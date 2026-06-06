@@ -22,5 +22,16 @@ const loginService = async (empcode, pasword) => {
   const accessToken = generateAccessToken(existingUser.empcode);
   return { accessToken, user: existingUser };
 };
+const getCurrentUserService = async (empcode) => {
+  const existingUser = await prisma.user.findUnique({
+    where: {
+      empcode,
+    },
+  });
+  if (!existingUser) {
+    throw new BadRequestError("User not found");
+  }
+  return existingUser;
+};
 
-export { loginService };
+export { loginService, getCurrentUserService };
