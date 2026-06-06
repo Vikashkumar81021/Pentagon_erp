@@ -2,6 +2,8 @@ import express from "express";
 import helmet from "helmet";
 import cookieParser from "cookie-parser";
 import { errorMiddleware } from "./middleware/error.middleware.js";
+import compression from "compression";
+import authRoute from "./routes/auth.route.js";
 const app = express();
 
 app.use(express.json());
@@ -11,6 +13,10 @@ app.use(
     xDownloadOptions: false,
   }),
 );
+
 app.use(cookieParser());
 app.use(errorMiddleware);
+app.use(compression());
+app.use("/api/v1", authRoute);
+
 export default app;

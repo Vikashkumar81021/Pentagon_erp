@@ -1,9 +1,5 @@
 import prisma from "../config/db.js";
-import {
-  BadRequestError,
-  ConflictError,
-  UnAuthorizedError,
-} from "../utils/error.js";
+import { BadRequestError } from "../utils/error.js";
 import bcrypt from "bcrypt";
 import { generateAccessToken } from "../utils/generateToken.js";
 const loginService = async (empcode, pasword) => {
@@ -12,6 +8,7 @@ const loginService = async (empcode, pasword) => {
       empcode,
     },
   });
+
   if (!empcode) {
     throw new BadRequestError("Invalid  EmpCode or PassWord");
   }
