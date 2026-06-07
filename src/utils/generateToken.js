@@ -6,7 +6,7 @@ const generateAccessToken = (userId) => {
     id: userId,
   };
   return jwt.sign(payload, config.JWT_ACCESS_SECRET_KEY, {
-    expiresIn: config.JWT_ACCESS_TOKEN_EXPIRY,
+    expiresIn: "1h",
   });
 };
 

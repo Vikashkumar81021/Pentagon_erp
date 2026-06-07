@@ -20,4 +20,34 @@ const loginService = async (empcode, pasword) => {
   return { accessToken, user: existingUser };
 };
 
-export { loginService };
+const getCurrentUserService = async (userId) => {
+  const user = await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      empcode: true,
+      roles: {
+        include: {
+          role: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+      },
+    },
+  });
+
+  if (!user) {
+    throw new BadRequestError("User not found");
+  }
+
+  return user;
+};
+
+export { loginService, getCurrentUserService };

@@ -4,7 +4,6 @@ import { BadRequestError } from "../utils/error.js";
 
 const login = asyncHandler(async (req, res) => {
   const { empcode, password } = req.body;
-  console.log("em", empcode);
 
   if (!empcode || !password) {
     throw new BadRequestError("Missing fileds are required");
@@ -24,5 +23,26 @@ const login = asyncHandler(async (req, res) => {
       message: "Login successfully",
     });
 });
+const getCurrentUser = asyncHandler(async (req, res) => {
+  const user = await getCurrentUserService(req.user.id);
 
-export { login };
+  res.status(200).json({
+    success: true,
+    data: user,
+  });
+});
+const logout = asyncHandler(async (req, res) => {
+  res
+    .clearCookie("access_token", {
+      httpOnly: true,
+      secure: true,
+      sameSite: "strict",
+    })
+    .status(200)
+    .json({
+      success: true,
+      message: "Logout successfully",
+    });
+});
+
+export { login, getCurrentUser, logout };
