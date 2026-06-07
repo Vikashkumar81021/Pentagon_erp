@@ -16,7 +16,7 @@ const loginService = async (empcode, pasword) => {
   if (!isMatchPassword) {
     throw new BadRequestError("Invalid  EmpCode or PassWord");
   }
-  const accessToken = generateAccessToken(existingUser.empcode);
+  const accessToken = generateAccessToken(existingUser.id);
   return { accessToken, user: existingUser };
 };
 

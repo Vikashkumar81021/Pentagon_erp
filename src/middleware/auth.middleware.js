@@ -1,22 +1,26 @@
+import { config } from "../config/configuration.js";
 import jwt from "jsonwebtoken";
 import { UnAuthorizedError } from "../utils/error.js";
+import { logger } from "../config/logger.js";
 
-const protect = (req, res, next) => {
+const authMiddleware = (req, res, next) => {
   try {
-    const accessToken = req.cookies?.access_token;
+    const token = req.cookies.access_token;
 
-    if (!accessToken) {
-      throw new UnAuthorizedError("Access token is required");
+    if (!token) {
+      throw new UnAuthorizedError("Unauthorized user");
     }
 
-    const decoded = jwt.verify(accessToken, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, config.JWT_ACCESS_SECRET_KEY);
 
     req.user = decoded;
-
+    //ADD USER ID ON HEADERS
+    // req.headers["x-user-id"] = decoded.id.toString();
+    // logger.info(`Userid ${decoded.id} is authentication successfully`);
     next();
   } catch (error) {
-    throw new UnAuthorizedError("Invalid or expired access token");
+    next(error);
   }
 };
 
-export default protect;
+export default authMiddleware;

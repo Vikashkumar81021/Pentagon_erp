@@ -1,4 +1,7 @@
-import { loginService } from "../services/auth.service.js";
+import {
+  getCurrentUserService,
+  loginService,
+} from "../services/auth.service.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { BadRequestError } from "../utils/error.js";
 
@@ -9,11 +12,10 @@ const login = asyncHandler(async (req, res) => {
     throw new BadRequestError("Missing fileds are required");
   }
   const { accessToken } = await loginService(empcode, password);
-
   res
     .cookie("access_token", accessToken, {
       httpOnly: true,
-      secure: true,
+      secure: false,
       sameSite: "strict",
       maxAge: 24 * 60 * 60 * 1000,
     })
