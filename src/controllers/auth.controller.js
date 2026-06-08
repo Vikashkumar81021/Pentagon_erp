@@ -4,7 +4,7 @@ import {
 } from "../services/auth.service.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { BadRequestError } from "../utils/error.js";
-
+import { STATUS_CODE } from "../constants/status.code.js";
 const login = asyncHandler(async (req, res) => {
   const { empcode, password } = req.body;
 
@@ -19,7 +19,7 @@ const login = asyncHandler(async (req, res) => {
       sameSite: "strict",
       maxAge: 24 * 60 * 60 * 1000,
     })
-    .status(200)
+    .status(STATUS_CODE.SUCCESS)
     .json({
       success: true,
       message: "Login successfully",
@@ -28,7 +28,7 @@ const login = asyncHandler(async (req, res) => {
 const getCurrentUser = asyncHandler(async (req, res) => {
   const user = await getCurrentUserService(req.user.id);
 
-  res.status(200).json({
+  res.status(STATUS_CODE.SUCCESS).json({
     success: true,
     data: user,
   });
@@ -40,7 +40,7 @@ const logout = asyncHandler(async (req, res) => {
       secure: true,
       sameSite: "strict",
     })
-    .status(200)
+    .status(STATUS_CODE.SUCCESS)
     .json({
       success: true,
       message: "Logout successfully",
