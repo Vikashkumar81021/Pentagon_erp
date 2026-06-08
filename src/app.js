@@ -5,6 +5,7 @@ import { errorMiddleware } from "./middleware/error.middleware.js";
 import compression from "compression";
 import authRoute from "./routes/auth.route.js";
 import leadRoute from "./routes/lead.route.js";
+import dashboardStatsRoute from "./routes/dashboard.route.js";
 import { reqLogger } from "./middleware/req.middleware.js";
 const app = express();
 
@@ -23,5 +24,5 @@ app.use(errorMiddleware);
 app.use(compression());
 app.use("/api/v1", authRoute);
 app.use("/api/v1", leadRoute);
-
+app.use("/api/v1", dashboardStatsRoute);
 export default app;

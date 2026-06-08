@@ -25,7 +25,6 @@ import { createLead, fetchLeads } from "../services/lead.service.js";
 
 const createLeadController = asyncHandler(async (req, res, next) => {
   const validateData = createLeadSchema.parse(req.body);
-  console.log("valid", validateData);
 
   const lead = await createLead(validateData);
   return res.status(STATUS_CODE.CREATED).json({

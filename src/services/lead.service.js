@@ -1,5 +1,4 @@
 import prisma from "../config/db.js";
-import { BadRequestError } from "../utils/error.js";
 
 const createLead = async (leadData) => {
   console.log("leadData", leadData);
