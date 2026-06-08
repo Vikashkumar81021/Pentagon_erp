@@ -16,19 +16,38 @@ const loginService = async (empcode, pasword) => {
   if (!isMatchPassword) {
     throw new BadRequestError("Invalid  EmpCode or PassWord");
   }
-  const accessToken = generateAccessToken(existingUser.empcode);
+  const accessToken = generateAccessToken(existingUser.id);
   return { accessToken, user: existingUser };
 };
-const getCurrentUserService = async (empcode) => {
-  const existingUser = await prisma.user.findUnique({
+
+const getCurrentUserService = async (userId) => {
+  const user = await prisma.user.findUnique({
     where: {
-      empcode,
+      id: userId,
+    },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      empcode: true,
+      roles: {
+        include: {
+          role: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+      },
     },
   });
-  if (!existingUser) {
+
+  if (!user) {
     throw new BadRequestError("User not found");
   }
-  return existingUser;
+
+  return user;
 };
 
 export { loginService, getCurrentUserService };
