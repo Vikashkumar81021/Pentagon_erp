@@ -1,6 +1,7 @@
 import prisma from "../config/db.js";
 import { BadRequestError } from "../utils/error.js";
 import bcrypt from "bcrypt";
+
 import { generateAccessToken } from "../utils/generateToken.js";
 const loginService = async (empcode, pasword) => {
   const existingUser = await prisma.user.findUnique({
@@ -26,20 +27,18 @@ const getCurrentUserService = async (userId) => {
       id: userId,
     },
     select: {
-      id: true,
       name: true,
       email: true,
       empcode: true,
-      roles: {
-        include: {
-          role: {
-            select: {
-              id: true,
-              name: true,
-            },
-          },
-        },
-      },
+      // roles: {
+      //   include: {
+      //     role: {
+      //       select: {
+      //         name: true,
+      //       },
+      //     },
+      //   },
+      // },
     },
   });
 

@@ -1,3 +1,4 @@
+import { STATUS_CODE } from "../constants/status.code";
 class ApiError extends Error {
   constructor(message, statusCode, code) {
     super(message);
@@ -8,33 +9,33 @@ class ApiError extends Error {
 }
 class BadRequestError extends ApiError {
   constructor(message, code = "BAD REQUEST") {
-    super(message, 400, code);
+    super(message, STATUS_CODE.BAD_REQUESTS, code);
   }
 }
 
 class UnAuthorizedError extends ApiError {
   constructor(message, code = "UNAUTHORIZED") {
-    super(message, 401, code);
+    super(message, STATUS_CODE.UNAUTHORIZED, code);
   }
 }
 class ForBiddenError extends ApiError {
   constructor(message, code = "FORBIDDEN") {
-    super(message, 403, code);
+    super(message, STATUS_CODE.FORBIDDEN, code);
   }
 }
 class NotFoundError extends ApiError {
   constructor(message, code = "NOT FOUND") {
-    super(message, 404, code);
+    super(message, STATUS_CODE.NOTFOUND, code);
   }
 }
 class ConflictError extends ApiError {
   constructor(message, code = "CONFLICT") {
-    super(message, 409, code);
+    super(message, STATUS_CODE.CONFLICT, code);
   }
 }
 class TooManyRequestError extends ApiError {
   constructor(message, code = "TOO MANY REQUEST") {
-    super(message, 429, code);
+    super(message, STATUS_CODE.TOOMANYREQUEST, code);
   }
 }
 
