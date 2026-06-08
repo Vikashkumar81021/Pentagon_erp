@@ -6,6 +6,8 @@ import { createLead } from "../services/lead.service.js";
 
 const createLeadController = asyncHandler(async (req, res, next) => {
   const validateData = createLeadSchema.parse(req.body);
+  console.log("valid",validateData);
+  
   const lead = await createLead(validateData);
   return res.status(STATUS_CODE.CREATED).json({
     success: true,
@@ -14,4 +16,13 @@ const createLeadController = asyncHandler(async (req, res, next) => {
   });
 });
 
-export { createLeadController };
+const fetchLeadsController = asyncHandler(async (req, res, next) => {
+  const leads = await fetchLeads();
+  return res.status(STATUS_CODE.SUCCESS).json({
+    success: true,
+    message: "Leads fetched successfully",
+    data: leads,
+  });
+});
+
+export { createLeadController, fetchLeadsController };

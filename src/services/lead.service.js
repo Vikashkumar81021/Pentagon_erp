@@ -2,6 +2,7 @@ import prisma from "../config/db.js";
 import { BadRequestError } from "../utils/error.js";
 
 const createLead = async (leadData) => {
+  console.log("leadData", leadData);
   const lead = await prisma.lead.create({
     data: leadData,
   });
@@ -13,4 +14,4 @@ const fetchLeads = async () => {
 
   return lead;
 };
-export { createLead };
+export { createLead, fetchLeads };
