@@ -5,6 +5,42 @@ import {
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { BadRequestError } from "../utils/error.js";
 import { STATUS_CODE } from "../constants/status.code.js";
+
+/**
+ * @swagger
+ * tags:
+ *   name: Auth
+ *   description: Authentication APIs
+ */
+
+/**
+ * @swagger
+ * /api/auth/login:
+ *   post:
+ *     summary: User Login
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - password
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 example: admin@pentagon.com
+ *               password:
+ *                 type: string
+ *                 example: Admin@123
+ *     responses:
+ *       200:
+ *         description: Login successful
+ *       401:
+ *         description: Invalid credentials
+ */
 const login = asyncHandler(async (req, res) => {
   const { empcode, password } = req.body;
 
@@ -25,6 +61,21 @@ const login = asyncHandler(async (req, res) => {
       message: "Login successfully",
     });
 });
+
+/**
+ * @swagger
+ * /api/auth/profile:
+ *   get:
+ *     summary: Get Logged In User Profile
+ *     tags: [Auth]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: User profile fetched successfully
+ *       401:
+ *         description: Unauthorized
+ */
 const getCurrentUser = asyncHandler(async (req, res) => {
   const user = await getCurrentUserService(req.user.id);
 

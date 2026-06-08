@@ -1,7 +1,14 @@
 import app from "./app.js";
 import prisma from "./config/db.js";
+import swaggerUi from "swagger-ui-express";
+import swaggerSpec from "./swagger.js";
 
 const PORT = process.env.PORT || 3000;
+
+app.use(
+  "/api-docs",
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerSpec));
 
 const startServer = async () => {
   try {
