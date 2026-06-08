@@ -49,4 +49,8 @@ const getCurrentUserService = async (userId) => {
   return user;
 };
 
+const logoutService = async (userId) => {
+  return { message: "Logout successful" };
+};
+
 export { loginService, getCurrentUserService };
