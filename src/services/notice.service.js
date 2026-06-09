@@ -8,6 +8,7 @@ const createNotice = async (noticeData) => {
 };
 const fetchNotices = async () => {
     const notices = await prisma.notice.findMany({
+        take:5,
         orderBy: {
             createdAt: "desc",
         },  
@@ -16,4 +17,12 @@ const fetchNotices = async () => {
     
     return notices;
 };
-export  {createNotice, fetchNotices};
+const deleteNotice = async (id) => {
+  return await prisma.notice.delete({
+    where: {
+      id: Number(id),
+    },
+  });
+};
+
+export  {createNotice, fetchNotices, deleteNotice};
