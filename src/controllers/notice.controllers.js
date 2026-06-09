@@ -1,6 +1,6 @@
 import { asyncHandler } from '../utils/asyncHandler.js';
 import { STATUS_CODE } from '../constants/status.code.js';
-import { createNotice, fetchNotices } from '../services/notice.service.js';
+import { createNotice, fetchNotices, deleteNotice } from '../services/notice.service.js';
 
 const createNoticeController = asyncHandler(async (req, res) => {
     const { text } = req.body;
@@ -21,4 +21,12 @@ const getNoticesController = asyncHandler(async (req, res) => {
         data: notices,
     });
 });
-export  { createNoticeController, getNoticesController };
+const deleteNoticeController = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    await deleteNotice(id);
+    return res.status(200).json({
+        success: true,
+        message: "Notice deleted successfully",
+    });
+});
+export  { createNoticeController, getNoticesController, deleteNoticeController };
