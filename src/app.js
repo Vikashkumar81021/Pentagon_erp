@@ -6,6 +6,7 @@ import compression from "compression";
 import authRoute from "./routes/auth.route.js";
 import leadRoute from "./routes/lead.route.js";
 import dashboardStatsRoute from "./routes/dashboard.route.js";
+import noticeRoute from "./routes/notice.route.js";
 import { reqLogger } from "./middleware/req.middleware.js";
 const app = express();
 
@@ -25,4 +26,5 @@ app.use(compression());
 app.use("/api/v1", authRoute);
 app.use("/api/v1", leadRoute);
 app.use("/api/v1", dashboardStatsRoute);
+app.use("/api/v1", noticeRoute);
 export default app;
