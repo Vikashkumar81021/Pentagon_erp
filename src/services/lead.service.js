@@ -9,8 +9,17 @@ const createLead = async (leadData) => {
   return lead;
 };
 const fetchLeads = async () => {
-  const lead = await prisma.lead.findMany();
+  const leads = await prisma.lead.findMany({
+    select: {
+      id: true,
+      organization_name: true,
+      phoneNumber: true,
+      email: true,
+      attemptsCount: true,
+      status: true,
+    },
+  });
 
-  return lead;
+  return leads;
 };
 export { createLead, fetchLeads };
