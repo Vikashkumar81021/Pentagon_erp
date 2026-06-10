@@ -53,6 +53,7 @@ const discusionLead = async (leadId, durationSec, outcome, remarks) => {
         attemptsCount: {
           increment: 1,
         },
+        status: outcome,
       },
     });
   });
