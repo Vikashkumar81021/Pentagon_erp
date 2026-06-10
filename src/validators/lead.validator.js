@@ -17,7 +17,7 @@ export const createLeadSchema = z
     city: z.string().min(1, "City is required"),
 
     notes: z.string().optional(),
-
+    industry_sector: z.string().optional(),
     priority: z.enum(["LOW", "MEDIUM", "HIGH"]).default("MEDIUM"),
   })
   .refine((data) => data.phoneNumber || data.email, {
