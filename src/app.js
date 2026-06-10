@@ -8,9 +8,11 @@ import leadRoute from "./routes/lead.route.js";
 import dashboardStatsRoute from "./routes/dashboard.route.js";
 import noticeRoute from "./routes/notice.route.js";
 import { reqLogger } from "./middleware/req.middleware.js";
+import cors from "cors";
 const app = express();
 
 app.use(express.json());
+app.use(cors());
 app.use(
   helmet({
     contentSecurityPolicy: false,
