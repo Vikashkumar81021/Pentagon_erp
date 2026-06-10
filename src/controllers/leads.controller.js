@@ -47,12 +47,7 @@ const leadDiscussionController = asyncHandler(async (req, res, next) => {
   if (!durationSec || !outcome || !remarks) {
     throw new BadRequestError(400, "Missing fileds are required");
   }
-  const discussion = await discussionLead(
-    leadId,
-    durationSec,
-    outcome,
-    remarks,
-  );
+  const discussion = await discusionLead(leadId, durationSec, outcome, remarks);
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
     message: "Lead discussion added successfully",

@@ -33,12 +33,12 @@ const getConvertedLeads = async () => {
   return convertedLeads;
 };
 
-const discusionLead = async (durationSec, outcome, remarks) => {
-  await prisma.$transaction(async (tx) => {
+const discusionLead = async (leadId, durationSec, outcome, remarks) => {
+  const discussLead = await prisma.$transaction(async (tx) => {
     await tx.leadActivity.create({
       data: {
-        leadId,
-        type,
+        leadId: Number(leadId),
+        type: "CALL",
         durationSec,
         outcome,
         remarks,
@@ -47,7 +47,7 @@ const discusionLead = async (durationSec, outcome, remarks) => {
 
     await tx.lead.update({
       where: {
-        id: leadId,
+        id: Number(leadId),
       },
       data: {
         attemptsCount: {
