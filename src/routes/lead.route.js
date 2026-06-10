@@ -4,6 +4,7 @@ import {
   createLeadController,
   fetchLeadsController,
   getConvertedLeadsController,
+  leadDiscussionController,
 } from "../controllers/leads.controller.js";
 
 const router = express.Router();
@@ -11,6 +12,7 @@ const router = express.Router();
 router.get("/fetchLeads", fetchLeadsController);
 
 router.post("/createLead", createLeadController);
-router.get("/convertedLeads", getConvertedLeadsController);
+router.get("/convertedLeads", authMiddleware, getConvertedLeadsController);
+router.get("/discusion", leadDiscussionController);
 
 export default router;

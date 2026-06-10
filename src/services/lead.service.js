@@ -1,7 +1,6 @@
 import prisma from "../config/db.js";
 
 const createLead = async (leadData) => {
-  console.log("leadData", leadData);
   const lead = await prisma.lead.create({
     data: leadData,
   });
@@ -33,4 +32,30 @@ const getConvertedLeads = async () => {
   });
   return convertedLeads;
 };
-export { createLead, fetchLeads, getConvertedLeads };
+
+const discusionLead = async (durationSec, outcome, remarks) => {
+  await prisma.$transaction(async (tx) => {
+    await tx.leadActivity.create({
+      data: {
+        leadId,
+        type,
+        durationSec,
+        outcome,
+        remarks,
+      },
+    });
+
+    await tx.lead.update({
+      where: {
+        id: leadId,
+      },
+      data: {
+        attemptsCount: {
+          increment: 1,
+        },
+      },
+    });
+  });
+  return discussLead;
+};
+export { createLead, fetchLeads, getConvertedLeads, discusionLead };
