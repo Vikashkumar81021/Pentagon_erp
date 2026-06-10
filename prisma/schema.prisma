@@ -47,7 +47,7 @@ model Lead {
   organization_name String
   name_of_poc       String
   designation       String
-  industrt_sector   String
+  industry_sector   String
   phoneNumber       String?
   email             String?
 

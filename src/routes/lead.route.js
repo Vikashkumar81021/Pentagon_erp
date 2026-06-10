@@ -9,6 +9,6 @@ const router = express.Router();
 
 router.get("/fetchLeads", fetchLeadsController);
 
-router.post("/createLead", authMiddleware, createLeadController);
+router.post("/createLead", createLeadController);
 
 export default router;
