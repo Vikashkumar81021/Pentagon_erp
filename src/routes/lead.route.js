@@ -13,6 +13,6 @@ router.get("/fetchLeads", fetchLeadsController);
 
 router.post("/createLead", createLeadController);
 router.get("/convertedLeads", authMiddleware, getConvertedLeadsController);
-router.get("/discusion", leadDiscussionController);
+router.patch("/discusion", leadDiscussionController);
 
 export default router;
