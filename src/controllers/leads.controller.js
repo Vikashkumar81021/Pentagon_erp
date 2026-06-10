@@ -1,7 +1,7 @@
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { STATUS_CODE } from "../constants/status.code.js";
 import { createLeadSchema } from "../validators/lead.validator.js";
-import { createLead, fetchLeads } from "../services/lead.service.js";
+import { createLead, fetchLeads, getConvertedLeads } from "../services/lead.service.js";
 
 
 
@@ -26,5 +26,13 @@ const fetchLeadsController = asyncHandler(async (req, res, next) => {
     data: leads,
   });
 });
+const getConvertedLeadsController = asyncHandler(async (req, res, next) => {
+  const leads = await getConvertedLeads();
+  return res.status(STATUS_CODE.SUCCESS).json({
+    success: true,
+    message: "Converted leads fetched successfully",
+    data: leads,
+  });
+});
 
-export { createLeadController, fetchLeadsController };
+export { createLeadController, fetchLeadsController, getConvertedLeadsController };

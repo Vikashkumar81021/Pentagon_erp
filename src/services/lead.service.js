@@ -22,4 +22,15 @@ const fetchLeads = async () => {
 
   return leads;
 };
-export { createLead, fetchLeads };
+const getConvertedLeads = async () => {
+  const convertedLeads = await prisma.lead.findMany({
+    where: {
+      status: "converted",
+    },
+    orderBy: {
+      updatedAt: "desc",
+    },
+  });
+  return convertedLeads;
+};
+export { createLead, fetchLeads, getConvertedLeads };
