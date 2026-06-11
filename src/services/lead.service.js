@@ -10,8 +10,8 @@ const createLead = async (leadData) => {
 const fetchLeads = async () => {
   const leads = await prisma.lead.findMany({
     where: {
-      status:{
-        not: "CONVERTED",
+      status: {
+        not: "Converted",
       },
     },
     select: {
