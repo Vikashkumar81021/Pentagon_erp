@@ -24,7 +24,7 @@ const fetchLeads = async () => {
 const getConvertedLeads = async () => {
   const convertedLeads = await prisma.lead.findMany({
     where: {
-      status: "converted",
+      status: "Converted",
     },
     orderBy: {
       updatedAt: "desc",
