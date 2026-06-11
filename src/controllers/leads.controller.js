@@ -72,7 +72,7 @@ const actionConvertedController = asyncHandler(async (req, res) => {
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
     message: "Lead status updated successfully",
-    data: actionData,
+    data: actionData.status,
   });
 });
 export {
