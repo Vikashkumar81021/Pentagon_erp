@@ -57,6 +57,26 @@ const discusionLead = async (leadId, durationSec, outcome, remarks) => {
       },
     });
   });
+
   return discussLead;
 };
-export { createLead, fetchLeads, getConvertedLeads, discusionLead };
+
+const actionConverted = async (leadId, outcome) => {
+  const actionData = await prisma.lead.update({
+    where: {
+      id: Number(leadId),
+    },
+    data: {
+      status: outcome,
+    },
+  });
+
+  return actionData;
+};
+export {
+  createLead,
+  fetchLeads,
+  getConvertedLeads,
+  discusionLead,
+  actionConverted,
+};

@@ -30,15 +30,15 @@ const getCurrentUserService = async (userId) => {
       name: true,
       email: true,
       empcode: true,
-      // roles: {
-      //   include: {
-      //     role: {
-      //       select: {
-      //         name: true,
-      //       },
-      //     },
-      //   },
-      // },
+      roles: {
+        include: {
+          role: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      },
     },
   });
 
@@ -53,4 +53,4 @@ const logoutService = async (userId) => {
   return { message: "Logout successful" };
 };
 
-export { loginService, getCurrentUserService };
+export { loginService, getCurrentUserService, logoutService };

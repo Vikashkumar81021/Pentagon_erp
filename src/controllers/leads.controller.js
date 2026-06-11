@@ -2,6 +2,7 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { STATUS_CODE } from "../constants/status.code.js";
 import { createLeadSchema } from "../validators/lead.validator.js";
 import {
+  actionConverted,
   createLead,
   discusionLead,
   fetchLeads,
@@ -54,9 +55,30 @@ const leadDiscussionController = asyncHandler(async (req, res, next) => {
     data: discussion,
   });
 });
+const actionConvertedController = asyncHandler(async (req, res) => {
+  const { leadId } = req.params;
+  const { outcome } = req.body;
+
+  if (!leadId) {
+    throw new BadRequestError(400, "leadId is required");
+  }
+
+  if (!outcome) {
+    throw new BadRequestError(400, "outcome is required");
+  }
+
+  const actionData = await actionConverted(leadId, outcome);
+
+  return res.status(STATUS_CODE.SUCCESS).json({
+    success: true,
+    message: "Lead status updated successfully",
+    data: actionData,
+  });
+});
 export {
   createLeadController,
   fetchLeadsController,
   getConvertedLeadsController,
   leadDiscussionController,
+  actionConvertedController,
 };
