@@ -10,7 +10,7 @@ const loginService = async (empcode, pasword) => {
     },
   });
 
-  if (!empcode) {
+  if (!existingUser) {
     throw new BadRequestError("Invalid  EmpCode or PassWord");
   }
   const isMatchPassword = await bcrypt.compare(pasword, existingUser.password);

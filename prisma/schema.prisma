@@ -71,7 +71,7 @@ model LeadActivity {
   durationSec  Int       @default(0) // Call duration
   outcome      String    // No Response, Wrong Contact, Call Back Later, Interested, Not Interested, Meeting Requested
   remarks      String?
-  followUpDate DateTime?
+  followUpDate DateTime? @default(now())
   notes        String?
   mailStatus   String?   // Sent, Opened, Replied
   responses    String?   // Mail body summaries
