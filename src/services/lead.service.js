@@ -90,10 +90,13 @@ const actionConverted = async (leadId, outcome) => {
         await tx.clientAccount.create({
           data: {
             orgName: lead.organization_name,
+            pocName: lead.name_of_poc,
             email: lead.email,
             phone: lead.phoneNumber,
             city: lead.city,
             status: "ACTIVE",
+            industry: lead.industry_sector,
+            designation: lead.designation,
           },
         });
       }
