@@ -67,16 +67,38 @@ const discusionLead = async (leadId, durationSec, outcome, remarks) => {
 };
 
 const actionConverted = async (leadId, outcome) => {
-  const actionData = await prisma.lead.update({
-    where: {
-      id: Number(leadId),
-    },
-    data: {
-      status: outcome,
-    },
-  });
+  return prisma.$transaction(async (tx) => {
+    const lead = await tx.lead.update({
+      where: {
+        id: Number(leadId),
+      },
+      data: {
+        status: outcome,
+      },
+    });
 
-  return actionData;
+    if (outcome === "Converted") {
+      const existingClient = await tx.clientAccount.findFirst({
+        where: {
+          email: lead.email,
+        },
+      });
+
+      if (!existingClient) {
+        await tx.clientAccount.create({
+          data: {
+            orgName: lead.organization_name,
+            email: lead.email,
+            phone: lead.phoneNumber,
+            city: lead.city,
+            status: "ACTIVE",
+          },
+        });
+      }
+    }
+
+    return lead;
+  });
 };
 export {
   createLead,

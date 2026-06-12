@@ -77,7 +77,21 @@ model LeadActivity {
   responses    String?   // Mail body summaries
   createdAt    DateTime  @default(now())
 }
+model ClientAccount {
+  id          Int      @id @default(autoincrement())
+  orgName     String
+  pocName     String?
+  designation String?
+  email       String?
+  phone       String?
+  city        String?
+  industry    String?
 
+  status      String   @default("ACTIVE")
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
 model Notice{
    id                Int      @id @default(autoincrement())
   text String
