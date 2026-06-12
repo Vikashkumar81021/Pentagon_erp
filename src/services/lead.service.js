@@ -82,9 +82,11 @@ const actionConverted = async (leadId, outcome) => {
         where: {
           email: lead.email,
         },
+        
       });
 
       if (!existingClient) {
+        console.log("existingClient",existingClient);
         await tx.clientAccount.create({
           data: {
             orgName: lead.organization_name,
