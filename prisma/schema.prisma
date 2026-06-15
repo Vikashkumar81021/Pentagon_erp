@@ -71,13 +71,27 @@ model LeadActivity {
   durationSec  Int       @default(0) // Call duration
   outcome      String    // No Response, Wrong Contact, Call Back Later, Interested, Not Interested, Meeting Requested
   remarks      String?
-  followUpDate DateTime?
+  followUpDate DateTime? @default(now())
   notes        String?
   mailStatus   String?   // Sent, Opened, Replied
   responses    String?   // Mail body summaries
   createdAt    DateTime  @default(now())
 }
+model ClientAccount {
+  id          Int      @id @default(autoincrement())
+  orgName     String
+  pocName     String?
+  designation String?
+  email       String?
+  phone       String?
+  city        String?
+  industry    String?
 
+  status      String   @default("ACTIVE")
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
 model Notice{
    id                Int      @id @default(autoincrement())
   text String

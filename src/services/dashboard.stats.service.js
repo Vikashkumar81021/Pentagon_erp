@@ -5,4 +5,25 @@ const fetchDashboardStats = async () => {
   return { totalLeads };
 };
 
-export { fetchDashboardStats };
+//clientAccountCRMStats
+const fetchClientAccountCRMStats = async () => {
+  const [totalAccounts, rawLeads] = await Promise.all([
+    prisma.lead.count({
+      where: {
+        status: "Converted",
+      },
+    }),
+
+    prisma.lead.count({
+      where: {
+        status: "RAW",
+      },
+    }),
+  ]);
+
+  return {
+    totalAccounts,
+    rawLeads,
+  };
+};
+export { fetchDashboardStats, fetchClientAccountCRMStats };

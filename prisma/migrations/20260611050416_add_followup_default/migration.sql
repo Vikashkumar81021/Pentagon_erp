@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "LeadActivity" ALTER COLUMN "followUpDate" SET DEFAULT CURRENT_TIMESTAMP;

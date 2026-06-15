@@ -10,7 +10,7 @@ const loginService = async (empcode, pasword) => {
     },
   });
 
-  if (!empcode) {
+  if (!existingUser) {
     throw new BadRequestError("Invalid  EmpCode or PassWord");
   }
   const isMatchPassword = await bcrypt.compare(pasword, existingUser.password);
@@ -30,15 +30,15 @@ const getCurrentUserService = async (userId) => {
       name: true,
       email: true,
       empcode: true,
-      // roles: {
-      //   include: {
-      //     role: {
-      //       select: {
-      //         name: true,
-      //       },
-      //     },
-      //   },
-      // },
+      roles: {
+        include: {
+          role: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      },
     },
   });
 
@@ -53,4 +53,4 @@ const logoutService = async (userId) => {
   return { message: "Logout successful" };
 };
 
-export { loginService, getCurrentUserService };
+export { loginService, getCurrentUserService, logoutService };
