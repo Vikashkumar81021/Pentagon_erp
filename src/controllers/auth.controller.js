@@ -2,6 +2,7 @@ import {
   getCurrentUserService,
   loginService,
 } from "../services/auth.service.js";
+
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { BadRequestError } from "../utils/error.js";
 import { STATUS_CODE } from "../constants/status.code.js";
@@ -10,9 +11,11 @@ const login = asyncHandler(async (req, res) => {
   const { empcode, password } = req.body;
 
   if (!empcode || !password) {
-    throw new BadRequestError("Missing fileds are required");
+    throw new BadRequestError("Empcode and Password are required");
   }
-  const { accessToken } = await loginService(empcode, password);
+
+  const { accessToken, user } = await loginService(empcode, password);
+
   res
     .cookie("access_token", accessToken, {
       httpOnly: true,
@@ -23,10 +26,15 @@ const login = asyncHandler(async (req, res) => {
     .status(STATUS_CODE.SUCCESS)
     .json({
       success: true,
-      message: "Login successfully",
+      message: "Login Successfully",
+      user: {
+        id: user.id,
+        name: user.name,
+        empcode: user.empcode,
+        roles: user.roles.map((item) => item.role.name),
+      },
     });
 });
-
 
 const getCurrentUser = asyncHandler(async (req, res) => {
   const user = await getCurrentUserService(req.user.id);
@@ -36,18 +44,12 @@ const getCurrentUser = asyncHandler(async (req, res) => {
     data: user,
   });
 });
+
 const logout = asyncHandler(async (req, res) => {
-  res
-    .clearCookie("access_token", {
-      httpOnly: true,
-      secure: true,
-      sameSite: "strict",
-    })
-    .status(STATUS_CODE.SUCCESS)
-    .json({
-      success: true,
-      message: "Logout successfully",
-    });
+  res.clearCookie("access_token").status(STATUS_CODE.SUCCESS).json({
+    success: true,
+    message: "Logout Successfully",
+  });
 });
 
 export { login, getCurrentUser, logout };

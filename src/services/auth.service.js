@@ -1,24 +1,43 @@
 import prisma from "../config/db.js";
-import { BadRequestError } from "../utils/error.js";
 import bcrypt from "bcrypt";
-
+import { BadRequestError } from "../utils/error.js";
 import { generateAccessToken } from "../utils/generateToken.js";
-const loginService = async (empcode, pasword) => {
+
+const loginService = async (empcode, password) => {
   const existingUser = await prisma.user.findUnique({
     where: {
       empcode,
     },
+    include: {
+      roles: {
+        include: {
+          role: true,
+        },
+      },
+    },
   });
 
   if (!existingUser) {
-    throw new BadRequestError("Invalid  EmpCode or PassWord");
+    throw new BadRequestError("Invalid EmpCode or Password");
   }
-  const isMatchPassword = await bcrypt.compare(pasword, existingUser.password);
+
+  const isMatchPassword = await bcrypt.compare(password, existingUser.password);
+
   if (!isMatchPassword) {
-    throw new BadRequestError("Invalid  EmpCode or PassWord");
+    throw new BadRequestError("Invalid EmpCode or Password");
   }
-  const accessToken = generateAccessToken(existingUser.id);
-  return { accessToken, user: existingUser };
+
+  const roles = existingUser.roles.map((item) => item.role.name);
+
+  const accessToken = generateAccessToken({
+    id: existingUser.id,
+    roles,
+  });
+
+  return {
+    accessToken,
+    user: existingUser,
+  };
 };
 
 const getCurrentUserService = async (userId) => {
@@ -27,11 +46,12 @@ const getCurrentUserService = async (userId) => {
       id: userId,
     },
     select: {
+      id: true,
       name: true,
       email: true,
       empcode: true,
       roles: {
-        include: {
+        select: {
           role: {
             select: {
               name: true,
@@ -46,11 +66,10 @@ const getCurrentUserService = async (userId) => {
     throw new BadRequestError("User not found");
   }
 
-  return user;
+  return {
+    ...user,
+    roles: user.roles.map((r) => r.role.name),
+  };
 };
 
-const logoutService = async (userId) => {
-  return { message: "Logout successful" };
-};
-
-export { loginService, getCurrentUserService, logoutService };
+export { loginService, getCurrentUserService };

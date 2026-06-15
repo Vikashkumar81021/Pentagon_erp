@@ -94,6 +94,7 @@ const actionConverted = async (leadId, outcome) => {
             status: "ACTIVE",
             industry_sector: lead.industry_sector,
             designation: lead.designation,
+            address: lead.address,
           },
         });
       }

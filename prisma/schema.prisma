@@ -16,6 +16,7 @@ model User {
   email     String     @unique
   password  String
   empcode   String     @unique
+  orders    Order[]
 
   roles     UserRole[]
 }
@@ -98,7 +99,7 @@ model ClientAccount {
 
   status            String   @default("ACTIVE")
 
-  // orders            Order[]
+  orders            Order[]
 
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
@@ -109,3 +110,30 @@ model Notice{
     createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
 }
+enum PurchaseMode {
+  GEM
+  DIRECT_PURCHASE
+  TENDER
+}
+model Order {
+  id                Int       @id @default(autoincrement())
+
+  // order_no          String    @unique
+ purchaseMode      PurchaseMode
+  clientAccountId   Int
+  clientAccount     ClientAccount @relation(fields: [clientAccountId], references: [id])
+  proposal       String?   // proposal no/name
+  poNumber       String?   // customer PO
+  salesPersonId     Int
+  salesPerson       User      @relation(fields: [salesPersonId], references: [id])
+
+  orderDate         DateTime  @default(now())
+  status            String    @default("PENDING")
+
+  totalAmount       Float
+
+  shippingAddress   String?
+
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+} 
