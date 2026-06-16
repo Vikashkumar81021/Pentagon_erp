@@ -43,4 +43,33 @@ const fetechOrders = async () => {
   });
   return totalOrders;
 };
-export { createOrderService, fetechOrders };
+
+const updateOrderService = async (orderId, updateData) => {
+  const updatedOrder = await prisma.order.update({
+    where: {
+      id: Number(orderId),
+    },
+    data: updateData,
+    include: {
+      salesPerson: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+      clientAccount: true,
+    },
+  });
+  return order;
+};
+
+const deleteOrderService = async (orderId) => {
+  const deletedOrder = await prisma.order.delete({
+    where: {
+      id: Number(orderId),
+    },
+  });
+  return order;
+};
+
+export { createOrderService, fetechOrders, updateOrderService, deleteOrderService };
