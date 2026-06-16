@@ -8,12 +8,20 @@ import leadRoute from "./routes/lead.route.js";
 import dashboardStatsRoute from "./routes/dashboard.route.js";
 import noticeRoute from "./routes/notice.route.js";
 import clientRoute from "./routes/client.route.js";
+import order from "./routes/order.route.js";
 import { reqLogger } from "./middleware/req.middleware.js";
 import cors from "cors";
 const app = express();
 
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:4200",
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  }),
+);
 app.use(
   helmet({
     contentSecurityPolicy: false,
@@ -31,4 +39,5 @@ app.use("/api/v1", leadRoute);
 app.use("/api/v1", dashboardStatsRoute);
 app.use("/api/v1", noticeRoute);
 app.use("/api/v1", clientRoute);
+app.use("/api/v1", order);
 export default app;

@@ -1,13 +1,8 @@
 import jwt from "jsonwebtoken";
 import { config } from "../config/configuration.js";
 
-const generateAccessToken = (userId) => {
-  const payload = {
-    id: userId,
-  };
+export const generateAccessToken = (payload) => {
   return jwt.sign(payload, config.JWT_ACCESS_SECRET_KEY, {
-    expiresIn: "1h",
+    expiresIn: "1d",
   });
 };
-
-export { generateAccessToken };

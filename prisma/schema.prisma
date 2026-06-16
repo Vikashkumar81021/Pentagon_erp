@@ -16,6 +16,7 @@ model User {
   email     String     @unique
   password  String
   empcode   String     @unique
+  orders    Order[]
 
   roles     UserRole[]
 }
@@ -58,6 +59,7 @@ model Lead {
    status           String        @default("RAW") // RAW, ASSIGNED, CONTACTED, INTERESTED, NOT_INTERESTED, IN_PROGRESS, MEETING_SCHEDULED, CONVERTED, INACTIVE
   attemptsCount    Int           @default(0) 
    activities        LeadActivity[] 
+     clientAccount     ClientAccount?
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
 }
@@ -78,19 +80,29 @@ model LeadActivity {
   createdAt    DateTime  @default(now())
 }
 model ClientAccount {
-  id          Int      @id @default(autoincrement())
-  orgName     String
-  pocName     String?
-  designation String?
-  email       String?
-  phone       String?
-  city        String?
-  industry    String?
+  id                Int      @id @default(autoincrement())
 
-  status      String   @default("ACTIVE")
+  // Kis lead se convert hua
+  leadId            Int      @unique
+  lead              Lead     @relation(fields: [leadId], references: [id])
 
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  organization_name String
+  name_of_poc       String?
+  designation       String?
+  industry_sector   String?
+
+  email             String?
+  phoneNumber       String?
+
+  address           String?
+  city              String?
+
+  status            String   @default("ACTIVE")
+
+  orders            Order[]
+
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 }
 model Notice{
    id                Int      @id @default(autoincrement())
@@ -98,3 +110,30 @@ model Notice{
     createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
 }
+enum PurchaseMode {
+  GEM
+  DIRECT_PURCHASE
+  TENDER
+}
+model Order {
+  id                Int       @id @default(autoincrement())
+
+  // order_no          String    @unique
+ purchaseMode      PurchaseMode
+  clientAccountId   Int
+  clientAccount     ClientAccount @relation(fields: [clientAccountId], references: [id])
+  proposal       String?   // proposal no/name
+  poNumber       String?   // customer PO
+  salesPersonId     Int
+  salesPerson       User      @relation(fields: [salesPersonId], references: [id])
+
+  orderDate         DateTime  @default(now())
+  status            String    @default("PENDING")
+
+  totalAmount       Float
+
+  shippingAddress   String?
+
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+} 
