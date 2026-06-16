@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const orderSchema = z.object({
-  order_no: z.string().min(1, "Order number is required"),
+  order_no: z.string().optional(),
 
   purchaseMode: z.enum(["GEM", "DIRECT_PURCHASE", "TENDER"]),
 
