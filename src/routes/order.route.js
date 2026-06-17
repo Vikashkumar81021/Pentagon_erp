@@ -10,7 +10,7 @@ import authMiddleware from "../middleware/auth.middleware.js";
 const router = express.Router();
 
 router.post("/createOrder", authMiddleware, createOrderController);
-router.get("/fetchOrders", authMiddleware, fetchOdersController);
+router.get("/fetchOrders", fetchOdersController);
 router.put("/updateOrder/:id", authMiddleware, updateOrderController);
 router.delete("/deleteOrder/:id", authMiddleware, deleteOrderController);
 export default router;

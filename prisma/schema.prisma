@@ -162,3 +162,56 @@ model Inventory {
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 }
+model ProcurementRequest {
+  id            Int      @id @default(autoincrement())
+
+  requestNo     String   @unique
+
+  itemName      String
+  quantity      Int
+  department    String
+  priority      String   // LOW / MEDIUM / HIGH
+
+  status        String   @default("PENDING")
+  remarks       String?
+
+  requestedById Int
+  requestedBy   User     @relation(fields: [requestedById], references: [id])
+
+  approvedById  Int?
+  approvedBy    User?    @relation("ApprovedBy", fields: [approvedById], references: [id])
+
+  createdAt     DateTime @default(now())
+}
+model Vendor {
+  id            Int      @id @default(autoincrement())
+
+  name          String
+  category      String?
+  city          String?
+  phone         String?
+  email         String?
+
+  rating        Float?   @default(0)
+  status        String   @default("ACTIVE") // ACTIVE / APPROVED / BLACKLISTED
+
+  createdAt     DateTime @default(now())
+}
+model Shipment {
+  id              Int      @id @default(autoincrement())
+
+  orderId         Int
+  order           Order    @relation(fields: [orderId], references: [id])
+
+  status          String   @default("READY") 
+  // READY, DISPATCHED, DELIVERED, DELAYED
+
+  trackingNumber  String?
+  carrier         String?
+  expectedDate    DateTime?
+
+  shippedDate     DateTime?
+  deliveredDate   DateTime?
+
+  createdAt       DateTime @default(now())
+}
