@@ -6,4 +6,20 @@ const salesVisitService = async (salesVisitData) => {
   });
   return salesVisit;
 };
-export { salesVisitService };
+const getSalesVisitsService = async () => {
+  const salesVisits = await prisma.salesVisit.findMany({
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+  return salesVisits;
+};
+const updateSalesVisit = async (id, data) => {
+  return await prisma.salesVisit.update({
+    where: {
+      id: Number(id),
+    },
+    data,
+  });
+};
+export { salesVisitService, getSalesVisitsService, updateSalesVisit };
