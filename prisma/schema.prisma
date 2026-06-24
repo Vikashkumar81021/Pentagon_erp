@@ -18,6 +18,8 @@ model User {
   empcode   String     @unique
   orders    Order[]
 
+  procurementRequests ProcurementRequest[]
+  approvedRequests    ProcurementRequest[] @relation("ApprovedBy")
   roles     UserRole[]
 }
 
@@ -43,6 +45,54 @@ enum LeadPriority {
   HIGH
 }
 
+enum CustomerType {
+  COLD
+  REPEAT
+  TELE_CALL
+}
+
+enum SalesStatus {
+  PENDING
+  IN_PROGRESS
+  WON
+  LOST
+  CLOSED
+}
+
+model SalesVisit {
+  id                       Int          @id @default(autoincrement())
+
+  executiveName            String
+  visitDate                DateTime
+
+  customerType             CustomerType
+
+  customerName             String
+  customerCompleteAddress  String?
+
+  contactPerson            String
+  contactNumber            String
+  customerMailId           String?
+
+  productType              String
+  productDescription       String?
+
+  quantity                 Int?
+
+  organizationName         String?
+  category                 String?
+
+  closureDate              DateTime?
+
+  basicAmount              Decimal?     @db.Decimal(12,2)
+
+  status                   SalesStatus  @default(PENDING)
+
+  remarks                  String?
+
+  createdAt                DateTime     @default(now())
+  updatedAt                DateTime     @updatedAt
+}
 model Lead {
   id                Int      @id @default(autoincrement())
   organization_name String
@@ -133,7 +183,7 @@ model Order {
   totalAmount       Float
 
   shippingAddress   String?
-
+ shipments Shipment[]
   createdAt         DateTime  @default(now())
   updatedAt         DateTime  @updatedAt
 } 
@@ -176,11 +226,10 @@ model ProcurementRequest {
   remarks       String?
 
   requestedById Int
-  requestedBy   User     @relation(fields: [requestedById], references: [id])
+  requestedBy User @relation(fields: [requestedById], references: [id])
 
-  approvedById  Int?
-  approvedBy    User?    @relation("ApprovedBy", fields: [approvedById], references: [id])
-
+  approvedById Int?
+  approvedBy User? @relation("ApprovedBy", fields: [approvedById], references: [id])
   createdAt     DateTime @default(now())
 }
 model Vendor {
