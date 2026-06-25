@@ -15,13 +15,14 @@
   - Added the required column `contact_person` to the `SalesVisit` table without a default value. This is not possible if the table is not empty.
   - Added the required column `customer_name` to the `SalesVisit` table without a default value. This is not possible if the table is not empty.
   - Added the required column `executive_name` to the `SalesVisit` table without a default value. This is not possible if the table is not empty.
+  - Added the required column `lead_type` to the `SalesVisit` table without a default value. This is not possible if the table is not empty.
   - Added the required column `product_type` to the `SalesVisit` table without a default value. This is not possible if the table is not empty.
   - Added the required column `visit_date` to the `SalesVisit` table without a default value. This is not possible if the table is not empty.
   - Added the required column `visit_type` to the `SalesVisit` table without a default value. This is not possible if the table is not empty.
 
 */
 -- CreateEnum
-CREATE TYPE "VisitType" AS ENUM ('COLD_PROSPECT', 'WARM_PROSPECT', 'HOT_PROSPECT');
+CREATE TYPE "VisitType" AS ENUM ('WARM', 'HOT');
 
 -- CreateEnum
 CREATE TYPE "VisitStatus" AS ENUM ('PENDING', 'IN_PROGRESS', 'WON', 'LOST', 'CLOSED');
@@ -43,10 +44,11 @@ ADD COLUMN     "customer_address" TEXT,
 ADD COLUMN     "customer_email" TEXT,
 ADD COLUMN     "customer_name" TEXT NOT NULL,
 ADD COLUMN     "executive_name" TEXT NOT NULL,
+ADD COLUMN     "lead_type" TEXT NOT NULL,
 ADD COLUMN     "product_description" TEXT,
 ADD COLUMN     "product_type" TEXT NOT NULL,
 ADD COLUMN     "quantity" INTEGER,
 ADD COLUMN     "remarks" TEXT,
 ADD COLUMN     "status" "VisitStatus" NOT NULL DEFAULT 'PENDING',
 ADD COLUMN     "visit_date" TIMESTAMP(3) NOT NULL,
-ADD COLUMN     "visit_type" "VisitType" NOT NULL;
+ADD COLUMN     "visit_type" TEXT NOT NULL;

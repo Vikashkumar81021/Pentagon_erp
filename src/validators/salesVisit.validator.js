@@ -5,12 +5,8 @@ export const salesVisitValidator = z.object({
 
   visit_date: z.coerce.date(),
 
-  visit_type: z.enum([
-    "COLD_PROSPECT",
-    "WARM_PROSPECT",
-    "HOT_PROSPECT",
-  ]),
-
+  visit_type: z.string(),
+  lead_type: z.string(),
   customer_name: z.string().min(1, "Customer name is required"),
 
   customer_address: z.string().optional(),
@@ -34,12 +30,6 @@ export const salesVisitValidator = z.object({
   remarks: z.string().optional(),
 
   status: z
-    .enum([
-      "PENDING",
-      "IN_PROGRESS",
-      "WON",
-      "LOST",
-      "CLOSED",
-    ])
+    .enum(["PENDING", "IN_PROGRESS", "WON", "LOST", "CLOSED"])
     .optional(),
 });
