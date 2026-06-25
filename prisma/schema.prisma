@@ -22,6 +22,7 @@ model User {
   procurementRequests ProcurementRequest[]
   approvedRequests    ProcurementRequest[] @relation("ApprovedBy")
   roles               UserRole[]
+   salesVisits SalesVisit[]
 }
 
 model Role {
@@ -78,7 +79,8 @@ model SalesVisit {
 
   notes    String?
   priority LeadPriority @default(MEDIUM)
-
+ userId Int
+  user   User @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

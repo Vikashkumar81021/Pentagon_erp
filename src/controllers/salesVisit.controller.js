@@ -6,12 +6,19 @@ import {
   salesVisitService,
   updateSalesVisit,
   deleteSalesVisit,
-  getcurrentuser,
+  mySalesVisitsService,
 } from "../services/salesVisit.service.js";
 
 const createSalesVisitController = asyncHandler(async (req, res, next) => {
   const validateData = salesVisitValidator.parse(req.body);
-  const salesVisit = await salesVisitService(validateData);
+  console.log("userId", req.user.id);
+
+  console.log("validate", validateData);
+
+  const salesVisit = await salesVisitService({
+    ...validateData,
+    userId: req.user.id,
+  });
   return res.status(STATUS_CODE.CREATED).json({
     success: true,
     message: "Sales Visit created successfully",
@@ -44,22 +51,19 @@ const deleteSalesVisitController = asyncHandler(async (req, res, next) => {
     message: "Sales Visit deleted successfully",
   });
 });
-const getcurrentuserController = asyncHandler(async (req, res) =>{
-    const salesVisits = await getcurrentuser(
-      req.user.id
-    );
-    return res.status(200).json({
-      success: true,
-      message: "My sales visits fetched successfully",
-      data: salesVisits,
-    });
-  }
-);
+const mySalesVisitsController = asyncHandler(async (req, res) => {
+  const salesVisits = await mySalesVisitsService(req.user.id);
+  return res.status(200).json({
+    success: true,
+    message: "My sales visits fetched successfully",
+    data: salesVisits,
+  });
+});
 
 export {
   createSalesVisitController,
   getSalesVisitsController,
   updateSalesVisitController,
   deleteSalesVisitController,
-  getcurrentuserController,
+  mySalesVisitsController,
 };
