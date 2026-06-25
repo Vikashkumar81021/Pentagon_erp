@@ -61,26 +61,46 @@ enum SalesStatus {
   CLOSED
 }
 
+enum VisitType {
+  WARM
+  HOT
+}
+
+enum VisitStatus {
+  PENDING
+  IN_PROGRESS
+  WON
+  LOST
+  CLOSED
+}
+
 model SalesVisit {
-  id Int @id @default(autoincrement())
+  id                  Int          @id @default(autoincrement())
 
-  organization_name String
-  industry_sector   String?
+  executive_name      String
 
-  name_of_poc String
-  designation String
+  visit_date          DateTime
+  visit_type          VisitType
 
-  phoneNumber String
-  email       String
+  customer_name       String
+  customer_address    String?
 
-  address String
-  city    String
+  contact_person      String
+  contact_number      String
 
-  notes    String?
-  priority LeadPriority @default(MEDIUM)
+  customer_email      String?
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  product_type        String
+  product_description String?
+
+  quantity            Int?
+
+  remarks             String?
+
+  status              VisitStatus  @default(PENDING)
+
+  createdAt           DateTime     @default(now())
+  updatedAt           DateTime     @updatedAt
 }
 
 model Lead {

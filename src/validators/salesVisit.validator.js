@@ -1,28 +1,45 @@
 import { z } from "zod";
 
-export const salesVisitValidator = z
-  .object({
-    organization_name: z.string().min(1, "Organization name is required"),
+export const salesVisitValidator = z.object({
+  executive_name: z.string().min(1, "Executive name is required"),
 
-    industry_sector: z.string().optional(),
+  visit_date: z.coerce.date(),
 
-    name_of_poc: z.string().min(1, "POC name is required"),
+  visit_type: z.enum([
+    "COLD_PROSPECT",
+    "WARM_PROSPECT",
+    "HOT_PROSPECT",
+  ]),
 
-    designation: z.string().min(1, "Designation is required"),
+  customer_name: z.string().min(1, "Customer name is required"),
 
-    phoneNumber: z.string().optional(),
+  customer_address: z.string().optional(),
 
-    email: z.string().email("Invalid email").optional(),
+  contact_person: z.string().min(1, "Contact person is required"),
 
-    address: z.string().optional(),
+  contact_number: z.string().min(10, "Invalid contact number"),
 
-    city: z.string().min(1, "City is required"),
+  customer_email: z
+    .string()
+    .email("Invalid email")
+    .optional()
+    .or(z.literal("")),
 
-    notes: z.string().optional(),
+  product_type: z.string().min(1, "Product type is required"),
 
-    priority: z.enum(["LOW", "MEDIUM", "HIGH"]).default("MEDIUM"),
-  })
-  .refine((data) => data.phoneNumber || data.email, {
-    message: "Either phone number or email is required",
-    path: ["phoneNumber"],
-  });
+  product_description: z.string().optional(),
+
+  quantity: z.number().int().positive().optional(),
+
+  remarks: z.string().optional(),
+
+  status: z
+    .enum([
+      "PENDING",
+      "IN_PROGRESS",
+      "WON",
+      "LOST",
+      "CLOSED",
+    ])
+    .optional(),
+});
