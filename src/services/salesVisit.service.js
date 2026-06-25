@@ -29,5 +29,22 @@ const deleteSalesVisit = async (id) => {
     },
   });
 };
+const getcurrentuser = async(userId) =>{
+  return await prisma.salesVisit.findMany({
+    where: {
+     id:Number(userId),
+    },
+    orderBy:{
+      createdAt: "desc",
+    },
+  });
+};
 
-export { salesVisitService, getSalesVisitsService, updateSalesVisit, deleteSalesVisit };
+
+export { 
+  salesVisitService, 
+  getSalesVisitsService, 
+  updateSalesVisit, 
+  deleteSalesVisit, 
+  getcurrentuser 
+};

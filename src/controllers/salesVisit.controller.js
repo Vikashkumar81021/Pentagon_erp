@@ -6,6 +6,7 @@ import {
   salesVisitService,
   updateSalesVisit,
   deleteSalesVisit,
+  getcurrentuser,
 } from "../services/salesVisit.service.js";
 
 const createSalesVisitController = asyncHandler(async (req, res, next) => {
@@ -43,9 +44,22 @@ const deleteSalesVisitController = asyncHandler(async (req, res, next) => {
     message: "Sales Visit deleted successfully",
   });
 });
+const getcurrentuserController = asyncHandler(async (req, res) =>{
+    const salesVisits = await getcurrentuser(
+      req.user.id
+    );
+    return res.status(200).json({
+      success: true,
+      message: "My sales visits fetched successfully",
+      data: salesVisits,
+    });
+  }
+);
+
 export {
   createSalesVisitController,
   getSalesVisitsController,
   updateSalesVisitController,
   deleteSalesVisitController,
+  getcurrentuserController,
 };
