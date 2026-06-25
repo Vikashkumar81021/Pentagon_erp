@@ -22,7 +22,9 @@ model User {
   procurementRequests ProcurementRequest[]
   approvedRequests    ProcurementRequest[] @relation("ApprovedBy")
   roles               UserRole[]
-   salesVisits SalesVisit[]
+  
+  
+  salesVisits SalesVisit[]
 }
 
 model Role {
@@ -62,27 +64,51 @@ enum SalesStatus {
   CLOSED
 }
 
+enum VisitType {
+  WARM
+  HOT
+}
+
+enum VisitStatus {
+  PENDING
+  IN_PROGRESS
+  WON
+  LOST
+  CLOSED
+}
+
+
 model SalesVisit {
-  id Int @id @default(autoincrement())
+  id                  Int          @id @default(autoincrement())
 
-  organization_name String
-  industry_sector   String?
+  executive_name      String
 
-  name_of_poc String
-  designation String
+  visit_date          DateTime
 
-  phoneNumber String
-  email       String
+  visit_type          String
+  lead_type           String
 
-  address String
-  city    String
+  customer_name       String
+  customer_address    String?
 
-  notes    String?
-  priority LeadPriority @default(MEDIUM)
+  contact_person      String
+  contact_number      String
+
+  customer_email      String?
+
+  product_type        String
+  product_description String?
+
+  quantity            Int?
+
+  remarks             String?
+
+  status              VisitStatus  @default(PENDING)
  userId Int
   user   User @relation(fields: [userId], references: [id])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+
+  createdAt           DateTime     @default(now())
+  updatedAt           DateTime     @updatedAt
 }
 
 model Lead {
