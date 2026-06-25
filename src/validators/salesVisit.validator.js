@@ -1,43 +1,28 @@
 import { z } from "zod";
 
-export const salesVisitValidator = z.object({
-  executiveName: z.string().min(1, "Executive Name is required"),
+export const salesVisitValidator = z
+  .object({
+    organization_name: z.string().min(1, "Organization name is required"),
 
-  visitDate: z.coerce.date(),
+    industry_sector: z.string().optional(),
 
-  customerType: z.enum(["COLD", "REPEAT", "TELE_CALL"]),
+    name_of_poc: z.string().min(1, "POC name is required"),
 
-  customerName: z.string().min(1, "Customer Name is required"),
+    designation: z.string().min(1, "Designation is required"),
 
-  customerCompleteAddress: z.string().optional(),
+    phoneNumber: z.string().optional(),
 
-  contactPerson: z.string().min(1, "Contact Person is required"),
+    email: z.string().email("Invalid email").optional(),
 
-  contactNumber: z.string().min(10, "Invalid contact number"),
+    address: z.string().optional(),
 
-  customerMailId: z
-    .string()
-    .email("Invalid email")
-    .optional()
-    .or(z.literal("")),
+    city: z.string().min(1, "City is required"),
 
-  productType: z.string().min(1, "Product Type is required"),
+    notes: z.string().optional(),
 
-  productDescription: z.string().optional(),
-
-  quantity: z.number().int().positive().optional(),
-
-  organizationName: z.string().optional(),
-
-  category: z.string().optional(),
-
-  closureDate: z.coerce.date().optional(),
-
-  basicAmount: z.number().nonnegative().optional(),
-
-  status: z
-    .enum(["PENDING", "IN_PROGRESS", "WON", "LOST", "CLOSED"])
-    .optional(),
-
-  remarks: z.string().optional(),
-});
+    priority: z.enum(["LOW", "MEDIUM", "HIGH"]).default("MEDIUM"),
+  })
+  .refine((data) => data.phoneNumber || data.email, {
+    message: "Either phone number or email is required",
+    path: ["phoneNumber"],
+  });
