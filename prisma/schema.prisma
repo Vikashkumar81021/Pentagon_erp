@@ -22,6 +22,9 @@ model User {
   procurementRequests ProcurementRequest[]
   approvedRequests    ProcurementRequest[] @relation("ApprovedBy")
   roles               UserRole[]
+  
+  
+  salesVisits SalesVisit[]
 }
 
 model Role {
@@ -80,7 +83,9 @@ model SalesVisit {
   executive_name      String
 
   visit_date          DateTime
-  visit_type          VisitType
+
+  visit_type          String
+  lead_type           String
 
   customer_name       String
   customer_address    String?
@@ -98,6 +103,8 @@ model SalesVisit {
   remarks             String?
 
   status              VisitStatus  @default(PENDING)
+ userId Int
+  user   User @relation(fields: [userId], references: [id])
 
   createdAt           DateTime     @default(now())
   updatedAt           DateTime     @updatedAt
