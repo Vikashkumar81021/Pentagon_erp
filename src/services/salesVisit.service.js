@@ -22,4 +22,12 @@ const updateSalesVisit = async (id, data) => {
     data,
   });
 };
-export { salesVisitService, getSalesVisitsService, updateSalesVisit };
+const deleteSalesVisit = async (id) => {
+  return await prisma.salesVisit.delete({
+    where: {
+      id: Number(id),
+    },
+  });
+};
+
+export { salesVisitService, getSalesVisitsService, updateSalesVisit, deleteSalesVisit };

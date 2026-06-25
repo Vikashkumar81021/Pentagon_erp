@@ -5,6 +5,7 @@ import {
   getSalesVisitsService,
   salesVisitService,
   updateSalesVisit,
+  deleteSalesVisit,
 } from "../services/salesVisit.service.js";
 
 const createSalesVisitController = asyncHandler(async (req, res, next) => {
@@ -34,8 +35,17 @@ const updateSalesVisitController = asyncHandler(async (req, res, next) => {
     data: salesVisit,
   });
 });
+const deleteSalesVisitController = asyncHandler(async (req, res, next) => {
+  const { id } = req.params;
+  await deleteSalesVisit(id);
+  return res.status(STATUS_CODE.SUCCESS).json({
+    success: true,
+    message: "Sales Visit deleted successfully",
+  });
+});
 export {
   createSalesVisitController,
   getSalesVisitsController,
   updateSalesVisitController,
+  deleteSalesVisitController,
 };
