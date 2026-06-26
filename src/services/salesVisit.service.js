@@ -14,6 +14,29 @@ const getSalesVisitsService = async () => {
   });
   return salesVisits;
 };
+const getConvertedLeads = async () => {
+  const convertedLeads = await prisma.salesVisit.findMany({
+    where: {
+      status: "Converted",
+    },
+    orderBy: {
+      updatedAt: "desc",
+    },
+  });
+  return convertedLeads;
+};
+
+const getFailedLeads = async () => {
+  const convertedLeads = await prisma.salesVisit.findMany({
+    where: {
+      status: "Failed",
+    },
+    orderBy: {
+      updatedAt: "desc",
+    },
+  });
+  return convertedLeads;
+};
 const updateSalesVisit = async (id, data) => {
   return await prisma.salesVisit.update({
     where: {
@@ -46,4 +69,6 @@ export {
   updateSalesVisit,
   deleteSalesVisit,
   mySalesVisitsService,
+  getConvertedLeads,
+  getFailedLeads,
 };

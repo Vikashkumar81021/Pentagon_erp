@@ -7,6 +7,8 @@ import {
   updateSalesVisit,
   deleteSalesVisit,
   mySalesVisitsService,
+  getConvertedLeads,
+  getFailedLeads,
 } from "../services/salesVisit.service.js";
 
 const createSalesVisitController = asyncHandler(async (req, res, next) => {
@@ -61,6 +63,23 @@ const mySalesVisitsController = asyncHandler(async (req, res) => {
     data: salesVisits,
   });
 });
+const getConvertedSalesVisitController = asyncHandler(async (req, res, next) => {
+  const leads = await getConvertedLeads();
+  return res.status(STATUS_CODE.SUCCESS).json({
+    success: true,
+    message: "Converted leads fetched successfully",
+    data: leads,
+  });
+});
+
+const getFailedSalesVisistController = asyncHandler(async (req, res, next) => {
+  const leads = await getConvertedLeads();
+  return res.status(STATUS_CODE.SUCCESS).json({
+    success: true,
+    message: "Failed leads fetched successfully",
+    data: leads,
+  });
+});
 
 export {
   createSalesVisitController,
@@ -68,4 +87,6 @@ export {
   updateSalesVisitController,
   deleteSalesVisitController,
   mySalesVisitsController,
+  getConvertedSalesVisitController,
+  getFailedSalesVisistController,
 };
