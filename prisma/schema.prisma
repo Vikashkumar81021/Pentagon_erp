@@ -70,7 +70,6 @@ enum VisitType {
 }
 
 
-
 model SalesVisit {
   id                  Int          @id @default(autoincrement())
 
