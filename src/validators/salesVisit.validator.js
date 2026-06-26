@@ -29,7 +29,5 @@ export const salesVisitValidator = z.object({
 
   remarks: z.string().optional(),
 
-  status: z
-    .enum(["PENDING", "IN_PROGRESS", "WON", "LOST", "CLOSED"])
-    .optional(),
+  status: z.string().optional(),
 });

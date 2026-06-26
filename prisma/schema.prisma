@@ -69,13 +69,6 @@ enum VisitType {
   HOT
 }
 
-enum VisitStatus {
-  PENDING
-  IN_PROGRESS
-  WON
-  LOST
-  CLOSED
-}
 
 
 model SalesVisit {
@@ -98,15 +91,17 @@ model SalesVisit {
 
   product_type        String
   product_description String?
+ closure_date       String?
 
+  basic_amount         Int?
   quantity            Int?
 
   remarks             String?
 
-  status              VisitStatus  @default(PENDING)
+  status              String?
  userId Int
   user   User @relation(fields: [userId], references: [id])
-
+  
   createdAt           DateTime     @default(now())
   updatedAt           DateTime     @updatedAt
 }
