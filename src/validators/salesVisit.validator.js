@@ -24,7 +24,8 @@ export const salesVisitValidator = z.object({
   product_type: z.string().min(1, "Product type is required"),
 
   product_description: z.string().optional(),
-
+  closure_date: z.string().optional(),
+  basic_amount: z.number().optional(),
   quantity: z.number().int().positive().optional(),
 
   remarks: z.string().optional(),
