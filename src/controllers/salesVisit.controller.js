@@ -35,12 +35,14 @@ const getSalesVisitsController = asyncHandler(async (req, res, next) => {
 });
 const updateSalesVisitController = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
-  const validateData = salesVisitValidator.parse(req.body);
-  const salesVisit = await updateSalesVisit(id, validateData);
-  return res.status(STATUS_CODE.OK).json({
+  
+  const saleVisit = await updateSalesVisit(id, req.body);
+  
+  // const salesVisit = await updateSalesVisit(id, validateData);
+  return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
     message: "Sales Visit updated successfully",
-    data: salesVisit,
+    data: saleVisit,
   });
 });
 const deleteSalesVisitController = asyncHandler(async (req, res, next) => {
@@ -53,7 +55,7 @@ const deleteSalesVisitController = asyncHandler(async (req, res, next) => {
 });
 const mySalesVisitsController = asyncHandler(async (req, res) => {
   const salesVisits = await mySalesVisitsService(req.user.id);
-  return res.status(200).json({
+  return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
     message: "My sales visits fetched successfully",
     data: salesVisits,
