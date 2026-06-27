@@ -1,7 +1,7 @@
 import prisma from "../config/db.js";
 
 const fetchDashboardStats = async () => {
-  const [totalLeads] = await Promise.all([prisma.lead.count()]);
+  const [totalLeads] = await Promise.all([prisma.SalesVisit.count()]);
   return { totalLeads };
 };
 

@@ -10,41 +10,103 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
-model User {
-  id        Int        @id @default(autoincrement())
-  name      String
-  email     String     @unique
-  password  String
-  empcode   String     @unique
-  orders    Order[]
 
-  roles     UserRole[]
+model User {
+  id       Int     @id @default(autoincrement())
+  name     String
+  email    String  @unique
+  password String
+  empcode  String  @unique
+  orders   Order[]
+
+  procurementRequests ProcurementRequest[]
+  approvedRequests    ProcurementRequest[] @relation("ApprovedBy")
+  roles               UserRole[]
+  
+  
+  salesVisits SalesVisit[]
 }
 
 model Role {
-  id        Int        @id @default(autoincrement())
-  name      String     @unique
+  id   Int    @id @default(autoincrement())
+  name String @unique
 
-  users     UserRole[]
+  users UserRole[]
 }
 
 model UserRole {
-  userId    Int
-  roleId    Int
+  userId Int
+  roleId Int
 
-  user      User @relation(fields: [userId], references: [id])
-  role      Role @relation(fields: [roleId], references: [id])
+  user User @relation(fields: [userId], references: [id])
+  role Role @relation(fields: [roleId], references: [id])
 
   @@id([userId, roleId])
 }
+
 enum LeadPriority {
   LOW
   MEDIUM
   HIGH
 }
 
+enum CustomerType {
+  COLD
+  REPEAT
+  TELE_CALL
+}
+
+enum SalesStatus {
+  PENDING
+  IN_PROGRESS
+  WON
+  LOST
+  CLOSED
+}
+
+enum VisitType {
+  WARM
+  HOT
+}
+
+
+model SalesVisit {
+  id                  Int          @id @default(autoincrement())
+
+  executive_name      String
+
+  visit_date          DateTime
+
+  visit_type          String
+  lead_type           String
+
+  customer_name       String
+  customer_address    String?
+
+  contact_person      String
+  contact_number      String
+
+  customer_email      String?
+
+  product_type        String
+  product_description String?
+ closure_date       String?
+
+  basic_amount         Int?
+  quantity            Int?
+
+  remarks             String?
+
+  status              String?
+ userId Int
+  user   User @relation(fields: [userId], references: [id])
+  
+  createdAt           DateTime     @default(now())
+  updatedAt           DateTime     @updatedAt
+}
+
 model Lead {
-  id                Int      @id @default(autoincrement())
+  id                Int     @id @default(autoincrement())
   organization_name String
   name_of_poc       String
   designation       String
@@ -52,88 +114,200 @@ model Lead {
   phoneNumber       String?
   email             String?
 
-  address           String?
-  notes             String?
-   priority          LeadPriority @default(MEDIUM)
-  city            String
-   status           String        @default("RAW") // RAW, ASSIGNED, CONTACTED, INTERESTED, NOT_INTERESTED, IN_PROGRESS, MEETING_SCHEDULED, CONVERTED, INACTIVE
-  attemptsCount    Int           @default(0) 
-   activities        LeadActivity[] 
-     clientAccount     ClientAccount?
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
+  address       String?
+  notes         String?
+  priority      LeadPriority   @default(MEDIUM)
+  city          String
+  status        String         @default("RAW") // RAW, ASSIGNED, CONTACTED, INTERESTED, NOT_INTERESTED, IN_PROGRESS, MEETING_SCHEDULED, CONVERTED, INACTIVE
+  attemptsCount Int            @default(0)
+  activities    LeadActivity[]
+  clientAccount ClientAccount?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
 }
 
 model LeadActivity {
   id           String    @id @default(uuid())
   leadId       Int
   lead         Lead      @relation(fields: [leadId], references: [id], onDelete: Cascade)
-  type         String    // CALL, EMAIL
+  type         String // CALL, EMAIL
   activityDate DateTime  @default(now())
   durationSec  Int       @default(0) // Call duration
-  outcome      String    // No Response, Wrong Contact, Call Back Later, Interested, Not Interested, Meeting Requested
+  outcome      String // No Response, Wrong Contact, Call Back Later, Interested, Not Interested, Meeting Requested
   remarks      String?
   followUpDate DateTime? @default(now())
   notes        String?
-  mailStatus   String?   // Sent, Opened, Replied
-  responses    String?   // Mail body summaries
+  mailStatus   String? // Sent, Opened, Replied
+  responses    String? // Mail body summaries
   createdAt    DateTime  @default(now())
 }
+
 model ClientAccount {
-  id                Int      @id @default(autoincrement())
+  id Int @id @default(autoincrement())
 
   // Kis lead se convert hua
-  leadId            Int      @unique
-  lead              Lead     @relation(fields: [leadId], references: [id])
+  leadId Int  @unique
+  lead   Lead @relation(fields: [leadId], references: [id])
 
   organization_name String
   name_of_poc       String?
   designation       String?
   industry_sector   String?
 
-  email             String?
-  phoneNumber       String?
+  email       String?
+  phoneNumber String?
 
-  address           String?
-  city              String?
+  address String?
+  city    String?
 
-  status            String   @default("ACTIVE")
+  status String @default("ACTIVE")
 
-  orders            Order[]
+  orders Order[]
 
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
-model Notice{
-   id                Int      @id @default(autoincrement())
-  text String
-    createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
+model BillingOrder {
+  id                  Int      @id @default(autoincrement())
+  date                DateTime
+  particulars         String
+  item_details        String
+  taxable_amount      Float
+  support_of          String
+  monthly_business  Int
+
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  @@map("billing_orders")
 }
+model InstitutionVisit {
+  id                  Int      @id @default(autoincrement())
+  institution_type    String
+  institution_name    String
+  address             String
+  contact_person      String
+  contact_number      String
+  designation         String
+  planned_visit_date  DateTime
+
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+}
+model Notice {
+  id        Int      @id @default(autoincrement())
+  text      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 enum PurchaseMode {
   GEM
   DIRECT_PURCHASE
   TENDER
 }
+
 model Order {
-  id                Int       @id @default(autoincrement())
+  id Int @id @default(autoincrement())
 
   // order_no          String    @unique
- purchaseMode      PurchaseMode
-  clientAccountId   Int
-  clientAccount     ClientAccount @relation(fields: [clientAccountId], references: [id])
-  proposal       String?   // proposal no/name
-  poNumber       String?   // customer PO
-  salesPersonId     Int
-  salesPerson       User      @relation(fields: [salesPersonId], references: [id])
+  purchaseMode    PurchaseMode
+  clientAccountId Int
+  clientAccount   ClientAccount @relation(fields: [clientAccountId], references: [id])
+  proposal        String? // proposal no/name
+  poNumber        String? // customer PO
+  salesPersonId   Int
+  salesPerson     User          @relation(fields: [salesPersonId], references: [id])
 
-  orderDate         DateTime  @default(now())
-  status            String    @default("PENDING")
+  orderDate DateTime @default(now())
+  status    String   @default("PENDING")
 
-  totalAmount       Float
+  totalAmount Float
 
-  shippingAddress   String?
+  shippingAddress String?
+  shipments       Shipment[]
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+}
 
-  createdAt         DateTime  @default(now())
-  updatedAt         DateTime  @updatedAt
-} 
+model Product {
+  id        Int     @id @default(autoincrement())
+  name      String
+  sku       String  @unique
+  category  String?
+  unitPrice Float?
+
+  inventory Inventory?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Inventory {
+  id Int @id @default(autoincrement())
+
+  productId Int     @unique
+  product   Product @relation(fields: [productId], references: [id])
+
+  totalStock    Int @default(0)
+  reservedStock Int @default(0)
+  reorderLevel  Int @default(10)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ProcurementRequest {
+  id Int @id @default(autoincrement())
+
+  requestNo String @unique
+
+  itemName   String
+  quantity   Int
+  department String
+  priority   String // LOW / MEDIUM / HIGH
+
+  status  String  @default("PENDING")
+  remarks String?
+
+  requestedById Int
+  requestedBy   User @relation(fields: [requestedById], references: [id])
+
+  approvedById Int?
+  approvedBy   User?    @relation("ApprovedBy", fields: [approvedById], references: [id])
+  createdAt    DateTime @default(now())
+}
+
+model Vendor {
+  id Int @id @default(autoincrement())
+
+  name     String
+  category String?
+  city     String?
+  phone    String?
+  email    String?
+
+  rating Float? @default(0)
+  status String @default("ACTIVE") // ACTIVE / APPROVED / BLACKLISTED
+
+  createdAt DateTime @default(now())
+}
+
+model Shipment {
+  id Int @id @default(autoincrement())
+
+  orderId Int
+  order   Order @relation(fields: [orderId], references: [id])
+
+  status String @default("READY")
+  // READY, DISPATCHED, DELIVERED, DELAYED
+
+  trackingNumber String?
+  carrier        String?
+  expectedDate   DateTime?
+
+  shippedDate   DateTime?
+  deliveredDate DateTime?
+
+  createdAt DateTime @default(now())
+}
