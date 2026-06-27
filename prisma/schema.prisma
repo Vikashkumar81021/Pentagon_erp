@@ -181,6 +181,19 @@ model BillingOrder {
 
   @@map("billing_orders")
 }
+model InstitutionVisit {
+  id                  Int      @id @default(autoincrement())
+  institution_type    String
+  institution_name    String
+  address             String
+  contact_person      String
+  contact_number      String
+  designation         String
+  planned_visit_date  DateTime
+
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+}
 model Notice {
   id        Int      @id @default(autoincrement())
   text      String
