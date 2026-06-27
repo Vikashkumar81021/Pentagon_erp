@@ -1,13 +1,11 @@
 import prisma from "../config/db.js";
 import bcrypt from "bcrypt";
 import { BadRequestError } from "../utils/error.js";
-import { generateAccessToken } from "../utils/generateToken.js";
 
 const createUserService = async (data) => {
-    
   const existingUser = await prisma.user.findFirst({
     where: {
-     empcode:data.empcode
+      empcode: data.empcode,
     },
   });
   if (existingUser) {
@@ -15,12 +13,12 @@ const createUserService = async (data) => {
   }
 
   const hashedPassword = await bcrypt.hash(data.password, 10);
-return await prisma.user.create({
-    data:{
-        ...data,
-        password:hashedPassword
-    }
-});
+  return await prisma.user.create({
+    data: {
+      ...data,
+      password: hashedPassword,
+    },
+  });
 };
 
 const getUsersService = async () => {
@@ -31,7 +29,6 @@ const getUsersService = async () => {
       email: true,
       empcode: true,
     },
-
   });
 };
 
@@ -74,8 +71,8 @@ const deleteUserService = async (id) => {
   });
 };
 export {
-    createUserService,
-    getUsersService, 
-    updateUserService, 
-    deleteUserService
+  createUserService,
+  getUsersService,
+  updateUserService,
+  deleteUserService,
 };
