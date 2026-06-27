@@ -167,7 +167,20 @@ model ClientAccount {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+model BillingOrder {
+  id                  Int      @id @default(autoincrement())
+  date                DateTime
+  particulars         String
+  item_details        String
+  taxable_amount      Float
+  support_of          String
+  quarterly_business  String
 
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  @@map("billing_orders")
+}
 model Notice {
   id        Int      @id @default(autoincrement())
   text      String
