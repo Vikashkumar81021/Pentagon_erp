@@ -16,8 +16,20 @@ const getBillingOrders = async () => {
     },
   });
 };
+const updateBillingOrder = async (id, data) => {
+  return await prisma.billingOrder.update({
+    where: {
+      id: Number(id),
+    },
+    data: {
+      ...data,
+      date: data.date ? new Date(data.date) : undefined,
+    },
+  });
+};
 
 export {
   createBillingOrder,
   getBillingOrders,
+  updateBillingOrder,
 };
