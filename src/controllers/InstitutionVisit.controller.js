@@ -1,6 +1,9 @@
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { STATUS_CODE } from "../constants/status.code.js";
-
+import {
+  createInstitutionVisitValidator,
+  updateInstitutionVisitValidator,
+} from "../validators/InstitutionVisit.validator.js";
 import {
   createInstitutionVisit,
   getInstitutionVisits,
@@ -9,7 +12,8 @@ import {
 } from "../services/InstitutionVisit.service.js";
 
 const createInstitutionVisitController = asyncHandler(async (req, res) => {
-  const institutionVisit = await createInstitutionVisit(req.body);
+  const validateData = institutionVisitValidator.parse(req.body);
+  const institutionVisit = await createInstitutionVisit(validateData);
 
   return res.status(STATUS_CODE.CREATED).json({
     success: true,
@@ -30,9 +34,8 @@ const getInstitutionVisitsController = asyncHandler(async (req, res) => {
 
 const updateInstitutionVisitController = asyncHandler(async (req, res) => {
   const { id } = req.params;
-
-  const institutionVisit = await updateInstitutionVisit(id, req.body);
-
+  const validateData = updateInstitutionVisitValidator.parse(req.body);
+  const institutionVisit = await updateInstitutionVisit(id, validateData);
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
     message: "Institution Visit updated successfully",

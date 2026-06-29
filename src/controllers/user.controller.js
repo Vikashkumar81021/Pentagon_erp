@@ -1,5 +1,9 @@
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { STATUS_CODE } from "../constants/status.code.js";
+import{
+  createUserValidator,
+  updateUserValidator,
+} from "../validators/user.validator.js";
 import {
     createUserService,
     getUsersService,
@@ -8,9 +12,9 @@ import {
 } from "../services/user.service.js";
 
 const createUserController = asyncHandler(async (req, res) => {
-    console.log("user",req.body);
+  const validateData = createUserValidator.parse(req.body);
     
-  const user = await createUserService(req.body);
+  const user = await createUserService(validateData);
 
   return res.status(STATUS_CODE.CREATED).json({
     success: true,
@@ -29,7 +33,9 @@ const getUsersController = asyncHandler(async (req, res) => {
 });
 
 const updateUserController = asyncHandler(async (req, res) => {
-  const user = await updateUserService(Number(req.params.id), req.body);
+  const { id } = req.params;
+  const validateData = updateUserValidator.parse(req.body);
+  const user = await updateUserService(Number(id), validateData);
 
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,

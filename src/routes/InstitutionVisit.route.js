@@ -11,7 +11,15 @@ import {
 const router = express.Router();
 
 router.post("/InstitutionVisit/create", createInstitutionVisitController);
-router.get( "/InstitutionVisit", authMiddleware, getInstitutionVisitsController);
-router.put("/Visitupdate/:id", authMiddleware, updateInstitutionVisitController);
-router.delete("/delete/:id", authMiddleware, deleteInstitutionVisitController);
+router.get("/InstitutionVisit", authMiddleware, getInstitutionVisitsController);
+router.put(
+  "/InstitutionVisit/Visitupdate/:id",
+  authMiddleware,
+  updateInstitutionVisitController,
+);
+router.delete(
+  "/InstitutionVisit/delete/:id",
+  authMiddleware,
+  deleteInstitutionVisitController,
+);
 export default router;
