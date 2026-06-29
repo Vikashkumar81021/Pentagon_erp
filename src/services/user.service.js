@@ -9,7 +9,7 @@ const createUserService = async (data) => {
     },
   });
   if (existingUser) {
-    throw new BadRequestError("Employee Code already exists");
+     throw new BadRequestError("Employee Code already exists");
   }
 
   const hashedPassword = await bcrypt.hash(data.password, 10);
