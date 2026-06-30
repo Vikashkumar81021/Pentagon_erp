@@ -1,6 +1,15 @@
 import prisma from "../config/db.js";
+import { BadRequestError } from "../utils/error.js";
 
 const createEmployeeService = async (empdata) => {
+  const existEmpEmail = await prisma.employee.findFirst({
+    where: {
+      email: empdata.email,
+    },
+  });
+  if (existEmpEmail) {
+    throw new BadRequestError("Employee Already Exists.");
+  }
   const employeedata = await prisma.employee.create({
     data: empdata,
   });
