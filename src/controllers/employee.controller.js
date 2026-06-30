@@ -13,8 +13,6 @@ import {
 } from "../validators/employee.validators.js";
 
 const createEmployeeController = asyncHandler(async (req, res) => {
-    console.log("body",req.body);
-    
   const data = createEmployeeValidator.parse(req.body);
 
   const employee = await createEmployeeService(data);
@@ -60,9 +58,9 @@ const deleteEmployeeController = asyncHandler(async (req, res) => {
   });
 });
 
-export{
-    createEmployeeController,
-    getEmployeesController,
-    updateEmployeeController,
-    deleteEmployeeController
+export {
+  createEmployeeController,
+  getEmployeesController,
+  updateEmployeeController,
+  deleteEmployeeController,
 };

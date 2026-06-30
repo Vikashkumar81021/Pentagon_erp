@@ -109,7 +109,7 @@ model SalesVisit {
 model Employee {
   full_name   String
   email    String  @unique
-  mobile_number Int
+  mobile_number BigInt
   desgination  String
   department   String
   salary String
