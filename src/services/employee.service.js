@@ -1,18 +1,14 @@
 import prisma from "../config/db.js";
 
-
 const createEmployeeService = async (empdata) => {
-    console.log("emp",empdata)
   const employeedata = await prisma.employee.create({
-    data:empdata
-  })
-  return employeedata
+    data: empdata,
+  });
+  return employeedata;
 };
 
 const getEmployeesService = async () => {
-  return prisma.employee.findMany({
-   
-  });
+  return prisma.employee.findMany({});
 };
 
 const updateEmployeeService = async (id, data) => {
@@ -33,8 +29,8 @@ const deleteEmployeeService = async (id) => {
 };
 
 export {
-    createEmployeeService,
-    getEmployeesService,
-    updateEmployeeService,
-    deleteEmployeeService
+  createEmployeeService,
+  getEmployeesService,
+  updateEmployeeService,
+  deleteEmployeeService,
 };

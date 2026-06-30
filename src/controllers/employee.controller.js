@@ -20,7 +20,10 @@ const createEmployeeController = asyncHandler(async (req, res) => {
   return res.status(STATUS_CODE.CREATED).json({
     success: true,
     message: "Employee created successfully",
-    data: employee,
+    data: {
+      ...employee,
+      mobile_number: employee.mobile_number.toString(),
+    },
   });
 });
 

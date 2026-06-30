@@ -5,8 +5,7 @@ const employeeSchema = z.object({
 
   email: z.string().email("Invalid email"),
 
-  mobile_number: z.coerce
-    .number(),
+  mobile_number: z.coerce.bigint(),
 
   desgination: z.string().min(1, "Designation is required"),
 
