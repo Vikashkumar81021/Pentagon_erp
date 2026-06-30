@@ -105,6 +105,20 @@ model SalesVisit {
   updatedAt           DateTime     @updatedAt
 }
 
+
+model Employee {
+  full_name   String
+  email    String  @unique
+  mobile_number Int
+  desgination  String
+  department   String
+  salary String
+  status_desgnation String?
+  Bank_instutuion String
+  pan_id_card_number    String
+  aadhard_card_number   String
+  bank_account_number  String
+}
 model Lead {
   id                Int     @id @default(autoincrement())
   organization_name String
