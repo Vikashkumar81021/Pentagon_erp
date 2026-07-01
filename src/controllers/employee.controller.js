@@ -31,7 +31,6 @@ const createEmployeeController = asyncHandler(async (req, res) => {
 });
 
 const getEmployeesController = asyncHandler(async (req, res) => {
-  
   const employees = await getEmployeesService();
 
   return res.status(STATUS_CODE.SUCCESS).json({
@@ -51,11 +50,16 @@ const getEmployeeByIdController = asyncHandler(async (req, res) => {
       message: "Employee not found",
     });
   }
-
+  const safeEmployee = {
+    ...employee,
+    mobile_number: employee.mobile_number
+      ? String(employee.mobile_number)
+      : null,
+  };
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
     message: "Employee fetched successfully",
-    data:{ ...employee },
+    data: safeEmployee,
   });
 });
 
