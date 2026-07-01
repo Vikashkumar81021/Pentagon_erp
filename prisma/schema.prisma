@@ -111,7 +111,12 @@ model SalesVisit {
   updatedAt           DateTime     @updatedAt
 }
 
-
+model EmployeeOnboard{
+  id Int @id @default(autoincrement())
+  emp_full_name  String
+  designation_role String
+  joining_date   DateTime
+}
 model Employee {
   id Int @id @default(autoincrement())
   full_name   String
