@@ -17,7 +17,12 @@ const createEmployeeService = async (empdata) => {
 };
 
 const getEmployeesService = async () => {
-  return prisma.employee.findMany({});
+  const employees = await prisma.employee.findMany({});
+
+  return employees.map((emp) => ({
+    ...emp,
+    mobile_number: emp.mobile_number?.toString(),
+  }));
 };
 
 const updateEmployeeService = async (id, data) => {
@@ -38,7 +43,6 @@ const deleteEmployeeService = async (id) => {
 };
 
 const filterEmployees = async (filters) => {
-  console.log("service", filters);
   const { department, status_desgnation } = filters;
   const where = {};
   if (department) where.department = department;
