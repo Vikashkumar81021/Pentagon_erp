@@ -24,4 +24,15 @@ const deleteNotice = async (id) => {
     },
   });
 };
-export  {createNotice, fetchNotices, deleteNotice};
+
+const fetchNoticesByType = async (type) => {
+  return await prisma.notice.findMany({
+    where: {
+      type,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+};
+export  {createNotice, fetchNotices, deleteNotice, fetchNoticesByType};

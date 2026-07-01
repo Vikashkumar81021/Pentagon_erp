@@ -68,6 +68,12 @@ enum VisitType {
   WARM
   HOT
 }
+enum JobType {
+  Full_time
+  Part_time
+  Contract
+  Remote
+}
 
 
 model SalesVisit {
@@ -105,11 +111,17 @@ model SalesVisit {
   updatedAt           DateTime     @updatedAt
 }
 
-
+model EmployeeOnboard{
+  id Int @id @default(autoincrement())
+  emp_full_name  String
+  designation_role String
+  joining_date   DateTime
+}
 model Employee {
+  id Int @id @default(autoincrement())
   full_name   String
   email    String  @unique
-  mobile_number Int
+  mobile_number BigInt
   desgination  String
   department   String
   salary String
@@ -118,6 +130,14 @@ model Employee {
   pan_id_card_number    String
   aadhard_card_number   String
   bank_account_number  String
+}
+model HiringRequirement{
+
+  id Int @id @default(autoincrement())
+  job_Title   String
+  department  String
+  job_type  JobType
+  roles_requirements  String
 }
 model Lead {
   id                Int     @id @default(autoincrement())
@@ -210,6 +230,8 @@ model InstitutionVisit {
 }
 model Notice {
   id        Int      @id @default(autoincrement())
+  title     String
+  type      String
   text      String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
