@@ -3,6 +3,7 @@ import { STATUS_CODE } from "../constants/status.code.js";
 import {
   createEmployeeService,
   getEmployeesService,
+  getEmployeeByIdService,
   updateEmployeeService,
   deleteEmployeeService,
   filterEmployees,
@@ -30,11 +31,31 @@ const createEmployeeController = asyncHandler(async (req, res) => {
 });
 
 const getEmployeesController = asyncHandler(async (req, res) => {
+  
   const employees = await getEmployeesService();
 
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
     data: employees,
+  });
+});
+
+const getEmployeeByIdController = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  const employee = await getEmployeeByIdService(id);
+
+  if (!employee) {
+    return res.status(404).json({
+      success: false,
+      message: "Employee not found",
+    });
+  }
+
+  return res.status(STATUS_CODE.SUCCESS).json({
+    success: true,
+    message: "Employee fetched successfully",
+    data:{ ...employee },
   });
 });
 
@@ -85,6 +106,7 @@ const searchEmployeController = asyncHandler(async (req, res) => {
 export {
   createEmployeeController,
   getEmployeesController,
+  getEmployeeByIdController,
   updateEmployeeController,
   deleteEmployeeController,
   searchEmployeController,
