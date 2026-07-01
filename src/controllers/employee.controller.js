@@ -32,10 +32,15 @@ const createEmployeeController = asyncHandler(async (req, res) => {
 
 const getEmployeesController = asyncHandler(async (req, res) => {
   const employees = await getEmployeesService();
-
+  const safeEmployees = (Array.isArray(employees) ? employees : [employees])
+    .filter(Boolean)
+    .map((emp) => ({
+      ...emp,
+      mobile_number: emp.mobile_number?.toString(),
+    }));
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
-    data: employees,
+    data: safeEmployees,
   });
 });
 

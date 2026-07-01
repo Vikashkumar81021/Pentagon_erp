@@ -17,7 +17,7 @@ const createEmployeeService = async (empdata) => {
 };
 
 const getEmployeesService = async () => {
-  return prisma.employee.findMany({});
+  return prisma.employee.findMany();
 };
 
 const getEmployeeByIdService = async (id) => {
