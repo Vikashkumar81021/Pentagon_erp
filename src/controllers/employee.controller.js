@@ -6,6 +6,7 @@ import {
   updateEmployeeService,
   deleteEmployeeService,
   filterEmployees,
+  searchEmployeService,
 } from "../services/employee.service.js";
 
 import {
@@ -62,7 +63,7 @@ const deleteEmployeeController = asyncHandler(async (req, res) => {
   });
 });
 
-const  filterEmployeeController = asyncHandler(async (req, res) => {
+const filterEmployeeController = asyncHandler(async (req, res) => {
   const filters = req.query;
 
   const employees = await filterEmployees(filters);
@@ -74,10 +75,18 @@ const  filterEmployeeController = asyncHandler(async (req, res) => {
   });
 });
 
+const searchEmployeController = asyncHandler(async (req, res) => {
+  const search = req.query;
+  const searchData = await searchEmployeService(search);
+  return res.status(STATUS_CODE.SUCCESS).json({
+    data: searchData,
+  });
+});
 export {
   createEmployeeController,
   getEmployeesController,
   updateEmployeeController,
   deleteEmployeeController,
-  filterEmployeeController
+  searchEmployeController,
+  filterEmployeeController,
 };

@@ -38,29 +38,42 @@ const deleteEmployeeService = async (id) => {
 };
 
 const filterEmployees = async (filters) => {
-  console.log("service",filters)
-  const {
-    department,
-    status_desgnation,
-   
-  } = filters;
+  console.log("service", filters);
+  const { department, status_desgnation } = filters;
   const where = {};
   if (department) where.department = department;
 
   if (status_desgnation) where.status_desgnation = status_desgnation;
   return await prisma.employee.findMany({
-   where,
+    where,
     select: {
-    status_desgnation: true,
-    department: true,
-  },
+      status_desgnation: true,
+      department: true,
+    },
   });
 };
+const searchEmployeService = async (search) => {
+  const { full_name } = search;
 
+  const where = {};
+  if (full_name) {
+    where.full_name = {
+      contains: full_name,
+      mode: "insensitive",
+    };
+  }
+  return await prisma.employee.findMany({
+    where,
+    select: {
+      full_name: true,
+    },
+  });
+};
 export {
   createEmployeeService,
   getEmployeesService,
   updateEmployeeService,
   deleteEmployeeService,
   filterEmployees,
+  searchEmployeService,
 };
