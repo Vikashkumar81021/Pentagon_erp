@@ -12,7 +12,7 @@ import {
 } from "../services/InstitutionVisit.service.js";
 
 const createInstitutionVisitController = asyncHandler(async (req, res) => {
-  const validateData = institutionVisitValidator.parse(req.body);
+  const validateData = createInstitutionVisitValidator.parse(req.body);
   const institutionVisit = await createInstitutionVisit(validateData);
 
   return res.status(STATUS_CODE.CREATED).json({
@@ -55,8 +55,8 @@ const deleteInstitutionVisitController = asyncHandler(async (req, res) => {
 });
 
 export {
-    createInstitutionVisitController, 
-    getInstitutionVisitsController, 
-    updateInstitutionVisitController,
-    deleteInstitutionVisitController,
+  createInstitutionVisitController,
+  getInstitutionVisitsController,
+  updateInstitutionVisitController,
+  deleteInstitutionVisitController,
 };
