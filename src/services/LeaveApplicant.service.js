@@ -38,10 +38,23 @@ const deleteLeaveApplicantService = async (id) => {
     },
   });
 };
+
+const getLeaveByDateService = async (startDate, endDate) => {
+  return await prisma.leaveApplicant.findMany({
+    where: {
+      createdAt: {
+        gte: new Date(startDate),
+        lte: new Date(endDate),
+      },
+    },
+   
+  });
+};
 export {
   createLeaveApplicantService,
   getLeaveApplicantsService,
   getLeaveApplicantByIdService,
   updateLeaveApplicantService,
   deleteLeaveApplicantService,
+  getLeaveByDateService,
 };

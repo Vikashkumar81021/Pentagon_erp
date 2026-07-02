@@ -10,6 +10,7 @@ import {
     getLeaveApplicantByIdService,
     updateLeaveApplicantService,
     deleteLeaveApplicantService,
+    getLeaveByDateService,
 } from "../services/LeaveApplicant.service.js";
 
 const createLeaveApplicantController = asyncHandler(async (req, res) => {
@@ -78,10 +79,44 @@ const deleteLeaveApplicantController = asyncHandler(async (req, res) => {
   });
 });
 
+const getLeaveByDateController = asyncHandler(async (req, res) => {
+  const { startDate, endDate } = req.query;
+ 
+
+  if (!startDate) {
+    return res.status(400).json({
+      success: false,
+      message: "startDate  are required",
+    });
+  }
+
+  const leaves = await getLeaveByDateService(startDate, endDate);
+
+  const mappedLeaves = leaves.map((leave) => ({
+    id: leave.id,
+    applicant_name: leave.applicant_name,
+    leave_category: leave.leave_category,
+    from_date: leave.from_date,
+    to_date: leave.to_date,
+    leave_approve: leave.leave_approve,
+    reason_absence: leave.reason_absence,
+    createdAt: leave.createdAt,
+    updatedAt: leave.updatedAt,
+  }));
+
+  return res.status(STATUS_CODE.SUCCESS).json({
+    success: true,
+    message: "Leave applications fetched successfully",
+    count: mappedLeaves.length,
+    data: mappedLeaves,
+  });
+});
+
 export {
   createLeaveApplicantController,
   getLeaveApplicantsController,
   getLeaveApplicantByIdController,
+  getLeaveByDateController,
   updateLeaveApplicantController,
   deleteLeaveApplicantController,
 };
