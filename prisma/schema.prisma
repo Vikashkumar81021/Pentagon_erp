@@ -74,7 +74,11 @@ enum JobType {
   Contract
   Remote
 }
-
+enum ApprovedType {
+  PENDING
+  APPROVED
+  REJECTED
+}
 
 model SalesVisit {
   id                  Int          @id @default(autoincrement())
@@ -116,6 +120,7 @@ model LeaveApplicant {
   leave_category  String
   from_date      DateTime
   to_date      DateTime
+    leave_approve    ApprovedType @default(PENDING)
   reason_absence String
   createdAt           DateTime     @default(now())
   updatedAt           DateTime     @updatedAt
