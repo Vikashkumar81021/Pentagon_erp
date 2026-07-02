@@ -111,6 +111,7 @@ model SalesVisit {
   updatedAt           DateTime     @updatedAt
 }
 model LeaveApplicant {
+  id     Int @id @default(autoincrement())
   applicant_name  String
   leave_category  String
   from_date      DateTime
