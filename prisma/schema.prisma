@@ -110,7 +110,15 @@ model SalesVisit {
   createdAt           DateTime     @default(now())
   updatedAt           DateTime     @updatedAt
 }
-
+model LeaveApplicant {
+  applicant_name  String
+  leave_category  String
+  from_date      DateTime
+  to_date      DateTime
+  reason_absence String
+  createdAt           DateTime     @default(now())
+  updatedAt           DateTime     @updatedAt
+}
 model EmployeeOnboard{
   id Int @id @default(autoincrement())
   emp_full_name  String
