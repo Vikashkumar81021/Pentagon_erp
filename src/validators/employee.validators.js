@@ -13,10 +13,12 @@ const employeeSchema = z.object({
 
   salary: z.string().min(1, "Salary is required"),
 
-dob: z.coerce
-  .date({
-    invalid_type_error: "Invalid date",
-  })
+dob: z
+  .string()
+  .regex(
+    /^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-\d{4}$/,
+    "DOB must be in DD-MM-YYYY format"
+  )
   .optional(),
   status_desgnation: z.string().optional(),
 
