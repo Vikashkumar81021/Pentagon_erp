@@ -67,6 +67,7 @@ enum SalesStatus {
 enum VisitType {
   WARM
   HOT
+  DSR
 }
 enum JobType {
   Full_time
@@ -151,6 +152,7 @@ model HiringRequirement{
   job_Title   String
   department  String
   job_type  JobType
+  job_status   String  @default("OPEN")
   roles_requirements  String
 }
 model Lead {
