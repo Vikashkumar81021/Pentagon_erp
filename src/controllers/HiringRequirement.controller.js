@@ -4,8 +4,10 @@ import { STATUS_CODE } from "../constants/status.code.js";
 import {
   createHiringRequirement,
   getHiringRequirement,
+  getHiringRequirementById,
   updateHiringRequirement,
   deleteHiringRequirement,
+  searchHiringRequirement,
 } from "../services/HiringRequirement.service.js";
 
 import {
@@ -27,6 +29,17 @@ const createHiringRequirementController = asyncHandler(async (req, res) => {
 
 const getHiringRequirementController = asyncHandler(async (req, res) => {
   const result = await getHiringRequirement();
+
+  return res.status(STATUS_CODE.SUCCESS).json({
+    success: true,
+    data: result,
+  });
+});
+
+const getHiringRequirementByIdController = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  const result = await getHiringRequirementById(id);
 
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
@@ -59,9 +72,22 @@ const deleteHiringRequirementController = asyncHandler(async (req, res) => {
   });
 });
 
+const searchHiringRequirementController = asyncHandler(async (req, res) => {
+  const { job_Title } = req.query;
+
+  const result = await searchHiringRequirement({ job_Title });
+
+  return res.status(STATUS_CODE.SUCCESS).json({
+    success: true,
+    data: result,
+  });
+});
+
 export{
     createHiringRequirementController,
     getHiringRequirementController,
+    getHiringRequirementByIdController,
     updateHiringRequirementController,
-    deleteHiringRequirementController
+    deleteHiringRequirementController,
+    searchHiringRequirementController,
 };
