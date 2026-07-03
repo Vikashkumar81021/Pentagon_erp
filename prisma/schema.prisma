@@ -140,8 +140,8 @@ model Employee {
   desgination  String
   department   String
   salary String
-  org_name  String
-  dob    DateTime
+  org_name  String?
+  dob    DateTime?
   status_desgnation String?
   Bank_instutuion String
   pan_id_card_number    String

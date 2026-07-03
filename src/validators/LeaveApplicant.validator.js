@@ -12,12 +12,14 @@ export const createLeaveApplicantValidator = z.object({
   leave_category: z.string().min(1, "Leave category is required"),
 
   from_date: z.coerce.date(),
-
+  
   to_date: z.coerce.date(),
 
   leave_approve: ApprovedTypeEnum.default("PENDING"),
 
   reason_absence: z.string().min(1, "Reason is required"),
+
+  reason_reject: z.string().min(1, "Reason is required"),
 });
 
 export const updateLeaveApplicantValidator =

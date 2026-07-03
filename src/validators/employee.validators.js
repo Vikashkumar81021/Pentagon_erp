@@ -13,7 +13,14 @@ const employeeSchema = z.object({
 
   salary: z.string().min(1, "Salary is required"),
 
+dob: z.coerce
+  .date({
+    invalid_type_error: "Invalid date",
+  })
+  .optional(),
   status_desgnation: z.string().optional(),
+
+  org_name: z.string().optional(),
 
   Bank_instutuion: z.string().min(1, "Bank Institution is required"),
 
