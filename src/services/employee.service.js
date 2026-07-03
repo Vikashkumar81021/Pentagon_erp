@@ -76,6 +76,39 @@ const searchEmployeService = async (search) => {
     },
   });
 };
+
+const getEmployeService = async (page = 1, limit = 10) => {
+  page = Number(page);
+  limit = Number(limit);
+
+  const skip = (page - 1) * limit;
+
+  const [employees, totalEmployees] = await Promise.all([
+    prisma.employee.findMany({
+      skip,
+      take: limit,
+      orderBy: {
+        id: "desc",
+      },
+      select:{
+        mobile_number: false
+      }
+     
+    }),
+  ]);
+
+  return {
+    employees,
+    pagination: {
+      currentPage: page,
+      limit,
+      totalEmployees,
+      totalPages: Math.ceil(totalEmployees / limit),
+      hasNextPage: page < Math.ceil(totalEmployees / limit),
+      hasPreviousPage: page > 1,
+    },
+  };
+};
 export {
   createEmployeeService,
   getEmployeesService,
@@ -84,4 +117,5 @@ export {
   deleteEmployeeService,
   filterEmployees,
   searchEmployeService,
+  getEmployeService,
 };

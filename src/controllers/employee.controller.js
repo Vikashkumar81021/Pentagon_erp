@@ -8,6 +8,7 @@ import {
   deleteEmployeeService,
   filterEmployees,
   searchEmployeService,
+  getEmployeService,
 } from "../services/employee.service.js";
 
 import {
@@ -112,6 +113,22 @@ const searchEmployeController = asyncHandler(async (req, res) => {
     data: searchData,
   });
 });
+
+const getEmployeController = asyncHandler(async (req, res) => {
+  const { page = 1, limit = 10 } = req.query;
+
+  const result = await getEmployeService(page, limit);
+  console.log("result", result);
+  return res.status(STATUS_CODE.SUCCESS).json({
+    success: true,
+    message: "Employees fetched successfully",
+    data: result.employees,
+    pagination: result.pagination,
+    mobile_number: result.mobile_number
+      ? String(result.mobile_number)
+      : null
+  });
+});
 export {
   createEmployeeController,
   getEmployeesController,
@@ -120,4 +137,5 @@ export {
   deleteEmployeeController,
   searchEmployeController,
   filterEmployeeController,
+  getEmployeController,
 };
