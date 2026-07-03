@@ -84,18 +84,28 @@ const getEmployeService = async (page = 1, limit = 10) => {
   const skip = (page - 1) * limit;
 
   const [employees, totalEmployees] = await Promise.all([
-    prisma.employee.findMany({
-      skip,
-      take: limit,
-      orderBy: {
-        id: "desc",
-      },
-      select:{
-        mobile_number: false
-      }
-     
-    }),
-  ]);
+  prisma.employee.findMany({
+    skip,
+    take: limit,
+    orderBy: {
+      id: "desc",
+    },
+    select: {
+      id: true,
+      full_name: true,
+      email: true,
+      desgination: true,
+      department: true,
+      salary: true,
+      status_desgnation: true,
+      Bank_instutuion: true,
+      pan_id_card_number: true,
+      aadhard_card_number: true,
+      bank_account_number: true,
+    },
+  }),
+  prisma.employee.count(),
+]);
 
   return {
     employees,
