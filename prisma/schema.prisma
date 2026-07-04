@@ -131,6 +131,7 @@ model EmployeeOnboard{
   emp_full_name  String
   designation_role String
   joining_date   DateTime
+  taskCheckLists  TaskChecklist[]
 }
 
 model TaskChecklist {
