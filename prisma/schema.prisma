@@ -132,6 +132,14 @@ model EmployeeOnboard{
   designation_role String
   joining_date   DateTime
 }
+
+model TaskChecklist {
+  id     Int @id @default(autoincrement())
+
+  category  String
+  text String
+  completed  Boolean @default(false)
+}
 model Employee {
   id Int @id @default(autoincrement())
   full_name   String
