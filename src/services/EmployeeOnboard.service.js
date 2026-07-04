@@ -32,9 +32,47 @@ const deleteEmployeeOnboard = async (id) => {
   });
 };
 
+
+const getTaskChecklist = async () => {
+  return await prisma.taskChecklist.findMany({
+    include: {
+      employee: true,
+    },
+    orderBy: {
+      id: "desc",
+    },
+  });
+};
+
+const updateTaskChecklist = async (id, data) => {
+  if (data.employeId) {
+    const employee = await prisma.employeeOnboard.findUnique({
+      where: {
+        id: Number(data.employeId),
+      },
+    });
+
+    if (!employee) {
+      throw new BadRequestError("Employee not found");
+    }
+  }
+
+  return await prisma.taskChecklist.create({
+    where: {
+      id: Number(id),
+    },
+    data,
+    include: {
+      employee: true,
+    },
+  });
+};
+
 export {
   createEmployeeOnboard,
   fetchEmployeeOnboards,
   updateEmployeeOnboard,
-  deleteEmployeeOnboard
+  deleteEmployeeOnboard,
+  getTaskChecklist,
+  updateTaskChecklist,
 };

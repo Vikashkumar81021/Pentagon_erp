@@ -6,12 +6,17 @@ import {
   fetchEmployeeOnboards,
   updateEmployeeOnboard,
   deleteEmployeeOnboard,
+  getTaskChecklist,
+  updateTaskChecklist,
 } from "../services/EmployeeOnboard.service.js";
 
 import {
   createEmployeeOnboardValidator,
   updateEmployeeOnboardValidator,
 } from "../validators/EmployeeOnboard.validator.js";
+import {
+  updateTaskChecklistValidator,
+} from "../validators/TaskChecklist.validator.js";
 
 const createEmployeeOnboardController = asyncHandler(async (req, res) => {
   const validatedData = createEmployeeOnboardValidator.parse(req.body);
@@ -60,9 +65,36 @@ const deleteEmployeeOnboardController = asyncHandler(async (req, res) => {
   });
 });
 
+
+const getTaskChecklistController = asyncHandler(async (req, res) => {
+  const result = await getTaskChecklist();
+
+  return res.status(STATUS_CODE.SUCCESS).json({
+    success: true,
+    count: result.length,
+    data: result,
+  });
+});
+
+const updateTaskChecklistController = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  const validatedData = updateTaskChecklistValidator.parse(req.body);
+
+  const result = await updateTaskChecklist(id, validatedData);
+
+  return res.status(STATUS_CODE.SUCCESS).json({
+    success: true,
+    message: "Task Checklist updated successfully",
+    data: result,
+  });
+});
+
 export {
     createEmployeeOnboardController,
     getEmployeeOnboardController,
     updateEmployeeOnboardController,
-    deleteEmployeeOnboardController
+    deleteEmployeeOnboardController,
+    getTaskChecklistController,
+    updateTaskChecklistController,
 };
