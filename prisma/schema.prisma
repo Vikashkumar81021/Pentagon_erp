@@ -139,6 +139,8 @@ model TaskChecklist {
   category  String
   text String
   completed  Boolean @default(false)
+  employeId Int
+  employee   EmployeeOnboard @relation(fields: [employeId],references: [id],onDelete: Cascade)
 }
 model Employee {
   id Int @id @default(autoincrement())
