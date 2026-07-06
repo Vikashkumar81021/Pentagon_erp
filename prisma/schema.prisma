@@ -128,9 +128,9 @@ model LeaveApplicant {
 }
 model EmployeeOnboard{
   id Int @id @default(autoincrement())
-  emp_full_name  String
-  designation_role String
   joining_date   DateTime
+  employeeId   Int @unique
+  employee  Employee  @relation(fields: [employeeId],references: [id])
   taskCheckLists  TaskChecklist[]
 }
 
@@ -140,8 +140,8 @@ model TaskChecklist {
   category  String
   text String
   completed  Boolean @default(false)
-  employeId Int
-  employee   EmployeeOnboard @relation(fields: [employeId],references: [id],onDelete: Cascade)
+ employeeOnboardId Int
+ employeeOnboard   EmployeeOnboard @relation(fields: [employeeOnboardId], references: [id], onDelete: Cascade)
 }
 model Employee {
   id Int @id @default(autoincrement())
@@ -154,11 +154,13 @@ model Employee {
   org_name  String?
   dob    DateTime?
   status_desgnation String?
-  Bank_instutuion String
+ bank_institution    String
   pan_id_card_number    String
-  aadhard_card_number   String
+ aadhar_card_number  String
   bank_account_number  String
+  onboardProcess      EmployeeOnboard?
 }
+
 model HiringRequirement{
 
   id Int @id @default(autoincrement())

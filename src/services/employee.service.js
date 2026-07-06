@@ -13,6 +13,7 @@ const createEmployeeService = async (empdata) => {
   const employeedata = await prisma.employee.create({
     data: empdata,
   });
+
   return employeedata;
 };
 
@@ -84,28 +85,28 @@ const getEmployeService = async (page = 1, limit = 10) => {
   const skip = (page - 1) * limit;
 
   const [employees, totalEmployees] = await Promise.all([
-  prisma.employee.findMany({
-    skip,
-    take: limit,
-    orderBy: {
-      id: "desc",
-    },
-    select: {
-      id: true,
-      full_name: true,
-      email: true,
-      desgination: true,
-      department: true,
-      salary: true,
-      status_desgnation: true,
-      Bank_instutuion: true,
-      pan_id_card_number: true,
-      aadhard_card_number: true,
-      bank_account_number: true,
-    },
-  }),
-  prisma.employee.count(),
-]);
+    prisma.employee.findMany({
+      skip,
+      take: limit,
+      orderBy: {
+        id: "desc",
+      },
+      select: {
+        id: true,
+        full_name: true,
+        email: true,
+        desgination: true,
+        department: true,
+        salary: true,
+        status_desgnation: true,
+        Bank_instutuion: true,
+        pan_id_card_number: true,
+        aadhard_card_number: true,
+        bank_account_number: true,
+      },
+    }),
+    prisma.employee.count(),
+  ]);
 
   return {
     employees,
@@ -118,6 +119,26 @@ const getEmployeService = async (page = 1, limit = 10) => {
       hasPreviousPage: page > 1,
     },
   };
+};
+const generateEmpCode = async (empId, empCode) => {
+  const employeId = await prisma.employee.findFirst({
+    where: {
+      id: Number(empId),
+    },
+  });
+  if (!employeId) {
+    throw new BadRequestError("EmployeeId not found.");
+  }
+
+  //sest170201
+
+  const dateObj = new Date(employeId.dob);
+  const dd = String(dateObj.getDate()).padStart(2, "0");
+  const mm = String(dateObj.getMonth() + 1).padStart(2, "0");
+  const yy = String(dateObj.getFullYear()).slice(-2);
+  const dobPart = `${dd}${mm}${yy}`;
+  const finalEmpCode = `${orgPart}${dobPart}`;
+  // await prisma.
 };
 export {
   createEmployeeService,
