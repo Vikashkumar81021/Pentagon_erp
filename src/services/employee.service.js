@@ -120,25 +120,24 @@ const getEmployeService = async (page = 1, limit = 10) => {
     },
   };
 };
-const generateEmpCode = async (empId, empCode) => {
+const generateEmpCode = async (empId) => {
   const employeId = await prisma.employee.findFirst({
     where: {
-      id: Number(empId),
+      id: empId,
     },
   });
   if (!employeId) {
     throw new BadRequestError("EmployeeId not found.");
   }
-
-  //sest170201
-
   const dateObj = new Date(employeId.dob);
+  const SEST = "PTGN";
   const dd = String(dateObj.getDate()).padStart(2, "0");
   const mm = String(dateObj.getMonth() + 1).padStart(2, "0");
   const yy = String(dateObj.getFullYear()).slice(-2);
   const dobPart = `${dd}${mm}${yy}`;
-  const finalEmpCode = `${orgPart}${dobPart}`;
-  // await prisma.
+  const finalEmpCode = `${SEST}${dobPart}`;
+
+  return finalEmpCode;
 };
 export {
   createEmployeeService,
@@ -149,4 +148,5 @@ export {
   filterEmployees,
   searchEmployeService,
   getEmployeService,
+  generateEmpCode,
 };

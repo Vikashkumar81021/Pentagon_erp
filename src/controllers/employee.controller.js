@@ -9,6 +9,7 @@ import {
   filterEmployees,
   searchEmployeService,
   getEmployeService,
+  generateEmpCode,
 } from "../services/employee.service.js";
 
 import {
@@ -20,9 +21,9 @@ const createEmployeeController = asyncHandler(async (req, res) => {
   const data = createEmployeeValidator.parse(req.body);
 
   if (data.dob) {
-  const [day, month, year] = data.dob.split("-");
-  data.dob = new Date(`${year}-${month}-${day}`);
-}
+    const [day, month, year] = data.dob.split("-");
+    data.dob = new Date(`${year}-${month}-${day}`);
+  }
 
   const employee = await createEmployeeService(data);
 
@@ -129,9 +130,16 @@ const getEmployeController = asyncHandler(async (req, res) => {
     message: "Employees fetched successfully",
     data: result.employees,
     pagination: result.pagination,
-    mobile_number: result.mobile_number
-      ? String(result.mobile_number)
-      : null
+    mobile_number: result.mobile_number ? String(result.mobile_number) : null,
+  });
+});
+const generateEmpCodeController = asyncHandler(async (req, res) => {
+  const { id } = req.body;
+
+  const fetchEmpCodeService = await generateEmpCode(id);
+
+  return res.status(STATUS_CODE.SUCCESS).json({
+    data: fetchEmpCodeService,
   });
 });
 export {
@@ -143,4 +151,5 @@ export {
   searchEmployeController,
   filterEmployeeController,
   getEmployeController,
+  generateEmpCodeController,
 };

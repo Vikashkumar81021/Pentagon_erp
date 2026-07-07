@@ -9,6 +9,7 @@ import {
   filterEmployeeController,
   searchEmployeController,
   getEmployeController,
+  generateEmpCodeController,
 } from "../controllers/employee.controller.js";
 
 const router = express.Router();
@@ -21,5 +22,6 @@ router.delete("/deleteEmp/:id", authMiddleware, deleteEmployeeController);
 router.get("/filter", filterEmployeeController);
 router.get("/search", searchEmployeController);
 router.get("/getEmp", getEmployeController);
+router.post("/generateEmpCode", generateEmpCodeController);
 
 export default router;

@@ -10,7 +10,10 @@ import authMiddleware from "../middleware/auth.middleware.js";
 const router = express.Router();
 
 router.get("/dashboard/stats", fetchDashboardStatsController);
-router.get("/dashboard/client-account-stats",fetchClientAccountCRMStatsController,);
+router.get(
+  "/dashboard/client-account-stats",
+  fetchClientAccountCRMStatsController,
+);
 router.get("/dashboard/leave-stats", getApprovedLeaveStatsController);
 
 export default router;
