@@ -11,7 +11,11 @@ const getLeaveApplicantsService = async () => {
     orderBy: {
       createdAt: "desc",
     },
+    where:{
+      leave_approve:"PENDING"
+    }
   });
+
 };
 
 const getLeaveApplicantByIdService = async (id) => {

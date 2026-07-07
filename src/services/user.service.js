@@ -23,13 +23,26 @@ const createUserService = async (data) => {
 
 const getUsersService = async () => {
   return await prisma.user.findMany({
-    select: {
-      id: true,
-      name: true,
-      email: true,
-      empcode: true,
+  select: {
+    id: true,
+    name: true,
+    email: true,
+    empcode: true,
+
+    roles: {
+      select: {
+        userId: true,
+        roleId: true,
+        role: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
     },
-  });
+  },
+});
 };
 
 const updateUserService = async (id, data) => {
