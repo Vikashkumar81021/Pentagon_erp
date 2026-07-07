@@ -19,7 +19,7 @@ export const createLeaveApplicantValidator = z.object({
 
   reason_absence: z.string().min(1, "Reason is required"),
 
-  reason_reject: z.string().min(1, "Reason is required"),
+  reason_reject: z.string().optional,
 });
 
 export const updateLeaveApplicantValidator =

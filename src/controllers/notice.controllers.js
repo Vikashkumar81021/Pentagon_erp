@@ -2,11 +2,12 @@ import { asyncHandler } from '../utils/asyncHandler.js';
 import { STATUS_CODE } from '../constants/status.code.js';
 import { 
     createNotice, 
-    fetchNotices, 
+    fetchNotices,
+    updateNotice, 
     deleteNotice,
     fetchNoticesByType 
 } from '../services/notice.service.js';
-import { createNoticeValidator } from '../validators/notice.validator.js';
+import { createNoticeValidator, updateNoticeValidator } from '../validators/notice.validator.js';
 
 const createNoticeController = asyncHandler(async (req, res) => {
     const validatedData = createNoticeValidator.parse(req.body);
@@ -27,6 +28,21 @@ const getNoticesController = asyncHandler(async (req, res) => {
         data: notices,
     });
 });
+
+const updateNoticeController = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  const validatedData = updateNoticeValidator.parse(req.body);
+
+  const notice = await updateNotice(id, validatedData);
+
+  return res.status(STATUS_CODE.SUCCESS).json({
+    success: true,
+    message: "Notice updated successfully",
+    data: notice,
+  });
+});
+
 const deleteNoticeController = asyncHandler(async (req, res) => {
     const { id } = req.params;
     await deleteNotice(id);
@@ -50,7 +66,8 @@ const getNoticeByTypeController = asyncHandler(async (req, res) => {
 });
 export  { 
     createNoticeController, 
-    getNoticesController, 
+    getNoticesController,
+    updateNoticeController, 
     deleteNoticeController, 
     getNoticeByTypeController 
 };
