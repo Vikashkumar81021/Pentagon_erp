@@ -6,6 +6,7 @@ import {
 } from "../validators/LeaveApplicant.validator.js";
 import {
     createLeaveApplicantService,
+    getLeaveApplicantService,
     getLeaveApplicantsService,
     getLeaveApplicantByIdService,
     updateLeaveApplicantService,
@@ -22,6 +23,17 @@ const createLeaveApplicantController = asyncHandler(async (req, res) => {
     success: true,
     message: "Leave applied successfully",
     data: leave,
+  });
+});
+
+const getLeaveApplicantController = asyncHandler(async (req, res) => {
+  const leaves = await getLeaveApplicantsService();
+
+  return res.status(STATUS_CODE.SUCCESS).json({
+    success: true,
+    message: "Leave applications fetched successfully",
+    data: leaves,
+    leaveCount:leaves.length
   });
 });
 
@@ -114,6 +126,7 @@ const getLeaveByDateController = asyncHandler(async (req, res) => {
 
 export {
   createLeaveApplicantController,
+  getLeaveApplicantController,
   getLeaveApplicantsController,
   getLeaveApplicantByIdController,
   getLeaveByDateController,

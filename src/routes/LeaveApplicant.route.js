@@ -1,6 +1,7 @@
 import express from "express";
 import {
     createLeaveApplicantController,
+    getLeaveApplicantController,
   getLeaveApplicantsController,
   getLeaveApplicantByIdController,
   updateLeaveApplicantController,
@@ -11,6 +12,8 @@ import {
 const router = express.Router();
 
 router.post("/createLeave", createLeaveApplicantController);
+
+router.get("/fetchsLeave", getLeaveApplicantsController);
 
 router.get("/fetchLeave", getLeaveApplicantsController);
 

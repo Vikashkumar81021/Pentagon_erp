@@ -6,6 +6,15 @@ const createLeaveApplicantService = async (data) => {
   });
 };
 
+const getLeaveApplicantService = async () => {
+  return await prisma.leaveApplicant.findMany({
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+
+};
+
 const getLeaveApplicantsService = async () => {
   return await prisma.leaveApplicant.findMany({
     orderBy: {
@@ -56,6 +65,7 @@ const getLeaveByDateService = async (startDate, endDate) => {
 };
 export {
   createLeaveApplicantService,
+  getLeaveApplicantService,
   getLeaveApplicantsService,
   getLeaveApplicantByIdService,
   updateLeaveApplicantService,
