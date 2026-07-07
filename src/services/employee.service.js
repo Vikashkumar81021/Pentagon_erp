@@ -130,13 +130,12 @@ const generateEmpCode = async (empId) => {
     throw new BadRequestError("EmployeeId not found.");
   }
   const dateObj = new Date(employeId.dob);
-  const SEST = "PTGN";
+  // const SEST = "PTGN";
   const dd = String(dateObj.getDate()).padStart(2, "0");
   const mm = String(dateObj.getMonth() + 1).padStart(2, "0");
   const yy = String(dateObj.getFullYear()).slice(-2);
   const dobPart = `${dd}${mm}${yy}`;
-  const finalEmpCode = `${SEST}${dobPart}`;
-
+  const finalEmpCode = `${employeId.org_name}${dobPart}`;
   return finalEmpCode;
 };
 export {
