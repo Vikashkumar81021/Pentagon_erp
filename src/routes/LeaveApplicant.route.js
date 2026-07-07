@@ -13,7 +13,7 @@ const router = express.Router();
 
 router.post("/createLeave", createLeaveApplicantController);
 
-router.get("/fetchsLeave", getLeaveApplicantsController);
+router.get("/fetchsLeave", getLeaveApplicantController);
 
 router.get("/fetchLeave", getLeaveApplicantsController);
 

@@ -27,7 +27,7 @@ const createLeaveApplicantController = asyncHandler(async (req, res) => {
 });
 
 const getLeaveApplicantController = asyncHandler(async (req, res) => {
-  const leaves = await getLeaveApplicantsService();
+  const leaves = await getLeaveApplicantService();
 
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
