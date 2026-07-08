@@ -13,6 +13,7 @@ export const salesVisitValidator = z.object({
 
   visit_type: VisitTypeEnum,
   lead_type: z.string(),
+  designation: z.string(),
   customer_name: z.string().min(1, "Customer name is required"),
 
   customer_address: z.string().optional(),

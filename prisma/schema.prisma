@@ -89,7 +89,7 @@ model SalesVisit {
 
   visit_type          VisitType
   lead_type           String
-
+  designation         String
   customer_name       String
   customer_address    String?
 
