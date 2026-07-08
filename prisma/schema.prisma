@@ -64,8 +64,8 @@ enum SalesStatus {
 }
 
 enum VisitType {
-  WARM
-  HOT
+  WARM_PROSPECTS
+  HOT_PROSPECTS
   DSR
 }
 enum JobType {
@@ -87,7 +87,7 @@ model SalesVisit {
 
   visit_date          DateTime
 
-  visit_type          String
+  visit_type          VisitType
   lead_type           String
 
   customer_name       String
