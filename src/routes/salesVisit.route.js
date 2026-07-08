@@ -13,7 +13,7 @@ import authMiddleware from "../middleware/auth.middleware.js";
 
 const router = express.Router();
 
-router.post("/create", authMiddleware, createSalesVisitController);
+router.post("/create",authMiddleware, createSalesVisitController);
 router.get("/get", authMiddleware, getSalesVisitsController);
 router.put("/update/:id", updateSalesVisitController);
 router.delete("/delete/:id", deleteSalesVisitController);

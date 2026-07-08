@@ -13,7 +13,7 @@ import {
 
 const createSalesVisitController = asyncHandler(async (req, res, next) => {
   const validateData = salesVisitValidator.parse(req.body);
-  console.log("userId", req.user.id);
+
 
   console.log("validate", validateData);
 

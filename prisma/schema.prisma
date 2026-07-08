@@ -63,7 +63,7 @@ enum SalesStatus {
   CLOSED
 }
 
-enum VisitType {
+enum LeadType {
   WARM_PROSPECTS
   HOT_PROSPECTS
   DSR
@@ -87,8 +87,8 @@ model SalesVisit {
 
   visit_date          DateTime
 
-  visit_type          VisitType
-  lead_type           String
+  visit_type          String
+  lead_type           LeadType
   designation         String
   customer_name       String
   customer_address    String?
