@@ -146,6 +146,7 @@ model TaskChecklist {
 model Employee {
   id Int @id @default(autoincrement())
   full_name   String
+    employeeCode  String   @unique
   email    String  @unique
   mobile_number BigInt
   desgination  String
@@ -159,8 +160,20 @@ model Employee {
  aadhar_card_number  String
   bank_account_number  String
   onboardProcess      EmployeeOnboard?
+   attendanceLogs   AttendanceLog[]
 }
+enum PunchType {
+  IN
+  OUT
+}
+model AttendanceLog {
+  id  Int @id @default(autoincrement())
 
+    employeeCode  String
+    punch_time  DateTime
+    punch_type PunchType
+    empolyee   Employee @relation(fields: [employeeCode],references: [employeeCode])
+}
 model HiringRequirement{
 
   id Int @id @default(autoincrement())
@@ -170,6 +183,7 @@ model HiringRequirement{
   job_status   String  @default("OPEN")
   roles_requirements  String
 }
+
 model Lead {
   id                Int     @id @default(autoincrement())
   organization_name String
