@@ -63,9 +63,9 @@ enum SalesStatus {
   CLOSED
 }
 
-enum VisitType {
-  WARM
-  HOT
+enum LeadType {
+  WARM_PROSPECTS
+  HOT_PROSPECTS
   DSR
 }
 enum JobType {
@@ -88,8 +88,8 @@ model SalesVisit {
   visit_date          DateTime
 
   visit_type          String
-  lead_type           String
-
+  lead_type           LeadType
+  designation         String
   customer_name       String
   customer_address    String?
 
@@ -248,12 +248,44 @@ model ClientAccount {
 }
 model BillingOrder {
   id                  Int      @id @default(autoincrement())
+
+  // Billing Information
   date                DateTime
   particulars         String
   item_details        String
   taxable_amount      Float
-  support_of          String
-  monthly_business  Int
+  business_value      Int
+
+  // Customer
+  customer_name       String
+
+  // Customer Contact (Purchase Order)
+  po_contact_name     String
+  po_contact_email    String
+  po_contact_phone    String
+
+  // Billing Contact
+  billing_contact_name  String
+  billing_contact_email String
+  billing_contact_phone String
+
+  // Invoice Recipient
+  recipient_name      String
+  recipient_email     String
+  recipient_phone     String
+
+  // Accounts / Payment Contact
+  accounts_phone      String
+
+  // Project Execution Contact
+  execution_phone     String
+
+  // Post Implementation Support Contact
+  support_phone       String
+
+  // Partner / Support Reference
+  support_name        String
+  support_contact_phone String
 
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt

@@ -1,12 +1,19 @@
 import { z } from "zod";
 
+export const LeadTypeEnum = z.enum([
+  "WARM_PROSPECTS",
+  "HOT_PROSPECTS",
+  "DSR",
+]);
+
 export const salesVisitValidator = z.object({
   executive_name: z.string().min(1, "Executive name is required"),
 
   visit_date: z.coerce.date(),
 
   visit_type: z.string(),
-  lead_type: z.string(),
+  lead_type: LeadTypeEnum,
+  designation: z.string(),
   customer_name: z.string().min(1, "Customer name is required"),
 
   customer_address: z.string().optional(),
