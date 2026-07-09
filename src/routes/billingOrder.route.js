@@ -5,6 +5,7 @@ import {
   createBillingOrderController,
   getBillingOrdersController,
   updateBillingOrderController,
+  deleteBillingOrderController,
 } from "../controllers/billingOrder.controller.js";
 
 const router = Router();
@@ -15,4 +16,5 @@ router.get("/fetchBillings", authMiddleware, getBillingOrdersController);
 
 router.put("/updates/:id", authMiddleware, updateBillingOrderController);
 
+router.delete("/billingdelete/:id", authMiddleware, deleteBillingOrderController);
 export default router;
