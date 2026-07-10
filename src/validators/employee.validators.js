@@ -24,11 +24,11 @@ dob: z
 
   org_name: z.string().optional(),
 
-  Bank_instutuion: z.string().min(1, "Bank Institution is required"),
+  bank_institution: z.string().min(1, "Bank Institution is required"),
 
   pan_id_card_number: z.string().min(10),
 
-  aadhard_card_number: z
+  aadhar_card_number: z
     .string()
     .regex(/^[0-9]{12}$/, "Aadhar must be 12 digits"),
 
