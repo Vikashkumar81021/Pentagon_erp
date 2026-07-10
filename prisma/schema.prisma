@@ -48,6 +48,31 @@ enum LeadPriority {
   MEDIUM
   HIGH
 }
+enum CallType {
+  PHONE
+  WHATSAPP
+   VIDEO_CALL
+   MEETING
+}
+enum DiscussionOutcome{
+   INTERESTED
+   FOLLOW_UP
+   NEGOTIATION
+  QUOTATION_REQUIRED
+   NOT_INTERESTED
+  CONVERTED
+}
+enum FollowupMode {
+  PHONE
+   WHATSAPP
+   EMAIL
+  MEETING
+}
+enum ApprovalStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
 
 enum CustomerType {
   COLD
@@ -113,6 +138,30 @@ model SalesVisit {
   
   createdAt           DateTime     @default(now())
   updatedAt           DateTime     @updatedAt
+}
+model CallLog {
+  id                  Int                 @id @default(autoincrement())
+
+  customer_name       String
+  contact_person      String
+  contact_number      String
+
+  call_type           CallType
+  discussion_outcome  DiscussionOutcome
+
+  discussion_notes    String?
+
+  followup_date       DateTime?
+  followup_mode       FollowupMode?
+
+  approval_status     ApprovalStatus @default(PENDING)
+  approved_by         String?
+
+  approved_date       DateTime? @default(now())
+
+  management_remarks  String 
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
 }
 model LeaveApplicant {
   id     Int @id @default(autoincrement())
