@@ -195,7 +195,7 @@ model TaskChecklist {
 model Employee {
   id Int @id @default(autoincrement())
   full_name   String
-    employeeCode  String   @unique
+    employeeCode  String?   @unique
   email    String  @unique
   mobile_number BigInt
   desgination  String

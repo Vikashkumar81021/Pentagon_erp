@@ -136,7 +136,15 @@ const generateEmpCode = async (empId) => {
   const yy = String(dateObj.getFullYear()).slice(-2);
   const dobPart = `${dd}${mm}${yy}`;
   const finalEmpCode = `${employeId.org_name}${dobPart}`;
-  return finalEmpCode;
+  const empIds = await prisma.employee.update({
+    where:{
+      id:empId
+    },
+    data:{
+      employeeCode:finalEmpCode
+    }
+  })
+  return empIds.employeeCode
 };
 export {
   createEmployeeService,
