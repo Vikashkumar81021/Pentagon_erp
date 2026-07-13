@@ -1,16 +1,26 @@
 import prisma from "../config/db.js";
-
-const createEmployeeOnboard = async (data) => {
-    
+import { BadRequestError } from "../utils/error.js";
+const createEmployeeOnboard = async (employeeId, data) => {
+  const empId = await prisma.employee.findFirst({
+    where: {
+      id: Number(employeeId),
+    },
+  });
+  if (!empId) {
+    throw new BadRequestError("Employee not found");
+  }
   return await prisma.employeeOnboard.create({
-    data,
+    data: {
+      ...data,
+      employeeId: Number(employeeId),
+    },
   });
 };
 
 const fetchEmployeeOnboards = async () => {
   return await prisma.employeeOnboard.findMany({
     orderBy: {
-    //   createdAt: "desc",
+      //   createdAt: "desc",
     },
   });
 };
@@ -31,7 +41,6 @@ const deleteEmployeeOnboard = async (id) => {
     },
   });
 };
-
 
 const getTaskChecklist = async () => {
   return await prisma.taskChecklist.findMany({

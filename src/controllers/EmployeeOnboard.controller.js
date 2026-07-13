@@ -17,9 +17,10 @@ import {
 import { updateTaskChecklistValidator } from "../validators/TaskChecklist.validator.js";
 
 const createEmployeeOnboardController = asyncHandler(async (req, res) => {
+  const { employeeId } = req.body;
   const validatedData = createEmployeeOnboardValidator.parse(req.body);
 
-  const employee = await createEmployeeOnboard(validatedData);
+  const employee = await createEmployeeOnboard(employeeId, validatedData);
 
   return res.status(STATUS_CODE.CREATED).json({
     success: true,
