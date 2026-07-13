@@ -32,7 +32,7 @@ const createEmployeeController = asyncHandler(async (req, res) => {
     message: "Employee created successfully",
     data: {
       ...employee,
-      mobile_number: employee.mobile_number.toString(),
+      mobileNumber: employee.mobileNumber.toString(),
     },
   });
 });

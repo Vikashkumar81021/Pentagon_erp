@@ -1,38 +1,49 @@
 import { z } from "zod";
 
+export const StatusDesignationEnum = z.enum([
+  "Active",
+  "Probation",
+  "On Leave",
+]);
+
 const employeeSchema = z.object({
-  full_name: z.string().min(3, "Full name is required"),
+  fullName: z.string().min(3, "Full name is required"),
 
-  email: z.string().email("Invalid email"),
+  employeeCode: z.string().optional(),
 
-  mobile_number: z.coerce.bigint(),
+  workEmail: z.string().email("Invalid email"),
 
-  desgination: z.string().min(1, "Designation is required"),
+  mobileNumber: z.coerce.bigint(),
+
+  designation: z.string().min(1, "Designation is required"),
 
   department: z.string().min(1, "Department is required"),
 
-  salary: z.string().min(1, "Salary is required"),
-
-dob: z
-  .string()
-  .regex(
-    /^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-\d{4}$/,
-    "DOB must be in DD-MM-YYYY format"
-  )
-  .optional(),
-  status_desgnation: z.string().optional(),
+  salary: z.coerce.number().int().positive("Salary must be greater than 0"),
 
   org_name: z.string().optional(),
 
-  bank_institution: z.string().min(1, "Bank Institution is required"),
-
-  pan_id_card_number: z.string().min(10),
-
-  aadhar_card_number: z
+  dob: z
     .string()
-    .regex(/^[0-9]{12}$/, "Aadhar must be 12 digits"),
+    .regex(
+      /^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-\d{4}$/,
+      "DOB must be in DD-MM-YYYY format"
+    )
+    .optional(),
 
-  bank_account_number: z.string().min(8),
+  status: StatusDesignationEnum.optional(),
+
+  bankName: z.string().min(1, "Bank Name is required"),
+
+  panNumber: z
+    .string()
+    .regex(/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/, "Invalid PAN Number"),
+
+  aadhaarNumber: z
+    .string()
+    .regex(/^[0-9]{12}$/, "Aadhaar must be 12 digits"),
+
+  accountNumber: z.string().min(8, "Invalid Account Number"),
 });
 
 export const createEmployeeValidator = employeeSchema;

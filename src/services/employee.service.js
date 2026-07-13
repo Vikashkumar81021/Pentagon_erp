@@ -2,9 +2,10 @@ import prisma from "../config/db.js";
 import { BadRequestError } from "../utils/error.js";
 
 const createEmployeeService = async (empdata) => {
+
   const existEmpEmail = await prisma.employee.findFirst({
     where: {
-      email: empdata.email,
+      workEmail: empdata.workEmail,
     },
   });
   if (existEmpEmail) {
@@ -93,16 +94,16 @@ const getEmployeService = async (page = 1, limit = 10) => {
       },
       select: {
         id: true,
-        full_name: true,
-        email: true,
+        fullName: true,
+        workEmail: true,
         desgination: true,
         department: true,
         salary: true,
-        status_desgnation: true,
-        Bank_instutuion: true,
-        pan_id_card_number: true,
-        aadhard_card_number: true,
-        bank_account_number: true,
+        status: true,
+        bankName: true,
+        panNumber: true,
+        aadhaarNumber: true,
+        accountNumber: true,
       },
     }),
     prisma.employee.count(),

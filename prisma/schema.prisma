@@ -105,6 +105,12 @@ enum ApprovedType {
   REJECTED
 }
 
+enum statusDesgnation{
+  Active 
+  Probation 
+  On_Leave
+}
+
 model SalesVisit {
   id                  Int          @id @default(autoincrement())
 
@@ -194,20 +200,20 @@ model TaskChecklist {
 }
 model Employee {
   id Int @id @default(autoincrement())
-  full_name   String
+   fullName   String
     employeeCode  String?   @unique
-  email    String  @unique
-  mobile_number BigInt
-  desgination  String
+  workEmail    String  @unique
+  mobileNumber BigInt
+  designation  String
   department   String
-  salary String
+  salary       Int
   org_name  String?
   dob    DateTime?
-  status_desgnation String?
- bank_institution    String
-  pan_id_card_number    String
- aadhar_card_number  String
-  bank_account_number  String
+  status statusDesgnation
+ bankName    String
+  panNumber    String
+ aadhaarNumber  String
+  accountNumber  String
   onboardProcess      EmployeeOnboard?
    attendanceLogs   AttendanceLog[]
 }
