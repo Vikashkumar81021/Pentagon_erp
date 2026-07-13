@@ -1,5 +1,6 @@
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { STATUS_CODE } from "../constants/status.code.js";
+import { serializeBigInt } from "../utils/bigIntSerializer.js";
 
 import {
   createEmployeeOnboard,
@@ -35,7 +36,7 @@ const getEmployeeOnboardController = asyncHandler(async (req, res) => {
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
     count: employees.length,
-    data: employees,
+    data: serializeBigInt(employees),
   });
 });
 
