@@ -10,6 +10,7 @@ import {
   searchEmployeService,
   getEmployeService,
   generateEmpCode,
+  getEmployeeNameDesignationService,
 } from "../services/employee.service.js";
 
 import {
@@ -21,10 +22,8 @@ const createEmployeeController = asyncHandler(async (req, res) => {
   const data = createEmployeeValidator.parse(req.body);
 
   if (data.dob) {
-    const [day, month, year] = data.dob.split("-");
-    data.dob = new Date(`${year}-${month}-${day}`);
-  }
-
+  data.dob = new Date(data.dob);
+}
   const employee = await createEmployeeService(data);
 
   return res.status(STATUS_CODE.CREATED).json({
@@ -142,6 +141,15 @@ const generateEmpCodeController = asyncHandler(async (req, res) => {
     data: fetchEmpCodeService,
   });
 });
+
+const getEmployeeNameDesignationController = asyncHandler(async (req, res) => {
+  const employees = await getEmployeeNameDesignationService();
+
+  return res.status(200).json({
+    success: true,
+    data: employees,
+  });
+});
 export {
   createEmployeeController,
   getEmployeesController,
@@ -152,4 +160,5 @@ export {
   filterEmployeeController,
   getEmployeController,
   generateEmpCodeController,
+  getEmployeeNameDesignationController,
 };

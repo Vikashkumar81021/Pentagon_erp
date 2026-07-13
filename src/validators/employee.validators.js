@@ -23,14 +23,13 @@ const employeeSchema = z.object({
 
   org_name: z.string().optional(),
 
-  dob: z
-    .string()
-    .regex(
-      /^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-\d{4}$/,
-      "DOB must be in DD-MM-YYYY format"
-    )
-    .optional(),
-
+ dob: z
+  .string()
+  .regex(
+    /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/,
+    "DOB must be in YYYY-MM-DD format"
+  )
+  .optional(),
   status: StatusDesignationEnum.optional(),
 
   bankName: z.string().min(1, "Bank Name is required"),
