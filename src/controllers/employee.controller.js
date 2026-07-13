@@ -43,7 +43,7 @@ const getEmployeesController = asyncHandler(async (req, res) => {
     .filter(Boolean)
     .map((emp) => ({
       ...emp,
-      mobile_number: emp.mobile_number?.toString(),
+      mobileNumber: emp.mobileNumber?.toString(),
     }));
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
@@ -64,8 +64,8 @@ const getEmployeeByIdController = asyncHandler(async (req, res) => {
   }
   const safeEmployee = {
     ...employee,
-    mobile_number: employee.mobile_number
-      ? String(employee.mobile_number)
+    mobileNumber: employee.mobileNumber
+      ? String(employee.mobileNumber)
       : null,
   };
   return res.status(STATUS_CODE.SUCCESS).json({
@@ -130,7 +130,7 @@ const getEmployeController = asyncHandler(async (req, res) => {
     message: "Employees fetched successfully",
     data: result.employees,
     pagination: result.pagination,
-    mobile_number: result.mobile_number ? String(result.mobile_number) : null,
+    mobileNumber: result.mobileNumber ? String(result.mobileNumber) : null,
   });
 });
 const generateEmpCodeController = asyncHandler(async (req, res) => {
