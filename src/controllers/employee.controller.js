@@ -21,10 +21,8 @@ const createEmployeeController = asyncHandler(async (req, res) => {
   const data = createEmployeeValidator.parse(req.body);
 
   if (data.dob) {
-    const [day, month, year] = data.dob.split("-");
-    data.dob = new Date(`${year}-${month}-${day}`);
-  }
-
+  data.dob = new Date(data.dob);
+}
   const employee = await createEmployeeService(data);
 
   return res.status(STATUS_CODE.CREATED).json({
