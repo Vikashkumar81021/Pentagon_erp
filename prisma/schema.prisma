@@ -54,7 +54,7 @@ enum CallType {
    VIDEO_CALL
    MEETING
 }
-enum DiscussionOutcome{
+enum DiscussionOutcome {
    INTERESTED
    FOLLOW_UP
    NEGOTIATION

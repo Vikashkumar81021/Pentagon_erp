@@ -19,8 +19,8 @@ const createEmployeeOnboard = async (employeeId, data) => {
 
 const fetchEmployeeOnboards = async () => {
   return await prisma.employeeOnboard.findMany({
-    orderBy: {
-      //   createdAt: "desc",
+    include: {
+      employee: true,
     },
   });
 };
