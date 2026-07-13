@@ -10,6 +10,7 @@ import {
   searchEmployeController,
   getEmployeController,
   generateEmpCodeController,
+  getEmployeeNameDesignationController,
 } from "../controllers/employee.controller.js";
 
 const router = express.Router();
@@ -23,5 +24,5 @@ router.get("/filter", filterEmployeeController);
 router.get("/search", searchEmployeController);
 router.get("/getEmp", getEmployeController);
 router.post("/generateEmpCode", generateEmpCodeController);
-
+router.get("/employee-name-designation", authMiddleware, getEmployeeNameDesignationController);
 export default router;

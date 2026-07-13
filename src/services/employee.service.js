@@ -147,6 +147,19 @@ const generateEmpCode = async (empId) => {
   })
   return empIds.employeeCode
 };
+
+const getEmployeeNameDesignationService = async () => {
+  return await prisma.employee.findMany({
+    select: {
+      id: true,
+      fullName: true,
+      designation: true,
+    },
+    orderBy: {
+      fullName: "asc",
+    },
+  });
+};
 export {
   createEmployeeService,
   getEmployeesService,
@@ -157,4 +170,5 @@ export {
   searchEmployeService,
   getEmployeService,
   generateEmpCode,
+  getEmployeeNameDesignationService,
 };

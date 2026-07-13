@@ -10,6 +10,7 @@ import {
   searchEmployeService,
   getEmployeService,
   generateEmpCode,
+  getEmployeeNameDesignationService,
 } from "../services/employee.service.js";
 
 import {
@@ -140,6 +141,15 @@ const generateEmpCodeController = asyncHandler(async (req, res) => {
     data: fetchEmpCodeService,
   });
 });
+
+const getEmployeeNameDesignationController = asyncHandler(async (req, res) => {
+  const employees = await getEmployeeNameDesignationService();
+
+  return res.status(200).json({
+    success: true,
+    data: employees,
+  });
+});
 export {
   createEmployeeController,
   getEmployeesController,
@@ -150,4 +160,5 @@ export {
   filterEmployeeController,
   getEmployeController,
   generateEmpCodeController,
+  getEmployeeNameDesignationController,
 };
