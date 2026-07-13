@@ -14,9 +14,7 @@ import {
   createEmployeeOnboardValidator,
   updateEmployeeOnboardValidator,
 } from "../validators/EmployeeOnboard.validator.js";
-import {
-  updateTaskChecklistValidator,
-} from "../validators/TaskChecklist.validator.js";
+import { updateTaskChecklistValidator } from "../validators/TaskChecklist.validator.js";
 
 const createEmployeeOnboardController = asyncHandler(async (req, res) => {
   const validatedData = createEmployeeOnboardValidator.parse(req.body);
@@ -65,7 +63,6 @@ const deleteEmployeeOnboardController = asyncHandler(async (req, res) => {
   });
 });
 
-
 const getTaskChecklistController = asyncHandler(async (req, res) => {
   const result = await getTaskChecklist();
 
@@ -91,10 +88,10 @@ const updateTaskChecklistController = asyncHandler(async (req, res) => {
 });
 
 export {
-    createEmployeeOnboardController,
-    getEmployeeOnboardController,
-    updateEmployeeOnboardController,
-    deleteEmployeeOnboardController,
-    getTaskChecklistController,
-    updateTaskChecklistController,
+  createEmployeeOnboardController,
+  getEmployeeOnboardController,
+  updateEmployeeOnboardController,
+  deleteEmployeeOnboardController,
+  getTaskChecklistController,
+  updateTaskChecklistController,
 };
