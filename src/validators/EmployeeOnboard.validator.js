@@ -9,7 +9,7 @@ export const createEmployeeOnboardValidator = z.object({
     .string()
     .min(2, "Designation is required"),
 
-  joining_date: z.coerce.date(),
+  joiningDate: z.coerce.date(),
 });
 
 export const updateEmployeeOnboardValidator =

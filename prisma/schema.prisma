@@ -183,7 +183,7 @@ model LeaveApplicant {
 }
 model EmployeeOnboard{
   id Int @id @default(autoincrement())
-  joining_date   DateTime
+  joiningDate   DateTime
   employeeId   Int @unique
   employee  Employee  @relation(fields: [employeeId],references: [id])
   taskCheckLists  TaskChecklist[]
