@@ -105,6 +105,26 @@ const updateTaskChecklist = async (id, data) => {
   });
 };
 
+const getEmployeeOnboardById = async (id) => {
+  console.log("id",id);
+  
+  const onboard = await prisma.employeeOnboard.findUnique({
+    where: {
+      id: Number(id),
+    },
+    include: {
+      employee: true,
+      taskCheckLists: true,
+    },
+  });
+
+  if (!onboard) {
+    throw new BadRequestError("Employee Onboard record not found");
+  }
+
+  return onboard;
+};
+
 export {
   createEmployeeOnboard,
   fetchEmployeeOnboards,
@@ -112,4 +132,5 @@ export {
   deleteEmployeeOnboard,
   getTaskChecklist,
   updateTaskChecklist,
+  getEmployeeOnboardById,
 };

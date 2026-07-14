@@ -9,6 +9,7 @@ import {
   deleteEmployeeOnboard,
   getTaskChecklist,
   updateTaskChecklist,
+  getEmployeeOnboardById,
 } from "../services/EmployeeOnboard.service.js";
 
 import {
@@ -89,6 +90,17 @@ const updateTaskChecklistController = asyncHandler(async (req, res) => {
   });
 });
 
+const fetchEmployeeOnboardByIdController = asyncHandler(async (req, res) => {
+  
+  const { id } = req.params;
+
+  const onboard = await getEmployeeOnboardById(id);
+
+  res.status(STATUS_CODE.SUCCESS).json({
+    success: true,
+    data: onboard,
+  });
+});
 export {
   createEmployeeOnboardController,
   getEmployeeOnboardController,
@@ -96,4 +108,5 @@ export {
   deleteEmployeeOnboardController,
   getTaskChecklistController,
   updateTaskChecklistController,
+  fetchEmployeeOnboardByIdController,
 };
