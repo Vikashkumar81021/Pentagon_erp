@@ -91,14 +91,13 @@ const updateTaskChecklistController = asyncHandler(async (req, res) => {
 });
 
 const fetchEmployeeOnboardByIdController = asyncHandler(async (req, res) => {
-  
   const { id } = req.params;
 
   const onboard = await getEmployeeOnboardById(id);
 
   res.status(STATUS_CODE.SUCCESS).json({
     success: true,
-    data: onboard,
+    data: serializeBigInt(onboard),
   });
 });
 export {
