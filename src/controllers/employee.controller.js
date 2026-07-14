@@ -85,7 +85,7 @@ const updateEmployeeController = asyncHandler(async (req, res) => {
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
     message: "Employee updated successfully",
-    data: employee,
+    data: serializeBigInt(employee),
   });
 });
 
@@ -108,7 +108,7 @@ const filterEmployeeController = asyncHandler(async (req, res) => {
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
     count: employees.length,
-    data: employees,
+    data: serializeBigInt(employees),
   });
 });
 

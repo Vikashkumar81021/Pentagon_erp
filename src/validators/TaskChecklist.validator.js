@@ -1,8 +1,16 @@
 import { z } from "zod";
 
-export const updateTaskChecklistValidator = z.object({
-  category: z.string().min(1).optional(),
-  text: z.string().min(1).optional(),
+const taskChecklistSchema = z.object({
+  category: z.string().trim().min(1, "Category is required"),
+
+  text: z.string().trim().min(1, "Text is required"),
+
   completed: z.boolean().optional(),
-  employeeId: z.number().int().positive().optional(),
+
+  employeeOnboardId: z.coerce.number().int().positive(),
 });
+
+export const createTaskChecklistValidator = taskChecklistSchema;
+
+export const updateTaskChecklistValidator = taskChecklistSchema
+  .partial()

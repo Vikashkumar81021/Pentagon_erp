@@ -26,7 +26,7 @@ const createEmployeeOnboardController = asyncHandler(async (req, res) => {
   return res.status(STATUS_CODE.CREATED).json({
     success: true,
     message: "Employee Onboard created successfully",
-    data: employee,
+    data: serializeBigInt(employee),
   });
 });
 
@@ -50,7 +50,7 @@ const updateEmployeeOnboardController = asyncHandler(async (req, res) => {
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
     message: "Employee Onboard updated successfully",
-    data: employee,
+    data: serializeBigInt(employee),
   });
 });
 
