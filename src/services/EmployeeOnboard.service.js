@@ -13,6 +13,34 @@ const createEmployeeOnboard = async (employeeId, data) => {
     data: {
       ...data,
       employeeId: Number(employeeId),
+      taskCheckLists: {
+        create: [
+          {
+            category: "FORMALITY",
+            text: "Submit PAN & Aadhaar details",
+            completed: false,
+          },
+          {
+            category: "DOCUMENT",
+            text: "Sign Employment Agreement & Policy Handbook",
+            completed: false,
+          },
+          {
+            category: "ASSET",
+            text: "Allocate Laptop & Accessories",
+            completed: false,
+          },
+          {
+            category: "INDUCTION",
+            text: "Schedule HR Induction & Code Walkthrough",
+            completed: false,
+          },
+        ],
+      },
+    },
+    include: {
+      taskCheckLists: true,
+      employee: true,
     },
   });
 };

@@ -1,14 +1,17 @@
-import {createTaskChecklistValidator,} from "../validators/TaskChecklist.validator.js";
+import { createTaskChecklistValidator } from "../validators/TaskChecklist.validator.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
-
-import {createTaskChecklist, getTaskChecklist,} from "../services/TaskChecklist.service.js";
+import { STATUS_CODE } from "../constants/status.code.js";
+import {
+  createTaskChecklist,
+  getTaskChecklist,
+} from "../services/TaskChecklist.service.js";
 
 const createTaskChecklistController = asyncHandler(async (req, res) => {
   const payload = createTaskChecklistValidator.parse(req.body);
 
   const task = await createTaskChecklist(payload);
 
-  res.status(201).json({
+  return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
     data: task,
   });
@@ -17,10 +20,10 @@ const createTaskChecklistController = asyncHandler(async (req, res) => {
 const getTaskChecklistController = asyncHandler(async (req, res) => {
   const tasks = await getTaskChecklist();
 
-  res.status(200).json({
+  return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
     data: tasks,
   });
 });
 
-export{createTaskChecklistController, getTaskChecklistController};
+export { createTaskChecklistController, getTaskChecklistController };
