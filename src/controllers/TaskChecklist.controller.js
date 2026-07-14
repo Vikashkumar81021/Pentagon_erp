@@ -4,6 +4,7 @@ import { STATUS_CODE } from "../constants/status.code.js";
 import {
   createTaskChecklist,
   getTaskChecklist,
+  toggleTaskStatus,
 } from "../services/TaskChecklist.service.js";
 
 const createTaskChecklistController = asyncHandler(async (req, res) => {
@@ -17,6 +18,14 @@ const createTaskChecklistController = asyncHandler(async (req, res) => {
   });
 });
 
+const toggleTaskCheckListController = asyncHandler(async (req, res) => {
+  const { taskId } = req.params;
+  const updateTask = await toggleTaskStatus(taskId);
+  return res.status(STATUS_CODE.SUCCESS).json({
+    success: true,
+    data: updateTask,
+  });
+});
 const getTaskChecklistController = asyncHandler(async (req, res) => {
   const tasks = await getTaskChecklist();
 
@@ -26,4 +35,8 @@ const getTaskChecklistController = asyncHandler(async (req, res) => {
   });
 });
 
-export { createTaskChecklistController, getTaskChecklistController };
+export {
+  createTaskChecklistController,
+  getTaskChecklistController,
+  toggleTaskCheckListController,
+};

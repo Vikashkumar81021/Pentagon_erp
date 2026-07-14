@@ -23,6 +23,27 @@ const createTaskChecklist = async (data) => {
   });
 };
 
+const toggleTaskStatus = async (taskId) => {
+  const exisitngTask = await prisma.taskChecklist.findUnique({
+    where: {
+      id: Number(taskId),
+    },
+  });
+  if (!exisitngTask) {
+    throw new BadRequestError("Task checklist not found");
+  }
+  return await prisma.taskChecklist.update({
+    where: {
+      id: Number(taskId),
+    },
+    data: {
+      completed: !exisitngTask.completed,
+    },
+    include: {
+      employeeOnboard: true,
+    },
+  });
+};
 const getTaskChecklist = async () => {
   return await prisma.taskChecklist.findMany({
     orderBy: {
@@ -34,4 +55,4 @@ const getTaskChecklist = async () => {
   });
 };
 
-export { createTaskChecklist, getTaskChecklist };
+export { createTaskChecklist, getTaskChecklist, toggleTaskStatus };
