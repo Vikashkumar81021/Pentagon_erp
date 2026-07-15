@@ -237,6 +237,7 @@ model HiringRequirement{
   job_type  JobType
   job_status   String  @default("OPEN")
   roles_requirements  String
+  applications JobApplication[]
 }
 
 model Lead {
@@ -274,6 +275,18 @@ model LeadActivity {
   mailStatus   String? // Sent, Opened, Replied
   responses    String? // Mail body summaries
   createdAt    DateTime  @default(now())
+}
+model JobApplication {
+  id                  Int @id @default(autoincrement())
+
+  hiringRequirementId Int
+  hiringRequirement   HiringRequirement @relation(fields: [hiringRequirementId], references: [id], onDelete: Cascade)
+
+  candidateName       String
+  email               String
+  mobile              String
+
+  appliedAt           DateTime @default(now())
 }
 
 model ClientAccount {
