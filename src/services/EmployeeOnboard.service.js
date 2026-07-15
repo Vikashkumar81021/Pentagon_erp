@@ -49,6 +49,7 @@ const fetchEmployeeOnboards = async () => {
   return await prisma.employeeOnboard.findMany({
     include: {
       employee: true,
+      taskCheckLists: true,
     },
   });
 };
