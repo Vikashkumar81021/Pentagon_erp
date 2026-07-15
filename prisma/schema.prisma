@@ -93,12 +93,7 @@ enum LeadType {
   HOT_PROSPECTS
   DSR
 }
-enum JobType {
-  Full_time
-  Part_time
-  Contract
-  Remote
-}
+
 enum ApprovedType {
   PENDING
   APPROVED
@@ -234,7 +229,7 @@ model HiringRequirement{
   id Int @id @default(autoincrement())
   jobTitle   String
   department  String
-  employmentType  JobType
+  employmentType  String
   jobStatus   String  @default("OPEN")
   description  String
   applications JobApplication[]
