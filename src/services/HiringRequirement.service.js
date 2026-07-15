@@ -8,7 +8,15 @@ const createHiringRequirement = async (data) => {
 };
 
 const getHiringRequirement = async () => {
-  return await prisma.hiringRequirement.findMany();
+  return await prisma.hiringRequirement.findMany({
+    include: {
+      _count: {
+        select: {
+          applications: true,
+        },
+      },
+    },
+  });
 };
 
 const getHiringRequirementById = async (id) => {
