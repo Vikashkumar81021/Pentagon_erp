@@ -184,6 +184,16 @@ model EmployeeOnboard{
   taskCheckLists  TaskChecklist[]
 }
 
+model Holidays {
+  id          Int      @id @default(autoincrement())
+  holidayName String
+  holidayDate String
+  day         String
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
 model TaskChecklist {
   id     Int @id @default(autoincrement())
 
