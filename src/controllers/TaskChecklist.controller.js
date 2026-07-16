@@ -5,6 +5,7 @@ import {
   createTaskChecklist,
   getTaskChecklist,
   toggleTaskStatus,
+  getTaskChecklistByEmployee,
 } from "../services/TaskChecklist.service.js";
 
 const createTaskChecklistController = asyncHandler(async (req, res) => {
@@ -35,8 +36,24 @@ const getTaskChecklistController = asyncHandler(async (req, res) => {
   });
 });
 
+const getTaskChecklistByEmployeeController = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+console.log(req.params)
+    const data = await getTaskChecklistByEmployee(id);
+
+    res.status(STATUS_CODE.SUCCESS).json({
+      success: true,
+      message: "Task checklist fetched successfully",
+      data,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 export {
   createTaskChecklistController,
   getTaskChecklistController,
   toggleTaskCheckListController,
+  getTaskChecklistByEmployeeController,
 };
