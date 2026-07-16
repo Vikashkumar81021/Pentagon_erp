@@ -16,23 +16,23 @@ const createEmployeeOnboard = async (employeeId, data) => {
       taskCheckLists: {
         create: [
           {
-            category: "FORMALITY",
-            text: "Submit PAN & Aadhaar details",
+            category: "DOCUMENT",
+            text: "Submit Documents",
             completed: false,
           },
           {
-            category: "DOCUMENT",
-            text: "Sign Employment Agreement & Policy Handbook",
+            category: "Create Email Account",
+            text: "IT",
             completed: false,
           },
           {
             category: "ASSET",
-            text: "Allocate Laptop & Accessories",
+            text: "Allocate Laptop",
             completed: false,
           },
           {
             category: "INDUCTION",
-            text: "Schedule HR Induction & Code Walkthrough",
+            text: "HR Induction",
             completed: false,
           },
         ],
@@ -107,8 +107,8 @@ const updateTaskChecklist = async (id, data) => {
 };
 
 const getEmployeeOnboardById = async (id) => {
-  console.log("id",id);
-  
+  console.log("id", id);
+
   const onboard = await prisma.employeeOnboard.findUnique({
     where: {
       id: Number(id),

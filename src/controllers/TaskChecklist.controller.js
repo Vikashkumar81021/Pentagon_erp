@@ -22,6 +22,7 @@ const createTaskChecklistController = asyncHandler(async (req, res) => {
 const toggleTaskCheckListController = asyncHandler(async (req, res) => {
   const { taskId } = req.params;
   const updateTask = await toggleTaskStatus(taskId);
+  console.log("updateTask", updateTask);
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
     data: updateTask,
@@ -39,7 +40,7 @@ const getTaskChecklistController = asyncHandler(async (req, res) => {
 const getTaskChecklistByEmployeeController = async (req, res, next) => {
   try {
     const { id } = req.params;
-console.log(req.params)
+    console.log(req.params);
     const data = await getTaskChecklistByEmployee(id);
 
     res.status(STATUS_CODE.SUCCESS).json({

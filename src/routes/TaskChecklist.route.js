@@ -14,5 +14,5 @@ router.post("/createChecklist", authMiddleware, createTaskChecklistController);
 
 router.get("/fetchChecklist", authMiddleware, getTaskChecklistController);
 router.patch("/task-checklist/:taskId/toggle", toggleTaskCheckListController);
-router.get("/fetchChecklistId/:id", getTaskChecklistByEmployeeController)
+router.get("/fetchChecklist/:id", getTaskChecklistByEmployeeController);
 export default router;

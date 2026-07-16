@@ -2,7 +2,6 @@ import prisma from "../config/db.js";
 import { BadRequestError } from "../utils/error.js";
 
 const createEmployeeService = async (empdata) => {
-
   const existEmpEmail = await prisma.employee.findFirst({
     where: {
       workEmail: empdata.workEmail,
@@ -19,7 +18,11 @@ const createEmployeeService = async (empdata) => {
 };
 
 const getEmployeesService = async () => {
-  return prisma.employee.findMany();
+  return prisma.employee.findMany({
+    include: {
+      onboardProcess: true,
+    },
+  });
 };
 
 const getEmployeeByIdService = async (id) => {
@@ -138,14 +141,15 @@ const generateEmpCode = async (empId) => {
   const dobPart = `${dd}${mm}${yy}`;
   const finalEmpCode = `${employeId.org_name}${dobPart}`;
   const empIds = await prisma.employee.update({
-    where:{
-      id:empId
+    where: {
+      id: empId,
     },
-    data:{
-      employeeCode:finalEmpCode
-    }
-  })
-  return empIds.employeeCode
+    data: {
+      employeeCode: finalEmpCode,
+    },
+  });
+
+  return empIds.employeeCode;
 };
 
 const getEmployeeNameDesignationService = async () => {

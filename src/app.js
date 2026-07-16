@@ -20,7 +20,7 @@ import EmployeeOnboardRoute from "./routes/EmployeeOnboard.route.js";
 import LeaveApplicantRoute from "./routes/LeaveApplicant.route.js";
 import OperationManagementRoute from "./routes/Operation.Management.route.js";
 import attendenceRoute from "./routes/attendence.route.js";
-import  calltypeRoute  from "./routes/calltype.route.js";
+import calltypeRoute from "./routes/calltype.route.js";
 import TaskChecklistRoute from "./routes/TaskChecklist.route.js";
 import JobApplicationRoute from "./routes/JobApplication.route.js";
 import { reqLogger } from "./middleware/req.middleware.js";

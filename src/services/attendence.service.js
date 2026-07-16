@@ -14,13 +14,12 @@ export const syncAttendanceService = async () => {
       FromDateTime: from.toISOString().slice(0, 19).replace("T", " "),
       ToDateTime: now.toISOString().slice(0, 19).replace("T", " "),
       SerialNumber: "",
-      UserName: "apiuser",
-      UserPassword: "App@create121",
+      UserName: process.env.ATTENDENCE_API_URL_USER_KEY,
+      UserPassword: process.env.ATTENDENCE_API_URL_PASSWORD,
       strDataList: "",
     };
 
     const [response] = await client.GetTransactionsLogAsync(args);
-    console.log("response", response);
 
     if (!response.strDataList) {
       return {
@@ -41,7 +40,6 @@ export const syncAttendanceService = async () => {
           punch_type: punchType.toUpperCase(),
         };
       });
-    console.log("attende", attendance);
 
     for (const item of attendance) {
       const employee = await prisma.employee.findUnique({
@@ -49,7 +47,6 @@ export const syncAttendanceService = async () => {
           employeeCode: item.employeeCode,
         },
       });
-      console.log("employe", employee);
 
       if (!employee) continue;
 

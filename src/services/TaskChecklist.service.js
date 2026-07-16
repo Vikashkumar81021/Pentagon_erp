@@ -55,10 +55,7 @@ const getTaskChecklist = async () => {
   });
 };
 
-
 const getTaskChecklistByEmployee = async (employeeOnboardId) => {
-  console.log(employeeOnboardId);
-  
   const onboard = await prisma.employeeOnboard.findUnique({
     where: {
       id: Number(employeeOnboardId),
@@ -82,11 +79,9 @@ const getTaskChecklistByEmployee = async (employeeOnboardId) => {
   });
 };
 
-
-
 export {
-  createTaskChecklist, 
-  getTaskChecklist, 
-  toggleTaskStatus, 
-  getTaskChecklistByEmployee 
+  createTaskChecklist,
+  getTaskChecklist,
+  toggleTaskStatus,
+  getTaskChecklistByEmployee,
 };
