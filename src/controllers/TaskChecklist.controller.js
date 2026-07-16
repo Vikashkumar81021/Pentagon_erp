@@ -6,8 +6,9 @@ import {
   getTaskChecklist,
   toggleTaskStatus,
   getTaskChecklistByEmployee,
+  getRecentPendingChecklist,
 } from "../services/TaskChecklist.service.js";
-
+import { serializeBigInt } from "../utils/bigIntSerializer.js";
 const createTaskChecklistController = asyncHandler(async (req, res) => {
   const payload = createTaskChecklistValidator.parse(req.body);
 
@@ -52,9 +53,19 @@ const getTaskChecklistByEmployeeController = async (req, res, next) => {
     next(error);
   }
 };
+
+const getRecentPendingChecklistController = asyncHandler(async (req, res) => {
+  const data = await getRecentPendingChecklist();
+
+  return res.status(STATUS_CODE.SUCCESS).json({
+    success: true,
+    data: serializeBigInt(data),
+  });
+});
 export {
   createTaskChecklistController,
   getTaskChecklistController,
   toggleTaskCheckListController,
   getTaskChecklistByEmployeeController,
+  getRecentPendingChecklistController,
 };

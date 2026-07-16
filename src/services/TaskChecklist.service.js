@@ -79,9 +79,29 @@ const getTaskChecklistByEmployee = async (employeeOnboardId) => {
   });
 };
 
+const getRecentPendingChecklist = async () => {
+  return await prisma.taskChecklist.findMany({
+    where: {
+      completed: false,
+    },
+    include: {
+      employeeOnboard: {
+        include: {
+          employee: true,
+        },
+      },
+    },
+    orderBy: {
+      id: "desc",
+    },
+    take: 2,
+  });
+};
+
 export {
   createTaskChecklist,
   getTaskChecklist,
   toggleTaskStatus,
   getTaskChecklistByEmployee,
+  getRecentPendingChecklist,
 };
