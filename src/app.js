@@ -23,6 +23,7 @@ import attendenceRoute from "./routes/attendence.route.js";
 import calltypeRoute from "./routes/calltype.route.js";
 import TaskChecklistRoute from "./routes/TaskChecklist.route.js";
 import JobApplicationRoute from "./routes/JobApplication.route.js";
+import HolidaysRoute from "./routes/Holidays.route.js"
 import { reqLogger } from "./middleware/req.middleware.js";
 import cors from "cors";
 const app = express();
@@ -68,4 +69,5 @@ app.use("/api/v1", attendenceRoute);
 app.use("/api/v1", calltypeRoute);
 app.use("/api/v1", TaskChecklistRoute);
 app.use("/api/v1", JobApplicationRoute);
+app.use("/api/v1", HolidaysRoute)
 export default app;

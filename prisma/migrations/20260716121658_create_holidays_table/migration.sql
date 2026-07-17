@@ -27,10 +27,10 @@ CREATE TYPE "SalesStatus" AS ENUM ('PENDING', 'IN_PROGRESS', 'WON', 'LOST', 'CLO
 CREATE TYPE "LeadType" AS ENUM ('WARM_PROSPECTS', 'HOT_PROSPECTS', 'DSR');
 
 -- CreateEnum
-CREATE TYPE "JobType" AS ENUM ('Full_time', 'Part_time', 'Contract', 'Remote');
+CREATE TYPE "ApprovedType" AS ENUM ('PENDING', 'APPROVED', 'REJECTED');
 
 -- CreateEnum
-CREATE TYPE "ApprovedType" AS ENUM ('PENDING', 'APPROVED', 'REJECTED');
+CREATE TYPE "statusDesgnation" AS ENUM ('Active', 'Probation', 'On_Leave');
 
 -- CreateEnum
 CREATE TYPE "PunchType" AS ENUM ('IN', 'OUT');
@@ -109,10 +109,22 @@ CREATE TABLE "LeaveApplicant" (
 -- CreateTable
 CREATE TABLE "EmployeeOnboard" (
     "id" SERIAL NOT NULL,
-    "joining_date" TIMESTAMP(3) NOT NULL,
+    "joiningDate" TIMESTAMP(3) NOT NULL,
     "employeeId" INTEGER NOT NULL,
 
     CONSTRAINT "EmployeeOnboard_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Holidays" (
+    "id" SERIAL NOT NULL,
+    "holidayName" TEXT NOT NULL,
+    "holidayDate" TEXT NOT NULL,
+    "day" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Holidays_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -129,20 +141,20 @@ CREATE TABLE "TaskChecklist" (
 -- CreateTable
 CREATE TABLE "Employee" (
     "id" SERIAL NOT NULL,
-    "full_name" TEXT NOT NULL,
-    "employeeCode" TEXT NOT NULL,
-    "email" TEXT NOT NULL,
-    "mobile_number" BIGINT NOT NULL,
-    "desgination" TEXT NOT NULL,
+    "fullName" TEXT NOT NULL,
+    "employeeCode" TEXT,
+    "workEmail" TEXT NOT NULL,
+    "mobileNumber" BIGINT NOT NULL,
+    "designation" TEXT NOT NULL,
     "department" TEXT NOT NULL,
-    "salary" TEXT NOT NULL,
+    "salary" INTEGER NOT NULL,
     "org_name" TEXT,
     "dob" TIMESTAMP(3),
-    "status_desgnation" TEXT,
-    "bank_institution" TEXT NOT NULL,
-    "pan_id_card_number" TEXT NOT NULL,
-    "aadhar_card_number" TEXT NOT NULL,
-    "bank_account_number" TEXT NOT NULL,
+    "status" "statusDesgnation" NOT NULL,
+    "bankName" TEXT NOT NULL,
+    "panNumber" TEXT NOT NULL,
+    "aadhaarNumber" TEXT NOT NULL,
+    "accountNumber" TEXT NOT NULL,
 
     CONSTRAINT "Employee_pkey" PRIMARY KEY ("id")
 );
@@ -160,13 +172,46 @@ CREATE TABLE "AttendanceLog" (
 -- CreateTable
 CREATE TABLE "HiringRequirement" (
     "id" SERIAL NOT NULL,
-    "job_Title" TEXT NOT NULL,
+    "jobTitle" TEXT NOT NULL,
     "department" TEXT NOT NULL,
-    "job_type" "JobType" NOT NULL,
-    "job_status" TEXT NOT NULL DEFAULT 'OPEN',
-    "roles_requirements" TEXT NOT NULL,
+    "employmentType" TEXT NOT NULL,
+    "jobStatus" TEXT NOT NULL DEFAULT 'OPEN',
+    "description" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "HiringRequirement_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "JobApplication" (
+    "id" SERIAL NOT NULL,
+    "hiringRequirementId" INTEGER NOT NULL,
+    "candidateName" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
+    "mobile" TEXT NOT NULL,
+    "appliedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "JobApplication_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "ClientAccount" (
+    "id" SERIAL NOT NULL,
+    "leadId" INTEGER NOT NULL,
+    "organization_name" TEXT NOT NULL,
+    "name_of_poc" TEXT,
+    "designation" TEXT,
+    "industry_sector" TEXT,
+    "email" TEXT,
+    "phoneNumber" TEXT,
+    "address" TEXT,
+    "city" TEXT,
+    "status" TEXT NOT NULL DEFAULT 'ACTIVE',
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "ClientAccount_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -233,6 +278,32 @@ CREATE TABLE "Order" (
 );
 
 -- CreateTable
+CREATE TABLE "Product" (
+    "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
+    "sku" TEXT NOT NULL,
+    "category" TEXT,
+    "unitPrice" DOUBLE PRECISION,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Product_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Inventory" (
+    "id" SERIAL NOT NULL,
+    "productId" INTEGER NOT NULL,
+    "totalStock" INTEGER NOT NULL DEFAULT 0,
+    "reservedStock" INTEGER NOT NULL DEFAULT 0,
+    "reorderLevel" INTEGER NOT NULL DEFAULT 10,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Inventory_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "ProcurementRequest" (
     "id" SERIAL NOT NULL,
     "requestNo" TEXT NOT NULL,
@@ -286,7 +357,16 @@ CREATE UNIQUE INDEX "EmployeeOnboard_employeeId_key" ON "EmployeeOnboard"("emplo
 CREATE UNIQUE INDEX "Employee_employeeCode_key" ON "Employee"("employeeCode");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Employee_email_key" ON "Employee"("email");
+CREATE UNIQUE INDEX "Employee_workEmail_key" ON "Employee"("workEmail");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "ClientAccount_leadId_key" ON "ClientAccount"("leadId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Product_sku_key" ON "Product"("sku");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Inventory_productId_key" ON "Inventory"("productId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "ProcurementRequest_requestNo_key" ON "ProcurementRequest"("requestNo");
@@ -304,10 +384,19 @@ ALTER TABLE "TaskChecklist" ADD CONSTRAINT "TaskChecklist_employeeOnboardId_fkey
 ALTER TABLE "AttendanceLog" ADD CONSTRAINT "AttendanceLog_employeeCode_fkey" FOREIGN KEY ("employeeCode") REFERENCES "Employee"("employeeCode") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "JobApplication" ADD CONSTRAINT "JobApplication_hiringRequirementId_fkey" FOREIGN KEY ("hiringRequirementId") REFERENCES "HiringRequirement"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ClientAccount" ADD CONSTRAINT "ClientAccount_leadId_fkey" FOREIGN KEY ("leadId") REFERENCES "Lead"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "Order" ADD CONSTRAINT "Order_clientAccountId_fkey" FOREIGN KEY ("clientAccountId") REFERENCES "ClientAccount"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Order" ADD CONSTRAINT "Order_salesPersonId_fkey" FOREIGN KEY ("salesPersonId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Inventory" ADD CONSTRAINT "Inventory_productId_fkey" FOREIGN KEY ("productId") REFERENCES "Product"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "ProcurementRequest" ADD CONSTRAINT "ProcurementRequest_requestedById_fkey" FOREIGN KEY ("requestedById") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
