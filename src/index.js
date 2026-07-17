@@ -17,7 +17,7 @@ const startServer = async () => {
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);
     });
-    startAttendanceCron();
+    // startAttendanceCron();
   } catch (error) {
     console.log(error);
     process.exit(1);
