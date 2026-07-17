@@ -3,6 +3,8 @@ import { STATUS_CODE } from "../constants/status.code.js";
 import {
     createHoliday,
     getAllHolidays,
+    getUpcomingHoliday,
+    deleteHoliday,
 } from "../services/Holidays.service.js";
 
 const createHolidayController = async (req, res) => {
@@ -15,7 +17,7 @@ const createHolidayController = async (req, res) => {
       data: holiday,
     });
   } catch (error) {
-    res.status(500).json({
+    res.status(STATUS_CODE.INTERNALERROR).json({
       success: false,
       message: error.message,
     });
@@ -26,7 +28,7 @@ const getAllHolidaysController = async (req, res) => {
   try {
     const holidays = await getAllHolidays()
 
-    res.status(200).json({
+    res.status(STATUS_CODE.SUCCESS).json({
       success: true,
       count: holidays.length,
       data: holidays,
@@ -39,7 +41,46 @@ const getAllHolidaysController = async (req, res) => {
   }
 };
 
+const getUpcomingHolidayController = async (req, res, next) => {
+  try {
+    const holiday = await getUpcomingHoliday();
+
+    if (!holiday) {
+      return res.status(STATUS_CODE.NOTFOUND).json({
+        success: false,
+        message: "No holiday found in the next 2 days",
+      });
+    }
+
+    return res.status(STATUS_CODE.SUCCESS).json({
+      success: true,
+      message: "Upcoming holiday found",
+      data: holiday,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const deleteHolidayController = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    const holiday = await deleteHoliday(id);
+
+    return res.status(STATUS_CODE.SUCCESS).json({
+      success: true,
+      message: "Holiday deleted successfully",
+      data: holiday,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export {
   createHolidayController,
   getAllHolidaysController,
+  getUpcomingHolidayController,
+  deleteHolidayController,
 };
