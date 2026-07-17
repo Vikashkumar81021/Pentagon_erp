@@ -23,8 +23,8 @@ const createEmployeeController = asyncHandler(async (req, res) => {
   const data = createEmployeeValidator.parse(req.body);
 
   if (data.dob) {
-  data.dob = new Date(data.dob);
-}
+    data.dob = new Date(data.dob);
+  }
   const employee = await createEmployeeService(data);
 
   return res.status(STATUS_CODE.CREATED).json({
@@ -64,9 +64,7 @@ const getEmployeeByIdController = asyncHandler(async (req, res) => {
   }
   const safeEmployee = {
     ...employee,
-    mobileNumber: employee.mobileNumber
-      ? String(employee.mobileNumber)
-      : null,
+    mobileNumber: employee.mobileNumber ? String(employee.mobileNumber) : null,
   };
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
@@ -134,9 +132,9 @@ const getEmployeController = asyncHandler(async (req, res) => {
   });
 });
 const generateEmpCodeController = asyncHandler(async (req, res) => {
-  const { id } = req.body;
+  const { employeeOnboardId } = req.body;
 
-  const fetchEmpCodeService = await generateEmpCode(id);
+  const fetchEmpCodeService = await generateEmpCode(employeeOnboardId);
 
   return res.status(STATUS_CODE.SUCCESS).json({
     data: fetchEmpCodeService,
