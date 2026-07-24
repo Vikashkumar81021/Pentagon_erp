@@ -111,16 +111,6 @@ enum TransactionType {
   DEBIT
 }
 
-enum TransactionCategory {
-  GENERAL
-  SALES_INCOME
-  SOFTWARE_SUBSCRIPTION
-  OFFICE_RENT
-  LOGISTICS
-  TAX
-  REFUND
-  CONSULTING
-}
 
 enum BankAccount {
   ICICI_BANK_CA_PENTAGON
@@ -134,7 +124,7 @@ model LedgerTransaction {
   id          Int                  @id @default(autoincrement())
   date        DateTime
   description String
-  category    TransactionCategory
+  category    String
   account     BankAccount
   amount      Decimal              @db.Decimal(12,2)
   type        TransactionType

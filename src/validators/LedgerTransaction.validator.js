@@ -9,16 +9,7 @@ const ledgerTransactionSchema = z.object({
     .optional(),
 
   category: z
-    .enum([
-      "GENERAL",
-      "SALES_INCOME",
-      "SOFTWARE_SUBSCRIPTION",
-      "OFFICE_RENT",
-      "LOGISTICS",
-      "TAX",
-      "REFUND",
-      "CONSULTING",
-    ])
+    .string()
     .optional(),
 
   account: z
@@ -28,8 +19,7 @@ const ledgerTransactionSchema = z.object({
       "INDUSIND_BANK_CA_SMART",
       "INDUSIND_BANK_CA_PENTAGON",
       "ICICI_BANK_CA_SEST",
-    ])
-    .optional(),
+    ]),
 
   amount: z
     .number()

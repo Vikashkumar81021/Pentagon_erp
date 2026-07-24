@@ -51,6 +51,7 @@ const updateLedgerTransaction = async (id, data) => {
     where: {
       id: Number(id),
     },
+
     data: {
       ...(data.date && { date: new Date(data.date) }),
       ...(data.description && { description: data.description }),
@@ -59,6 +60,7 @@ const updateLedgerTransaction = async (id, data) => {
       ...(data.amount !== undefined && { amount: data.amount }),
       ...(data.type && { type: data.type }),
     },
+    
   });
 };
 
