@@ -27,6 +27,11 @@ const ledgerTransactionSchema = z.object({
     .optional(),
 
   type: z.enum(["CREDIT", "DEBIT"]).optional(),
+  transactionId: z
+  .string({
+    required_error: "Transaction ID is required",
+  })
+  .min(1, "Transaction ID is required"),
 });
 
 export const createLedgerTransactionSchema = z.object({

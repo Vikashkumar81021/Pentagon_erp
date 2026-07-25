@@ -1,10 +1,6 @@
-/*
-  Warnings:
+-- CreateEnum
+CREATE TYPE "LeadPriority" AS ENUM ('LOW', 'MEDIUM', 'HIGH');
 
-  - Added the required column `title` to the `Notice` table without a default value. This is not possible if the table is not empty.
-  - Added the required column `type` to the `Notice` table without a default value. This is not possible if the table is not empty.
-
-*/
 -- CreateEnum
 CREATE TYPE "CallType" AS ENUM ('PHONE', 'WHATSAPP', 'VIDEO_CALL', 'MEETING');
 
@@ -33,14 +29,58 @@ CREATE TYPE "ApprovedType" AS ENUM ('PENDING', 'APPROVED', 'REJECTED');
 CREATE TYPE "statusDesgnation" AS ENUM ('Active', 'Probation', 'On_Leave');
 
 -- CreateEnum
+CREATE TYPE "TransactionType" AS ENUM ('CREDIT', 'DEBIT');
+
+-- CreateEnum
+CREATE TYPE "BankAccount" AS ENUM ('ICICI_BANK_CA_PENTAGON', 'ICICI_BANK_OD_PENTAGON', 'INDUSIND_BANK_CA_SMART', 'INDUSIND_BANK_CA_PENTAGON', 'ICICI_BANK_CA_SEST');
+
+-- CreateEnum
 CREATE TYPE "PunchType" AS ENUM ('IN', 'OUT');
 
 -- CreateEnum
 CREATE TYPE "PurchaseMode" AS ENUM ('GEM', 'DIRECT_PURCHASE', 'TENDER');
 
--- AlterTable
-ALTER TABLE "Notice" ADD COLUMN     "title" TEXT NOT NULL,
-ADD COLUMN     "type" TEXT NOT NULL;
+-- CreateTable
+CREATE TABLE "User" (
+    "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
+    "password" TEXT NOT NULL,
+    "empcode" TEXT NOT NULL,
+
+    CONSTRAINT "User_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Role" (
+    "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
+
+    CONSTRAINT "Role_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "UserRole" (
+    "userId" INTEGER NOT NULL,
+    "roleId" INTEGER NOT NULL,
+
+    CONSTRAINT "UserRole_pkey" PRIMARY KEY ("userId","roleId")
+);
+
+-- CreateTable
+CREATE TABLE "ledger_transactions" (
+    "id" SERIAL NOT NULL,
+    "date" TIMESTAMP(3) NOT NULL,
+    "description" TEXT NOT NULL,
+    "category" TEXT NOT NULL,
+    "account" "BankAccount" NOT NULL,
+    "amount" DECIMAL(12,2) NOT NULL,
+    "type" "TransactionType" NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "ledger_transactions_pkey" PRIMARY KEY ("id")
+);
 
 -- CreateTable
 CREATE TABLE "SalesVisit" (
@@ -184,6 +224,45 @@ CREATE TABLE "HiringRequirement" (
 );
 
 -- CreateTable
+CREATE TABLE "Lead" (
+    "id" SERIAL NOT NULL,
+    "organization_name" TEXT NOT NULL,
+    "name_of_poc" TEXT NOT NULL,
+    "designation" TEXT NOT NULL,
+    "industry_sector" TEXT NOT NULL,
+    "phoneNumber" TEXT,
+    "email" TEXT,
+    "address" TEXT,
+    "notes" TEXT,
+    "priority" "LeadPriority" NOT NULL DEFAULT 'MEDIUM',
+    "city" TEXT NOT NULL,
+    "status" TEXT NOT NULL DEFAULT 'RAW',
+    "attemptsCount" INTEGER NOT NULL DEFAULT 0,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Lead_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "LeadActivity" (
+    "id" TEXT NOT NULL,
+    "leadId" INTEGER NOT NULL,
+    "type" TEXT NOT NULL,
+    "activityDate" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "durationSec" INTEGER NOT NULL DEFAULT 0,
+    "outcome" TEXT NOT NULL,
+    "remarks" TEXT,
+    "followUpDate" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
+    "notes" TEXT,
+    "mailStatus" TEXT,
+    "responses" TEXT,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "LeadActivity_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "JobApplication" (
     "id" SERIAL NOT NULL,
     "hiringRequirementId" INTEGER NOT NULL,
@@ -257,6 +336,18 @@ CREATE TABLE "InstitutionVisit" (
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "InstitutionVisit_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Notice" (
+    "id" SERIAL NOT NULL,
+    "title" TEXT NOT NULL,
+    "type" TEXT NOT NULL,
+    "text" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Notice_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -351,6 +442,15 @@ CREATE TABLE "Shipment" (
 );
 
 -- CreateIndex
+CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_empcode_key" ON "User"("empcode");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Role_name_key" ON "Role"("name");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "EmployeeOnboard_employeeId_key" ON "EmployeeOnboard"("employeeId");
 
 -- CreateIndex
@@ -372,6 +472,12 @@ CREATE UNIQUE INDEX "Inventory_productId_key" ON "Inventory"("productId");
 CREATE UNIQUE INDEX "ProcurementRequest_requestNo_key" ON "ProcurementRequest"("requestNo");
 
 -- AddForeignKey
+ALTER TABLE "UserRole" ADD CONSTRAINT "UserRole_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "UserRole" ADD CONSTRAINT "UserRole_roleId_fkey" FOREIGN KEY ("roleId") REFERENCES "Role"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "SalesVisit" ADD CONSTRAINT "SalesVisit_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -382,6 +488,9 @@ ALTER TABLE "TaskChecklist" ADD CONSTRAINT "TaskChecklist_employeeOnboardId_fkey
 
 -- AddForeignKey
 ALTER TABLE "AttendanceLog" ADD CONSTRAINT "AttendanceLog_employeeCode_fkey" FOREIGN KEY ("employeeCode") REFERENCES "Employee"("employeeCode") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "LeadActivity" ADD CONSTRAINT "LeadActivity_leadId_fkey" FOREIGN KEY ("leadId") REFERENCES "Lead"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "JobApplication" ADD CONSTRAINT "JobApplication_hiringRequirementId_fkey" FOREIGN KEY ("hiringRequirementId") REFERENCES "HiringRequirement"("id") ON DELETE CASCADE ON UPDATE CASCADE;
