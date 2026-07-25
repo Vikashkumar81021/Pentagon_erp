@@ -23,7 +23,7 @@ const ledgerTransactionSchema = z.object({
     .positive("Amount must be greater than 0")
     .optional(),
 
-  type: z.enum(["credit", "debit"]).optional(),
+  type: z.string().optional(),
   transactionId: z
   .string({
     required_error: "Transaction ID is required",
