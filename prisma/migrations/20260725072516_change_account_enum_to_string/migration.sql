@@ -32,7 +32,16 @@ CREATE TYPE "statusDesgnation" AS ENUM ('Active', 'Probation', 'On_Leave');
 CREATE TYPE "TransactionType" AS ENUM ('CREDIT', 'DEBIT');
 
 -- CreateEnum
-CREATE TYPE "BankAccount" AS ENUM ('ICICI_BANK_CA_PENTAGON', 'ICICI_BANK_OD_PENTAGON', 'INDUSIND_BANK_CA_SMART', 'INDUSIND_BANK_CA_PENTAGON', 'ICICI_BANK_CA_SEST');
+CREATE TYPE "Classification" AS ENUM ('Assets', 'Liabilities', 'Equity', 'Revenue', 'Expenses');
+
+-- CreateEnum
+CREATE TYPE "SubClassification" AS ENUM ('Current_Assets', 'Non_Current_Assets', 'Current_Liabilities', 'Long_Term_Liabilities', 'Direct_Income', 'Indirect_Income', 'Direct_Expenses', 'Indirect_Expenses');
+
+-- CreateEnum
+CREATE TYPE "BalanceType" AS ENUM ('Debit', 'Credit');
+
+-- CreateEnum
+CREATE TYPE "AccountStatus" AS ENUM ('Active', 'Inactive');
 
 -- CreateEnum
 CREATE TYPE "PunchType" AS ENUM ('IN', 'OUT');
@@ -68,12 +77,30 @@ CREATE TABLE "UserRole" (
 );
 
 -- CreateTable
+CREATE TABLE "chart_accounts" (
+    "id" SERIAL NOT NULL,
+    "code" TEXT NOT NULL,
+    "accountName" TEXT NOT NULL,
+    "classification" "Classification" NOT NULL,
+    "subClassification" "SubClassification" NOT NULL,
+    "balanceType" "BalanceType" NOT NULL,
+    "openingBalance" DECIMAL(12,2) NOT NULL,
+    "status" "AccountStatus" NOT NULL DEFAULT 'Active',
+    "description" TEXT,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "chart_accounts_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "ledger_transactions" (
     "id" SERIAL NOT NULL,
     "date" TIMESTAMP(3) NOT NULL,
     "description" TEXT NOT NULL,
     "category" TEXT NOT NULL,
-    "account" "BankAccount" NOT NULL,
+    "transactionId" TEXT NOT NULL,
+    "account" TEXT NOT NULL,
     "amount" DECIMAL(12,2) NOT NULL,
     "type" "TransactionType" NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -449,6 +476,9 @@ CREATE UNIQUE INDEX "User_empcode_key" ON "User"("empcode");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Role_name_key" ON "Role"("name");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "chart_accounts_code_key" ON "chart_accounts"("code");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "EmployeeOnboard_employeeId_key" ON "EmployeeOnboard"("employeeId");

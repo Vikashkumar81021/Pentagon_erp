@@ -112,14 +112,6 @@ enum TransactionType {
 }
 
 
-enum BankAccount {
-  ICICI_BANK_CA_PENTAGON
-  ICICI_BANK_OD_PENTAGON
-  INDUSIND_BANK_CA_SMART
-  INDUSIND_BANK_CA_PENTAGON
-  ICICI_BANK_CA_SEST
-}
-
 enum Classification {
    Assets
   Liabilities
@@ -172,7 +164,7 @@ model LedgerTransaction {
   description String
   category    String
   transactionId String
-  account     BankAccount
+  account     String
   amount      Decimal              @db.Decimal(12,2)
   type        TransactionType
 

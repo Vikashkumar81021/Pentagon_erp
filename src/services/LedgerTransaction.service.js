@@ -58,7 +58,7 @@ const updateLedgerTransaction = async (id, data) => {
       ...(data.description && { description: data.description }),
       ...(data.category && { category: data.category }),
       ...(data.transactionId && { transactionId: data.transactionId, }),
-      ...(data.account && { account: data.account }),
+      ...(data.account && { account: data.account, }),
       ...(data.amount !== undefined && { amount: data.amount }),
       ...(data.type && { type: data.type }),
     },

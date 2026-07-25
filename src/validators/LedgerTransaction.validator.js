@@ -13,13 +13,10 @@ const ledgerTransactionSchema = z.object({
     .optional(),
 
   account: z
-    .enum([
-      "ICICI_BANK_CA_PENTAGON",
-      "ICICI_BANK_OD_PENTAGON",
-      "INDUSIND_BANK_CA_SMART",
-      "INDUSIND_BANK_CA_PENTAGON",
-      "ICICI_BANK_CA_SEST",
-    ]),
+  .string({
+    required_error: "Account is required",
+  })
+  .min(1, "Account is required"),
 
   amount: z
     .number()
