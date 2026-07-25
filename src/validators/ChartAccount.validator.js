@@ -13,24 +13,9 @@ const chartAccountSchema = z.object({
     })
     .min(3, "Account Name must be at least 3 characters"),
 
-  classification: z.enum([
-    "Assets",
-    "Liabilities",
-    "Equity",
-    "Revenue",
-    "Expenses"
-  ]),
+  classification: z.string(),
 
-  subClassification: z.enum([
-    'Current Assets',
-    'Non Current Assets',
-    'Current Liabilities',
-    'Long Term Liabilities',
-    'Direct Income',
-    'Indirect Income',
-    'Direct Expenses',
-    'Indirect Expenses'
-  ]),
+  subClassification: z.string(),
 
   balanceType: z.enum([
     "Debit",

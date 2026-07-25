@@ -112,25 +112,6 @@ enum TransactionType {
 }
 
 
-enum Classification {
-   Assets
-  Liabilities
-  Equity
-  Revenue
-  Expenses
-}
-
-enum SubClassification {
-  Current_Assets
-  Non_Current_Assets
-  Current_Liabilities
-  Long_Term_Liabilities
-  Direct_Income
-  Indirect_Income
-  Direct_Expenses
-  Indirect_Expenses
-}
-
 enum BalanceType {
   Debit
   Credit
@@ -145,8 +126,8 @@ model ChartAccount {
   id                Int                 @id @default(autoincrement())
   code              String              @unique
   accountName       String
-  classification    Classification
-  subClassification SubClassification
+  classification    String
+  subClassification String
   balanceType       BalanceType
   openingBalance    Decimal             @db.Decimal(12,2)
   status            AccountStatus       @default(Active)
