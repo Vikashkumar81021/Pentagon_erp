@@ -166,7 +166,7 @@ model LedgerTransaction {
   transactionId String
   account     String
   amount      Decimal              @db.Decimal(12,2)
-  type        BalanceType
+  type        String
 
   createdAt   DateTime             @default(now())
   updatedAt   DateTime             @updatedAt
