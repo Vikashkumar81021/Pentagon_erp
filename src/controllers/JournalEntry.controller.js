@@ -11,12 +11,14 @@ import {
 
 const createJournalEntryController = async (req, res, next) => {
   try {
-    const body = {
+    console.log("BODY:", req.body);
+    console.log("FILE:", req.file);
+    const data = {
       ...req.body,
       attachment: req.file ? req.file.path : null,
     };
 
-    const journal = await createJournalEntry(body);
+    const journal = await createJournalEntry(data);
 
     return res.status(STATUS_CODE.CREATED).json({
       success: true,
@@ -57,8 +59,9 @@ const getJournalEntryByIdController = async (req, res, next) => {
 
 const updateJournalEntryController = async (req, res, next) => {
   try {
-    const body = {
+    const data = {
       ...req.body,
+      attachment: req.file ? req.file.path : undefined,
     };
 
     if (req.file) {
@@ -67,7 +70,7 @@ const updateJournalEntryController = async (req, res, next) => {
 
     const journal = await updateJournalEntry(
       req.params.id,
-      body
+      data
     );
 
     return res.status(STATUS_CODE.SUCCESS).json({

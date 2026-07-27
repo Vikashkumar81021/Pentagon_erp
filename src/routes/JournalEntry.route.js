@@ -11,13 +11,13 @@ import{
 
 const router = express.Router();
 
-router.post("/createJournalEntry", authMiddleware, createJournalEntryController);
+router.post("/createJournalEntry", authMiddleware, upload.single("attachment"), createJournalEntryController);
 
 router.get("/fetchJournalEntry", authMiddleware, getAllJournalEntriesController);
 
 router.get("/fetchJournalEntry/:id", authMiddleware, getJournalEntryByIdController);
 
-router.patch("/updateJournalEntry/:id", authMiddleware, updateJournalEntryController);
+router.patch("/updateJournalEntry/:id", authMiddleware, upload.single("attachment"), updateJournalEntryController);
 
 router.delete("/deleteJournalEntry/:id", authMiddleware, deleteJournalEntryController);
 export default router;
