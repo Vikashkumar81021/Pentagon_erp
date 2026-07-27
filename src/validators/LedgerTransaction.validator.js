@@ -9,34 +9,26 @@ const ledgerTransactionSchema = z.object({
     .optional(),
 
   category: z
-    .enum([
-      "GENERAL",
-      "SALES_INCOME",
-      "SOFTWARE_SUBSCRIPTION",
-      "OFFICE_RENT",
-      "LOGISTICS",
-      "TAX",
-      "REFUND",
-      "CONSULTING",
-    ])
+    .string()
     .optional(),
 
   account: z
-    .enum([
-      "ICICI_BANK_CA_PENTAGON",
-      "ICICI_BANK_OD_PENTAGON",
-      "INDUSIND_BANK_CA_SMART",
-      "INDUSIND_BANK_CA_PENTAGON",
-      "ICICI_BANK_CA_SEST",
-    ])
-    .optional(),
+  .string({
+    required_error: "Account is required",
+  })
+  .min(1, "Account is required"),
 
   amount: z
     .number()
     .positive("Amount must be greater than 0")
     .optional(),
 
-  type: z.enum(["CREDIT", "DEBIT"]).optional(),
+  type: z.string().optional(),
+  transactionId: z
+  .string({
+    required_error: "Transaction ID is required",
+  })
+  .min(1, "Transaction ID is required"),
 });
 
 export const createLedgerTransactionSchema = z.object({

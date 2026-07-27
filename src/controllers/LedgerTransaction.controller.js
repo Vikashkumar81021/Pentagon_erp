@@ -4,6 +4,8 @@ import{
     createLedgerTransaction,
   getAllLedgerTransactions,
   getLedgerTransactionById,
+  getGeneralLedger,
+  getTrialBalance,
   updateLedgerTransaction,
   deleteLedgerTransaction,
 } from "../services/LedgerTransaction.service.js";
@@ -51,6 +53,34 @@ const getLedgerTransactionByIdController = async (req, res, next) => {
   }
 };
 
+const getGeneralLedgerController = async (req, res, next) => {
+  try {
+    const data = await getGeneralLedger();
+
+    return res.status(STATUS_CODE.SUCCESS).json({
+      success: true,
+      message: "General Ledger fetched successfully",
+      data,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getTrialBalanceController = async (req, res, next) => {
+  try {
+    const data = await getTrialBalance();
+
+    return res.status(STATUS_CODE.SUCCESS).json({
+      success: true,
+      message: "Trial Balance fetched successfully",
+      data,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const updateLedgerTransactionController = async (req, res, next) => {
   try {
     const transaction = await updateLedgerTransaction(
@@ -86,6 +116,8 @@ export {
   createLedgerTransactionController,
   getAllLedgerTransactionsController,
   getLedgerTransactionByIdController,
+  getGeneralLedgerController,
+  getTrialBalanceController,
   updateLedgerTransactionController,
   deleteLedgerTransactionController,
 };
