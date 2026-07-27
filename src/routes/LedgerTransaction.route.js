@@ -5,6 +5,8 @@ import{
     createLedgerTransactionController,
     getAllLedgerTransactionsController,
     getLedgerTransactionByIdController,
+    getGeneralLedgerController,
+    getTrialBalanceController,
     updateLedgerTransactionController,
     deleteLedgerTransactionController,
 } from "../controllers/LedgerTransaction.controller.js";
@@ -15,6 +17,10 @@ router.post("/createLedgerTransaction", authMiddleware , createLedgerTransaction
 router.get("/getLedgerTransactions",authMiddleware, getAllLedgerTransactionsController);
 
 router.get("/getLedgerTransaction/:id", authMiddleware, getLedgerTransactionByIdController);
+
+router.get("/fetchLedgerEntry", authMiddleware, getGeneralLedgerController);
+
+router.get("/fetchTrialBalance", authMiddleware, getTrialBalanceController);
 
 router.put("/updateLedgerTransaction/:id", authMiddleware, updateLedgerTransactionController);
 

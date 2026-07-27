@@ -1,5 +1,6 @@
 import express from "express";
 import authMiddleware from "../middleware/auth.middleware.js";
+import upload from "../middleware/upload.middleware.js";
 import{
     createJournalEntryController,
   getAllJournalEntriesController,

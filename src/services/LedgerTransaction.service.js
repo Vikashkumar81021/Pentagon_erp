@@ -37,6 +37,63 @@ const getLedgerTransactionById = async (id) => {
   return transaction;
 };
 
+const getGeneralLedger = async () => {
+  const transactions = await prisma.ledgerTransaction.findMany({
+    orderBy: {
+      date: "asc",
+    },
+  });
+
+  let runningBalance = 0;
+
+  return transactions.map((item) => {
+    const amount = Number(item.amount);
+
+    const debit =
+      item.type.toLowerCase() === "debit" ? amount : 0;
+
+    const credit =
+      item.type.toLowerCase() === "credit" ? amount : 0;
+
+    runningBalance += debit - credit;
+
+    return {
+      date: item.date.toISOString().split("T")[0],
+      reference: item.transactionId,
+      account: item.account,
+      description: item.description,
+      debit,
+      credit,
+      balance: runningBalance,
+    };
+  });
+};
+
+const getTrialBalance = async () => {
+  const transactions = await prisma.ledgerTransaction.findMany();
+
+  const accountMap = {};
+
+  transactions.forEach((item) => {
+    if (!accountMap[item.account]) {
+      accountMap[item.account] = {
+        accountCode: item.transactionId,
+        accountName: item.account,
+        debit: 0,
+        credit: 0,
+      };
+    }
+
+    if (item.type.toLowerCase() === "debit") {
+      accountMap[item.account].debit += Number(item.amount);
+    } else {
+      accountMap[item.account].credit += Number(item.amount);
+    }
+  });
+
+  return Object.values(accountMap);
+};
+
 const updateLedgerTransaction = async (id, data) => {
   const transaction = await prisma.ledgerTransaction.findUnique({
     where: {
@@ -90,6 +147,8 @@ export {
   createLedgerTransaction,
   getAllLedgerTransactions,
   getLedgerTransactionById,
+  getGeneralLedger,
+  getTrialBalance,
   updateLedgerTransaction,
   deleteLedgerTransaction,
 };

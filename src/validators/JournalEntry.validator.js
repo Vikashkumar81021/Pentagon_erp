@@ -25,7 +25,6 @@ const journalEntrySchema = z.object({
 
   narration: z.string().min(1, "Narration is required"),
 
-  attachment: z.string().optional(),
 });
 
 export const createJournalEntrySchema = z.object({

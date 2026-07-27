@@ -73,9 +73,8 @@ const updateJournalEntry = async (id, data) => {
       ...(data.creditAccount && { creditAccount: data.creditAccount }),
       ...(data.amount !== undefined && { amount: data.amount }),
       ...(data.narration && { narration: data.narration }),
-      ...(data.attachment !== undefined && {
-        attachment: data.attachment,
-      }),
+      ...(data.attachment && {
+        attachment: data.attachment,}),
     },
   });
 };
