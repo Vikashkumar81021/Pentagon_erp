@@ -155,6 +155,30 @@ model LedgerTransaction {
   @@map("ledger_transactions")
 }
 
+model JournalEntry{
+  id          Int      @id @default(autoincrement())
+  voucherNo   String
+
+  journalDate  String
+
+  reference  String
+
+  description  String
+
+  debitAccount  String
+
+  creditAccount  String
+
+  amount  Int
+
+  narration String
+
+  attachment String?
+
+  status           String   @default("Pending")
+
+  postImmediately  Boolean  @default(false)
+}
 model SalesVisit {
   id                  Int          @id @default(autoincrement())
 
