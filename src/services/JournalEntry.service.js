@@ -10,7 +10,7 @@ const createJournalEntry = async (data) => {
       description: data.description,
       debitAccount: data.debitAccount,
       creditAccount: data.creditAccount,
-      amount: data.amount,
+      amount: Number(data.amount),
       narration: data.narration,
       attachment: data.attachment,
     },

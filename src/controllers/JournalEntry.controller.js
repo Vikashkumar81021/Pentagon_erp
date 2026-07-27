@@ -11,8 +11,6 @@ import {
 
 const createJournalEntryController = async (req, res, next) => {
   try {
-    console.log("BODY:", req.body);
-    console.log("FILE:", req.file);
     const data = {
       ...req.body,
       attachment: req.file ? req.file.path : null,
