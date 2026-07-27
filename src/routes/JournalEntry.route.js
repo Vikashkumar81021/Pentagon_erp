@@ -16,7 +16,7 @@ router.get("/fetchJournalEntry", authMiddleware, getAllJournalEntriesController)
 
 router.get("/fetchJournalEntry/:id", authMiddleware, getJournalEntryByIdController);
 
-router.patch("/updateJournalEntry", authMiddleware, updateJournalEntryController);
+router.patch("/updateJournalEntry/:id", authMiddleware, updateJournalEntryController);
 
-router.delete("/deleteJournalEntry", authMiddleware, deleteJournalEntryController);
+router.delete("/deleteJournalEntry/:id", authMiddleware, deleteJournalEntryController);
 export default router;
