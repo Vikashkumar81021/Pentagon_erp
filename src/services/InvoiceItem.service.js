@@ -1,37 +1,78 @@
 import prisma from "../config/db.js";
 
 const createInvoiceservice = async (data) => {
-  return await prisma.invoiceItem.create({
+  return await prisma.invoice.create({
     data: {
-      description: data.description,
-      quantity: Number(data.quantity),
-      price: Number(data.price),
       invoiceId: data.invoiceId,
       customer: data.customer,
       dueDate: data.dueDate,
+
+      invoiceItems: {
+        create: data.item.map((item) => ({
+          description: item.description,
+          quantity: item.quantity,
+          price: item.price,
+        })),
+      },
+    },
+    include: {
+      invoiceItems: true,
     },
   });
 };
 
 const getAllInvoiceservice = async () => {
-  const invoices = await prisma.invoiceItem.findMany({
+  const invoices = await prisma.invoice.findMany({
     orderBy: {
       id: "desc",
     },
   });
 
-  return invoices.map((item) => ({
-    id: item.invoiceId,
-    customer: item.customer,
-    issueDate: item.createdAt.toISOString().split("T")[0],
-    dueDate: item.dueDate,
-    status: "Outstanding",
-    amount: Number(item.price) * Number(item.quantity),
-    createdAt: item.createdAt,
+  return invoices.map((invoice) => ({
+    id: invoice.invoiceId,
+    customer: invoice.customer,
+    issueDate: invoice.createdAt.toISOString().split("T")[0],
+    dueDate: invoice.dueDate,
+    status: invoice.status,
+    amount: invoice.items.reduce(
+      (total, item) => total + Number(item.price) * item.quantity,
+      0
+    ),
+    createdAt: invoice.createdAt,
+    items: invoice.items,
   }));
+};
+
+const updateInvoiceservice = async (id, data) => {
+  return await prisma.invoice.update({
+    where: {
+      id: Number(id),
+    },
+    data: {
+      invoiceId: data.invoiceId,
+      customer: data.customer,
+      dueDate: data.dueDate,
+      status: data.status,
+
+      ...(data.items && {
+        items: {
+          deleteMany: {},
+          create: data.items.map((item) => ({
+            description: item.description,
+            quantity: item.quantity,
+            price: item.price,
+          })),
+        },
+      }),
+    },
+    include: {
+      items: true,
+    },
+  });
 };
 
 export {
   createInvoiceservice,
   getAllInvoiceservice,
+  updateInvoiceservice
 };

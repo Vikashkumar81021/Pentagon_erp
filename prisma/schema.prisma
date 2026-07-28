@@ -187,20 +187,33 @@ model JournalEntry{
   postImmediately  Boolean  @default(false)
 }
 
+model Invoice {
+  id         Int            @id @default(autoincrement())
+  customer   String
+  dueDate    String
+  status     InvoiceStatus @default(Outstanding)
+  totalAmount Decimal?        @db.Decimal(12,2)
+
+  invoiceItems InvoiceItem[]
+
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @updatedAt
+
+  @@map("invoices")
+}
+
 model InvoiceItem {
-  id          Int           @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
+  item        Json?
   description String
   quantity    Int
-  price       Decimal       @db.Decimal(12,2)
+  price       Decimal  @db.Decimal(12,2)
 
-  invoiceId   String
-  customer    String
-  dueDate     String
+  invoiceId   Int
+  invoice     Invoice  @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
 
-  status      InvoiceStatus @default(Outstanding)
-
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   @@map("invoice_items")
 }

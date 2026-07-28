@@ -1,3 +1,15 @@
+/*
+  Warnings:
+
+  - You are about to drop the column `customer` on the `invoice_items` table. All the data in the column will be lost.
+  - You are about to drop the column `description` on the `invoice_items` table. All the data in the column will be lost.
+  - You are about to drop the column `dueDate` on the `invoice_items` table. All the data in the column will be lost.
+  - You are about to drop the column `price` on the `invoice_items` table. All the data in the column will be lost.
+  - You are about to drop the column `quantity` on the `invoice_items` table. All the data in the column will be lost.
+  - You are about to drop the column `status` on the `invoice_items` table. All the data in the column will be lost.
+  - Changed the type of `invoiceId` on the `invoice_items` table. No cast exists, the column would be dropped and recreated, which cannot be done if there is data, since the column is required.
+
+*/
 -- CreateEnum
 CREATE TYPE "LeadPriority" AS ENUM ('LOW', 'MEDIUM', 'HIGH');
 
@@ -32,12 +44,6 @@ CREATE TYPE "statusDesgnation" AS ENUM ('Active', 'Probation', 'On_Leave');
 CREATE TYPE "TransactionType" AS ENUM ('CREDIT', 'DEBIT');
 
 -- CreateEnum
-CREATE TYPE "Classification" AS ENUM ('Assets', 'Liabilities', 'Equity', 'Revenue', 'Expenses');
-
--- CreateEnum
-CREATE TYPE "SubClassification" AS ENUM ('Current_Assets', 'Non_Current_Assets', 'Current_Liabilities', 'Long_Term_Liabilities', 'Direct_Income', 'Indirect_Income', 'Direct_Expenses', 'Indirect_Expenses');
-
--- CreateEnum
 CREATE TYPE "BalanceType" AS ENUM ('Debit', 'Credit');
 
 -- CreateEnum
@@ -48,6 +54,17 @@ CREATE TYPE "PunchType" AS ENUM ('IN', 'OUT');
 
 -- CreateEnum
 CREATE TYPE "PurchaseMode" AS ENUM ('GEM', 'DIRECT_PURCHASE', 'TENDER');
+
+-- AlterTable
+ALTER TABLE "invoice_items" DROP COLUMN "customer",
+DROP COLUMN "description",
+DROP COLUMN "dueDate",
+DROP COLUMN "price",
+DROP COLUMN "quantity",
+DROP COLUMN "status",
+ADD COLUMN     "item" JSONB,
+DROP COLUMN "invoiceId",
+ADD COLUMN     "invoiceId" INTEGER NOT NULL;
 
 -- CreateTable
 CREATE TABLE "User" (
@@ -81,8 +98,8 @@ CREATE TABLE "chart_accounts" (
     "id" SERIAL NOT NULL,
     "code" TEXT NOT NULL,
     "accountName" TEXT NOT NULL,
-    "classification" "Classification" NOT NULL,
-    "subClassification" "SubClassification" NOT NULL,
+    "classification" TEXT NOT NULL,
+    "subClassification" TEXT NOT NULL,
     "balanceType" "BalanceType" NOT NULL,
     "openingBalance" DECIMAL(12,2) NOT NULL,
     "status" "AccountStatus" NOT NULL DEFAULT 'Active',
@@ -102,11 +119,25 @@ CREATE TABLE "ledger_transactions" (
     "transactionId" TEXT NOT NULL,
     "account" TEXT NOT NULL,
     "amount" DECIMAL(12,2) NOT NULL,
-    "type" "TransactionType" NOT NULL,
+    "type" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "ledger_transactions_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "invoices" (
+    "id" SERIAL NOT NULL,
+    "customer" TEXT NOT NULL,
+    "issueDate" TEXT NOT NULL,
+    "dueDate" TEXT NOT NULL,
+    "status" "InvoiceStatus" NOT NULL,
+    "amount" DECIMAL(12,2) NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "invoices_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -506,6 +537,9 @@ ALTER TABLE "UserRole" ADD CONSTRAINT "UserRole_userId_fkey" FOREIGN KEY ("userI
 
 -- AddForeignKey
 ALTER TABLE "UserRole" ADD CONSTRAINT "UserRole_roleId_fkey" FOREIGN KEY ("roleId") REFERENCES "Role"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "invoice_items" ADD CONSTRAINT "invoice_items_invoiceId_fkey" FOREIGN KEY ("invoiceId") REFERENCES "invoices"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "SalesVisit" ADD CONSTRAINT "SalesVisit_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
