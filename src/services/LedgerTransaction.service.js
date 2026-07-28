@@ -94,6 +94,82 @@ const getTrialBalance = async () => {
   return Object.values(accountMap);
 };
 
+const searchTrialBalance = async (search) => {
+  const { accountName } = search;
+
+  const where = {};
+
+  if (accountName) {
+    where.account = {
+      contains: accountName,
+      mode: "insensitive",
+    };
+  }
+
+  const transactions = await prisma.ledgerTransaction.findMany({
+    where,
+  });
+
+  const accountMap = {};
+
+  transactions.forEach((item) => {
+    if (!accountMap[item.account]) {
+      accountMap[item.account] = {
+        accountCode: item.transactionId,
+        accountName: item.account,
+        debit: 0,
+        credit: 0,
+      };
+    }
+
+    if (item.type.toLowerCase() === "debit") {
+      accountMap[item.account].debit += Number(item.amount);
+    } else {
+      accountMap[item.account].credit += Number(item.amount);
+    }
+  });
+
+  return Object.values(accountMap);
+};
+
+const filterTrialBalance = async (filters) => {
+  const { type } = filters;
+
+  const where = {};
+
+  if (type) {
+    where.type = {
+      equals: type,
+      mode: "insensitive",
+    };
+  }
+
+  const transactions = await prisma.ledgerTransaction.findMany({
+    where,
+  });
+
+  const accountMap = {};
+
+  transactions.forEach((item) => {
+    if (!accountMap[item.account]) {
+      accountMap[item.account] = {
+        accountCode: item.transactionId,
+        accountName: item.account,
+        debit: 0,
+        credit: 0,
+      };
+    }
+
+    if (item.type.toLowerCase() === "debit") {
+      accountMap[item.account].debit += Number(item.amount);
+    } else {
+      accountMap[item.account].credit += Number(item.amount);
+    }
+  });
+
+  return Object.values(accountMap);
+};
+
 const updateLedgerTransaction = async (id, data) => {
   const transaction = await prisma.ledgerTransaction.findUnique({
     where: {
@@ -149,6 +225,8 @@ export {
   getLedgerTransactionById,
   getGeneralLedger,
   getTrialBalance,
+  searchTrialBalance,
+  filterTrialBalance,
   updateLedgerTransaction,
   deleteLedgerTransaction,
 };
