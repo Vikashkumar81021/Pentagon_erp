@@ -1,7 +1,6 @@
 import { z } from "zod";
 
 export const invoiceSchema = z.object({
-  description: z.string().min(1, "Description is required"),
 
   status: z.enum([
   "Paid",
@@ -10,9 +9,15 @@ export const invoiceSchema = z.object({
   "Draft",
 ]).optional(),
 
-  quantity: z.number().int().positive("Quantity must be greater than 0"),
+items: z.array(
+    z.object({
+      description: z.string(),
 
-  price: z.number().positive("Price must be greater than 0"),
+      quantity: z.number().int().positive(),
+
+      price: z.number().positive(),
+    })
+  ),
 
   invoiceId: z.string().min(1, "Invoice ID is required"),
 
