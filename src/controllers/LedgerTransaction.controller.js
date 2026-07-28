@@ -6,6 +6,8 @@ import{
   getLedgerTransactionById,
   getGeneralLedger,
   getTrialBalance,
+  searchTrialBalance,
+  filterTrialBalance,
   updateLedgerTransaction,
   deleteLedgerTransaction,
 } from "../services/LedgerTransaction.service.js";
@@ -81,6 +83,30 @@ const getTrialBalanceController = async (req, res, next) => {
   }
 };
 
+const filterTrialBalanceController = asyncHandler(async (req, res) => {
+  const filters = req.query;
+
+  const trialBalance = await filterTrialBalance(filters);
+
+  return res.status(STATUS_CODE.SUCCESS).json({
+    success: true,
+    count: trialBalance.length,
+    data: trialBalance,
+  });
+});
+
+const searchTrialBalanceController = asyncHandler(async (req, res) => {
+  const search = req.query;
+
+  const searchData = await searchTrialBalance(search);
+
+  return res.status(STATUS_CODE.SUCCESS).json({
+    success: true,
+    count: searchData.length,
+    data: searchData,
+  });
+});
+
 const updateLedgerTransactionController = async (req, res, next) => {
   try {
     const transaction = await updateLedgerTransaction(
@@ -118,6 +144,8 @@ export {
   getLedgerTransactionByIdController,
   getGeneralLedgerController,
   getTrialBalanceController,
+  searchTrialBalanceController,
+  filterTrialBalanceController,
   updateLedgerTransactionController,
   deleteLedgerTransactionController,
 };

@@ -122,6 +122,13 @@ enum AccountStatus {
   Inactive
 }
 
+enum InvoiceStatus {
+  Paid
+  Outstanding
+  Overdue
+  Draft
+}
+
 model ChartAccount {
   id                Int                 @id @default(autoincrement())
   code              String              @unique
@@ -178,6 +185,24 @@ model JournalEntry{
   status           String   @default("Pending")
 
   postImmediately  Boolean  @default(false)
+}
+
+model InvoiceItem {
+  id          Int           @id @default(autoincrement())
+  description String
+  quantity    Int
+  price       Decimal       @db.Decimal(12,2)
+
+  invoiceId   String
+  customer    String
+  dueDate     String
+
+  status      InvoiceStatus @default(Outstanding)
+
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  @@map("invoice_items")
 }
 model SalesVisit {
   id                  Int          @id @default(autoincrement())
