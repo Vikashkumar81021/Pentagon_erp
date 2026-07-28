@@ -127,7 +127,23 @@ CREATE TABLE "ledger_transactions" (
 );
 
 -- CreateTable
+<<<<<<< HEAD
 <<<<<<<< HEAD:prisma/migrations/20260727103224_create_journal_entry/migration.sql
+=======
+<<<<<<<< HEAD:prisma/migrations/20260728115926_add_item_field/migration.sql
+CREATE TABLE "invoices" (
+    "id" SERIAL NOT NULL,
+    "customer" TEXT NOT NULL,
+    "issueDate" TEXT NOT NULL,
+    "dueDate" TEXT NOT NULL,
+    "status" "InvoiceStatus" NOT NULL,
+    "amount" DECIMAL(12,2) NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "invoices_pkey" PRIMARY KEY ("id")
+========
+>>>>>>> 259f6752ec415c85db5795b215628ec90e8ea261
 CREATE TABLE "JournalEntry" (
     "id" SERIAL NOT NULL,
     "voucherNo" TEXT NOT NULL,
@@ -143,6 +159,7 @@ CREATE TABLE "JournalEntry" (
     "postImmediately" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "JournalEntry_pkey" PRIMARY KEY ("id")
+<<<<<<< HEAD
 ========
 CREATE TABLE "invoices" (
     "id" SERIAL NOT NULL,
@@ -156,6 +173,9 @@ CREATE TABLE "invoices" (
 
     CONSTRAINT "invoices_pkey" PRIMARY KEY ("id")
 >>>>>>>> c308b2520617351bf09a0a7499262d5506109929:prisma/migrations/20260728115926_add_item_field/migration.sql
+=======
+>>>>>>>> a242863b9230ee58542132e7bdf9ca28a6302351:prisma/migrations/20260727103224_create_journal_entry/migration.sql
+>>>>>>> 259f6752ec415c85db5795b215628ec90e8ea261
 );
 
 -- CreateTable
