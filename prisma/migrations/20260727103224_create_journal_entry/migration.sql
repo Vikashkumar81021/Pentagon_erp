@@ -32,12 +32,6 @@ CREATE TYPE "statusDesgnation" AS ENUM ('Active', 'Probation', 'On_Leave');
 CREATE TYPE "TransactionType" AS ENUM ('CREDIT', 'DEBIT');
 
 -- CreateEnum
-CREATE TYPE "Classification" AS ENUM ('Assets', 'Liabilities', 'Equity', 'Revenue', 'Expenses');
-
--- CreateEnum
-CREATE TYPE "SubClassification" AS ENUM ('Current_Assets', 'Non_Current_Assets', 'Current_Liabilities', 'Long_Term_Liabilities', 'Direct_Income', 'Indirect_Income', 'Direct_Expenses', 'Indirect_Expenses');
-
--- CreateEnum
 CREATE TYPE "BalanceType" AS ENUM ('Debit', 'Credit');
 
 -- CreateEnum
@@ -81,8 +75,8 @@ CREATE TABLE "chart_accounts" (
     "id" SERIAL NOT NULL,
     "code" TEXT NOT NULL,
     "accountName" TEXT NOT NULL,
-    "classification" "Classification" NOT NULL,
-    "subClassification" "SubClassification" NOT NULL,
+    "classification" TEXT NOT NULL,
+    "subClassification" TEXT NOT NULL,
     "balanceType" "BalanceType" NOT NULL,
     "openingBalance" DECIMAL(12,2) NOT NULL,
     "status" "AccountStatus" NOT NULL DEFAULT 'Active',
@@ -102,11 +96,29 @@ CREATE TABLE "ledger_transactions" (
     "transactionId" TEXT NOT NULL,
     "account" TEXT NOT NULL,
     "amount" DECIMAL(12,2) NOT NULL,
-    "type" "TransactionType" NOT NULL,
+    "type" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "ledger_transactions_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "JournalEntry" (
+    "id" SERIAL NOT NULL,
+    "voucherNo" TEXT NOT NULL,
+    "journalDate" TEXT NOT NULL,
+    "reference" TEXT NOT NULL,
+    "description" TEXT NOT NULL,
+    "debitAccount" TEXT NOT NULL,
+    "creditAccount" TEXT NOT NULL,
+    "amount" INTEGER NOT NULL,
+    "narration" TEXT NOT NULL,
+    "attachment" TEXT,
+    "status" TEXT NOT NULL DEFAULT 'Pending',
+    "postImmediately" BOOLEAN NOT NULL DEFAULT false,
+
+    CONSTRAINT "JournalEntry_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
