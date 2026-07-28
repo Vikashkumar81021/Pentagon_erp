@@ -2,6 +2,32 @@ import prisma from "../config/db.js";
 import { NotFoundError } from "../utils/error.js";
 
 const createJournalEntry = async (data) => {
+  //ACCOUNT FIND FROM CHATOFACCOUNT TABLE
+  if (data.debitAccount === data.creditAccount) {
+    throw new Error("Debit and Credit account cannot be same");
+  }
+  const credit = await prisma.chartAccount.findFirst({
+    where: {
+      accountName: data.creditAccount,
+    },
+  });
+  if (!credit) {
+    throw new Error("Credit account not found");
+  }
+  if (!credit.status) {
+    throw new Error("Credit account is inactive");
+  }
+  const debit = await prisma.chartAccount.findFirst({
+    where: {
+      accountName: data.debitAccount,
+    },
+  });
+  if (!debit) {
+    throw new Error("Debit account not found");
+  }
+  if (!debit.status) {
+    throw new Error("Debit account is inactive");
+  }
   return await prisma.journalEntry.create({
     data: {
       voucherNo: data.voucherNo,
@@ -101,8 +127,8 @@ const updateJournalEntry = async (id, data) => {
       ...(data.amount !== undefined && { amount: data.amount }),
       ...(data.narration && { narration: data.narration }),
       ...(data.attachment !== undefined && {
-            attachment: data.attachment,
-          }),
+        attachment: data.attachment,
+      }),
     },
   });
 };
