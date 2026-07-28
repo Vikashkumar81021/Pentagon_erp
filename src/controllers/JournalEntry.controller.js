@@ -5,6 +5,7 @@ import {
   createJournalEntry,
   getAllJournalEntries,
   getJournalEntryById,
+  getJournalEntry,
   updateJournalEntry,
   deleteJournalEntry,
 } from "../services/JournalEntry.service.js";
@@ -55,6 +56,20 @@ const getJournalEntryByIdController = async (req, res, next) => {
   }
 };
 
+const getJournalEntryController = async (req, res, next) => {
+  try {
+    const data = await getJournalEntry();
+
+    return res.status(STATUS_CODE.SUCCESS).json({
+      success: true,
+      count: data.length,
+      data,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const updateJournalEntryController = async (req, res, next) => {
   try {
     const data = {
@@ -98,6 +113,7 @@ export {
   createJournalEntryController,
   getAllJournalEntriesController,
   getJournalEntryByIdController,
+  getJournalEntryController,
   updateJournalEntryController,
   deleteJournalEntryController,
 };

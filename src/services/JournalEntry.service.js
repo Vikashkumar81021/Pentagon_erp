@@ -49,6 +49,33 @@ const getJournalEntryById = async (id) => {
   };
 };
 
+const getJournalEntry = async () => {
+  const journals = await prisma.journalEntry.findMany({
+    orderBy: {
+      journalDate: "asc",
+    },
+  });
+
+  let balance = 0;
+
+  return journals.map((journal) => {
+    const debit = Number(journal.amount);
+    const credit = Number(journal.amount);
+
+    balance += debit - credit;
+
+    return {
+      date: journal.journalDate,
+      reference: journal.reference,
+      account: `${journal.debitAccount} / ${journal.creditAccount}`,
+      description: journal.description,
+      debit,
+      credit,
+      balance,
+    };
+  });
+};
+
 const updateJournalEntry = async (id, data) => {
   const journal = await prisma.journalEntry.findUnique({
     where: {
@@ -104,6 +131,7 @@ export {
   createJournalEntry,
   getAllJournalEntries,
   getJournalEntryById,
+  getJournalEntry,
   updateJournalEntry,
   deleteJournalEntry,
 };
