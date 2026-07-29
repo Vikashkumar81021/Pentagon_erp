@@ -218,6 +218,21 @@ model InvoiceItem {
 
   @@map("invoice_items")
 }
+
+model ExpenseClaim {
+  id                  Int          @id @default(autoincrement())
+  claimId             Int          @id @default(autoincrement())
+  employee            String
+  category            String
+  date                String
+  amount              Int
+  status              String       @default("Pending")
+  workflow            String?
+  description         String
+  decision            String?
+  remarks             String?
+}
+
 model SalesVisit {
   id                  Int          @id @default(autoincrement())
 
