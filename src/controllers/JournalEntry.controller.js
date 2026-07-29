@@ -1,6 +1,6 @@
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { STATUS_CODE } from "../constants/status.code.js";
-
+import path from "path";
 import {
   createJournalEntry,
   getAllJournalEntries,
@@ -75,10 +75,9 @@ const viewJournalAttachmentController = async (req, res, next) => {
   try {
     const journal = await viewJournalAttachment(req.params.id);
 
-    return res.status(STATUS_CODE.SUCCESS).json({
-      success: true,
-      attachment: journal.attachment,
-    });
+    const filePath = path.resolve(journal.attachment);
+
+    return res.sendFile(filePath);
   } catch (error) {
     next(error);
   }

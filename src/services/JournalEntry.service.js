@@ -108,7 +108,6 @@ const viewJournalAttachment = async (id) => {
       id: Number(id),
     },
     select: {
-      id: true,
       attachment: true,
     },
   });
