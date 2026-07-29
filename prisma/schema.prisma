@@ -194,7 +194,7 @@ model Invoice {
   status     InvoiceStatus @default(Outstanding)
   totalAmount Decimal?        @db.Decimal(12,2)
 
-  invoiceItems InvoiceItem[]
+  items       InvoiceItem[]
 
   createdAt  DateTime       @default(now())
   updatedAt  DateTime       @updatedAt

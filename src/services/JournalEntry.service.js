@@ -2,7 +2,7 @@ import prisma from "../config/db.js";
 import { NotFoundError } from "../utils/error.js";
 
 const createJournalEntry = async (data) => {
-  //ACCOUNT FIND FROM CHATOFACCOUNT TABLE
+
   if (data.debitAccount === data.creditAccount) {
     throw new Error("Debit and Credit account cannot be same");
   }

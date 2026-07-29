@@ -1,15 +1,3 @@
-/*
-  Warnings:
-
-  - You are about to drop the column `customer` on the `invoice_items` table. All the data in the column will be lost.
-  - You are about to drop the column `description` on the `invoice_items` table. All the data in the column will be lost.
-  - You are about to drop the column `dueDate` on the `invoice_items` table. All the data in the column will be lost.
-  - You are about to drop the column `price` on the `invoice_items` table. All the data in the column will be lost.
-  - You are about to drop the column `quantity` on the `invoice_items` table. All the data in the column will be lost.
-  - You are about to drop the column `status` on the `invoice_items` table. All the data in the column will be lost.
-  - Changed the type of `invoiceId` on the `invoice_items` table. No cast exists, the column would be dropped and recreated, which cannot be done if there is data, since the column is required.
-
-*/
 -- CreateEnum
 CREATE TYPE "LeadPriority" AS ENUM ('LOW', 'MEDIUM', 'HIGH');
 
@@ -50,21 +38,13 @@ CREATE TYPE "BalanceType" AS ENUM ('Debit', 'Credit');
 CREATE TYPE "AccountStatus" AS ENUM ('Active', 'Inactive');
 
 -- CreateEnum
+CREATE TYPE "InvoiceStatus" AS ENUM ('Paid', 'Outstanding', 'Overdue', 'Draft');
+
+-- CreateEnum
 CREATE TYPE "PunchType" AS ENUM ('IN', 'OUT');
 
 -- CreateEnum
 CREATE TYPE "PurchaseMode" AS ENUM ('GEM', 'DIRECT_PURCHASE', 'TENDER');
-
--- AlterTable
-ALTER TABLE "invoice_items" DROP COLUMN "customer",
-DROP COLUMN "description",
-DROP COLUMN "dueDate",
-DROP COLUMN "price",
-DROP COLUMN "quantity",
-DROP COLUMN "status",
-ADD COLUMN     "item" JSONB,
-DROP COLUMN "invoiceId",
-ADD COLUMN     "invoiceId" INTEGER NOT NULL;
 
 -- CreateTable
 CREATE TABLE "User" (
@@ -127,23 +107,6 @@ CREATE TABLE "ledger_transactions" (
 );
 
 -- CreateTable
-<<<<<<< HEAD
-<<<<<<<< HEAD:prisma/migrations/20260727103224_create_journal_entry/migration.sql
-=======
-<<<<<<<< HEAD:prisma/migrations/20260728115926_add_item_field/migration.sql
-CREATE TABLE "invoices" (
-    "id" SERIAL NOT NULL,
-    "customer" TEXT NOT NULL,
-    "issueDate" TEXT NOT NULL,
-    "dueDate" TEXT NOT NULL,
-    "status" "InvoiceStatus" NOT NULL,
-    "amount" DECIMAL(12,2) NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
-
-    CONSTRAINT "invoices_pkey" PRIMARY KEY ("id")
-========
->>>>>>> 259f6752ec415c85db5795b215628ec90e8ea261
 CREATE TABLE "JournalEntry" (
     "id" SERIAL NOT NULL,
     "voucherNo" TEXT NOT NULL,
@@ -159,23 +122,33 @@ CREATE TABLE "JournalEntry" (
     "postImmediately" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "JournalEntry_pkey" PRIMARY KEY ("id")
-<<<<<<< HEAD
-========
+);
+
+-- CreateTable
 CREATE TABLE "invoices" (
     "id" SERIAL NOT NULL,
     "customer" TEXT NOT NULL,
-    "issueDate" TEXT NOT NULL,
     "dueDate" TEXT NOT NULL,
-    "status" "InvoiceStatus" NOT NULL,
-    "amount" DECIMAL(12,2) NOT NULL,
+    "status" "InvoiceStatus" NOT NULL DEFAULT 'Outstanding',
+    "totalAmount" DECIMAL(12,2),
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "invoices_pkey" PRIMARY KEY ("id")
->>>>>>>> c308b2520617351bf09a0a7499262d5506109929:prisma/migrations/20260728115926_add_item_field/migration.sql
-=======
->>>>>>>> a242863b9230ee58542132e7bdf9ca28a6302351:prisma/migrations/20260727103224_create_journal_entry/migration.sql
->>>>>>> 259f6752ec415c85db5795b215628ec90e8ea261
+);
+
+-- CreateTable
+CREATE TABLE "invoice_items" (
+    "id" SERIAL NOT NULL,
+    "item" JSONB,
+    "description" TEXT NOT NULL,
+    "quantity" INTEGER NOT NULL,
+    "price" DECIMAL(12,2) NOT NULL,
+    "invoiceId" INTEGER NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "invoice_items_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable

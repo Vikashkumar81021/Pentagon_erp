@@ -7,8 +7,8 @@ const createInvoiceservice = async (data) => {
       customer: data.customer,
       dueDate: data.dueDate,
 
-      invoiceItems: {
-        create: data.item.map((item) => ({
+      items: {
+        create: data.items.map((item) => ({
           description: item.description,
           quantity: item.quantity,
           price: item.price,
@@ -16,7 +16,7 @@ const createInvoiceservice = async (data) => {
       },
     },
     include: {
-      invoiceItems: true,
+      items: true,
     },
   });
 };

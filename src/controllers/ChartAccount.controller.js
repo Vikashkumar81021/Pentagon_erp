@@ -4,6 +4,7 @@ import {
   createChartAccount,
   getAllChartAccounts,
   getChartAccountById,
+  getChartByAccount,
   updateChartAccount,
   deleteChartAccount,
 } from "../services/chartAccount.service.js";
@@ -52,6 +53,20 @@ const getChartAccountByIdController = async (req, res, next) => {
   }
 };
 
+const getChartByAccountController = async (req, res, next) => {
+  try {
+    const account = await getChartByAccount(req.query.account);
+
+    return res.status(STATUS_CODE.SUCCESS).json({
+      success: true,
+      count: account.length,
+      data: account,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const updateChartAccountController = async (req, res, next) => {
   try {
     const account = await updateChartAccount(
@@ -87,6 +102,7 @@ export {
   createChartAccountController,
   getAllChartAccountsController,
   getChartAccountByIdController,
+  getChartByAccountController,
   updateChartAccountController,
   deleteChartAccountController,
 };

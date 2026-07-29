@@ -38,6 +38,18 @@ const getChartAccountById = async (id) => {
   return account;
 };
 
+const getChartByAccount = async (account) => {
+  return await prisma.chartAccount.findMany({
+   select:{
+  balanceType:true,
+  accountName:true
+   },
+    orderBy: {
+      id: "desc",
+    },
+  });
+};
+
 const updateChartAccount = async (id, data) => {
   const account = await prisma.chartAccount.findUnique({
     where: {
@@ -102,6 +114,7 @@ export {
   createChartAccount,
   getAllChartAccounts,
   getChartAccountById,
+  getChartByAccount,
   updateChartAccount,
   deleteChartAccount,
 };
