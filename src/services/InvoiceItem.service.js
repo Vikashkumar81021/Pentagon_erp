@@ -28,11 +28,12 @@ const getAllInvoiceservice = async () => {
     },
     select: {
       items: true,
+      invoiceId: true,
     },
   });
 
   return invoices.map((invoice) => ({
-    id: invoice.invoiceId,
+    invoiceId: invoice.invoiceId,
     customer: invoice.customer,
     issueDate: invoice.createdAt,
     dueDate: invoice.dueDate,
