@@ -189,6 +189,7 @@ model JournalEntry{
 
 model Invoice {
   id         Int            @id @default(autoincrement())
+  invoiceId  String?
   customer   String
   dueDate    String
   status     InvoiceStatus @default(Outstanding)
