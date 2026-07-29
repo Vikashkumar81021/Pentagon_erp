@@ -55,7 +55,8 @@ const getChartAccountByIdController = async (req, res, next) => {
 
 const getChartByAccountController = async (req, res, next) => {
   try {
-    const account = await getChartByAccount(req.query.account);
+    
+    const account = await getChartByAccount(req.query.balanceType);
 
     return res.status(STATUS_CODE.SUCCESS).json({
       success: true,

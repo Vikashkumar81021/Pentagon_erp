@@ -39,15 +39,14 @@ const getChartAccountById = async (id) => {
 };
 
 const getChartByAccount = async (account) => {
-  return await prisma.chartAccount.findMany({
-   select:{
-  balanceType:true,
-  accountName:true
-   },
-    orderBy: {
-      id: "desc",
-    },
-  });
+ return await prisma.chartAccount.findMany({
+  where:{
+    balanceType:account
+  },select:{
+    accountName:true,
+    balanceType:true
+  }
+ })
 };
 
 const updateChartAccount = async (id, data) => {
