@@ -14,7 +14,7 @@ const createJournalEntry = async (data) => {
   if (!credit) {
     throw new Error("Credit account not found");
   }
-  if (!credit.status) {
+  if (credit.status !== "Active") {
     throw new Error("Credit account is inactive");
   }
   const debit = await prisma.chartAccount.findFirst({
@@ -25,7 +25,7 @@ const createJournalEntry = async (data) => {
   if (!debit) {
     throw new Error("Debit account not found");
   }
-  if (!debit.status) {
+  if (debit.status !== "Active") {
     throw new Error("Debit account is inactive");
   }
   return await prisma.journalEntry.create({
