@@ -221,7 +221,7 @@ model InvoiceItem {
 
 model ExpenseClaim {
   id                  Int          @id @default(autoincrement())
-  claimId             Int          @id @default(autoincrement())
+  claimId             Int          
   employee            String
   category            String
   date                String
