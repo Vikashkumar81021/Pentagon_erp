@@ -26,17 +26,21 @@ const getAllInvoiceservice = async () => {
     orderBy: {
       id: "desc",
     },
+    select: {
+      items: true,
+      invoiceId: true,
+    },
   });
 
   return invoices.map((invoice) => ({
-    id: invoice.invoiceId,
+    invoiceId: invoice.invoiceId,
     customer: invoice.customer,
-    issueDate: invoice.createdAt.toISOString().split("T")[0],
+    issueDate: invoice.createdAt,
     dueDate: invoice.dueDate,
     status: invoice.status,
     amount: invoice.items.reduce(
       (total, item) => total + Number(item.price) * item.quantity,
-      0
+      0,
     ),
     createdAt: invoice.createdAt,
     items: invoice.items,
@@ -71,8 +75,4 @@ const updateInvoiceservice = async (id, data) => {
   });
 };
 
-export {
-  createInvoiceservice,
-  getAllInvoiceservice,
-  updateInvoiceservice
-};
+export { createInvoiceservice, getAllInvoiceservice, updateInvoiceservice };
