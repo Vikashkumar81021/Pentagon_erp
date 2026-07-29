@@ -6,6 +6,7 @@ import {
   getAllJournalEntries,
   getJournalEntryById,
   getJournalEntry,
+  viewJournalAttachment,
   updateJournalEntry,
   deleteJournalEntry,
 } from "../services/JournalEntry.service.js";
@@ -70,6 +71,19 @@ const getJournalEntryController = async (req, res, next) => {
   }
 };
 
+const viewJournalAttachmentController = async (req, res, next) => {
+  try {
+    const journal = await viewJournalAttachment(req.params.id);
+
+    return res.status(STATUS_CODE.SUCCESS).json({
+      success: true,
+      attachment: journal.attachment,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const updateJournalEntryController = async (req, res, next) => {
   try {
     const data = {
@@ -114,6 +128,7 @@ export {
   getAllJournalEntriesController,
   getJournalEntryByIdController,
   getJournalEntryController,
+  viewJournalAttachmentController,
   updateJournalEntryController,
   deleteJournalEntryController,
 };

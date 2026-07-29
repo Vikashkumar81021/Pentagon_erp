@@ -6,6 +6,7 @@ import{
   getAllJournalEntriesController,
   getJournalEntryByIdController,
   getJournalEntryController,
+  viewJournalAttachmentController,
   updateJournalEntryController,
   deleteJournalEntryController,
 } from "../controllers/JournalEntry.controller.js";
@@ -19,6 +20,8 @@ router.get("/fetchJournalEntry", authMiddleware, getAllJournalEntriesController)
 router.get("/fetchJournalEntry/:id", authMiddleware, getJournalEntryByIdController);
 
 router.get("/fetchJournalEntrys", authMiddleware, getJournalEntryController);
+
+router.get("/viewJournalAttachment/:id", authMiddleware, viewJournalAttachmentController);
 
 router.patch("/updateJournalEntry/:id", authMiddleware, upload.single("attachment"), updateJournalEntryController);
 

@@ -102,6 +102,28 @@ const getJournalEntry = async () => {
   });
 };
 
+const viewJournalAttachment = async (id) => {
+  const journal = await prisma.journalEntry.findUnique({
+    where: {
+      id: Number(id),
+    },
+    select: {
+      id: true,
+      attachment: true,
+    },
+  });
+
+  if (!journal) {
+    throw new NotFoundError("Journal Entry not found");
+  }
+
+  if (!journal.attachment) {
+    throw new NotFoundError("Attachment not found");
+  }
+
+  return journal;
+};
+
 const updateJournalEntry = async (id, data) => {
   const journal = await prisma.journalEntry.findUnique({
     where: {
@@ -158,6 +180,7 @@ export {
   getAllJournalEntries,
   getJournalEntryById,
   getJournalEntry,
+  viewJournalAttachment,
   updateJournalEntry,
   deleteJournalEntry,
 };
