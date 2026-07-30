@@ -31,6 +31,8 @@ const getAllInvoiceservice = async () => {
       invoiceId: true,
       customer: true,
       status: true,
+      dueDate: true,
+      createdAt: true,
     },
   });
 
