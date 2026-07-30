@@ -29,6 +29,8 @@ const getAllInvoiceservice = async () => {
     select: {
       items: true,
       invoiceId: true,
+      customer: true,
+      status: true,
     },
   });
 
