@@ -2,9 +2,11 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { STATUS_CODE } from "../constants/status.code.js";
 import {
   createChartAccount,
+  createAmountInBank,
   getAllChartAccounts,
   getChartAccountById,
   getChartByAccount,
+  getBankAccounts,
   updateChartAccount,
   deleteChartAccount,
 } from "../services/chartAccount.service.js";
@@ -23,6 +25,16 @@ const createChartAccountController = async (req, res, next) => {
     next(error);
   }
 };
+
+const createAmountInBankController = asyncHandler(async (req, res) => {
+  const bank = await createAmountInBank(req.body);
+
+  return res.status(STATUS_CODE.SUCCESS).json({
+    success: true,
+    message: "Amount added successfully",
+    data: bank,
+  });
+});
 
 const getAllChartAccountsController = async (req, res, next) => {
   try {
@@ -68,6 +80,16 @@ const getChartByAccountController = async (req, res, next) => {
   }
 };
 
+const getBankAccountsController = asyncHandler(async (req, res) => {
+  const banks = await getBankAccounts();
+
+  return res.status(STATUS_CODE.SUCCESS).json({
+    success: true,
+    count: banks.length,
+    data: banks,
+  });
+});
+
 const updateChartAccountController = async (req, res, next) => {
   try {
     const account = await updateChartAccount(
@@ -101,9 +123,11 @@ const deleteChartAccountController = async (req, res, next) => {
 
 export {
   createChartAccountController,
+  createAmountInBankController,
   getAllChartAccountsController,
   getChartAccountByIdController,
   getChartByAccountController,
+  getBankAccountsController,
   updateChartAccountController,
   deleteChartAccountController,
 };

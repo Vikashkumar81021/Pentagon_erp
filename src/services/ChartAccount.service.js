@@ -16,6 +16,30 @@ const createChartAccount = async (data) => {
   });
 };
 
+const createAmountInBank = async (data) => {
+  const bank = await prisma.chartAccount.findFirst({
+    where: {
+      accountName: data.accountName,
+    },
+  });
+
+  if (!bank) {
+    throw new NotFoundError("Bank Account not found");
+  }
+
+  const updatedBalance =
+    Number(bank.openingBalance) + Number(data.amount);
+
+  return await prisma.chartAccount.update({
+    where: {
+      id: bank.id,
+    },
+    data: {
+      openingBalance: updatedBalance,
+    },
+  });
+};
+
 const getAllChartAccounts = async () => {
   return await prisma.chartAccount.findMany({
     orderBy: {
@@ -47,6 +71,25 @@ const getChartByAccount = async (account) => {
     balanceType:true
   }
  })
+};
+
+const getBankAccounts = async () => {
+  return await prisma.chartAccount.findMany({
+    where: {
+      classification: "Assets",
+      accountName: {
+        contains: "Bank",
+        mode: "insensitive",
+      },
+    },
+    select: {
+      id: true,
+      accountName: true,
+    },
+    orderBy: {
+      accountName: "asc",
+    },
+  });
 };
 
 const updateChartAccount = async (id, data) => {
@@ -111,9 +154,11 @@ const deleteChartAccount = async (id) => {
 
 export {
   createChartAccount,
+  createAmountInBank,
   getAllChartAccounts,
   getChartAccountById,
   getChartByAccount,
+  getBankAccounts,
   updateChartAccount,
   deleteChartAccount,
 };
