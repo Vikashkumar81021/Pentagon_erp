@@ -92,6 +92,28 @@ const getBankAccounts = async () => {
   });
 };
 
+const fetchBankAccount = async () => {
+  return await prisma.chartAccount.findMany({
+    where: {
+      accountName: {
+        in: [
+          "ICICI Bank - Pentagon Current Account",
+          "ICICI Bank - Pentagon Overdraft Account",
+          "IndusInd Bank - Smart Current Account",
+          "IndusInd Bank - Pentagon Current Account",
+          "ICICI Bank - SEST Current Account",
+        ],
+      },
+    },
+    select: {
+      accountName: true,
+    },
+    orderBy: {
+      accountName: "asc",
+    },
+  });
+};
+
 const updateChartAccount = async (id, data) => {
   const account = await prisma.chartAccount.findUnique({
     where: {
@@ -159,6 +181,7 @@ export {
   getChartAccountById,
   getChartByAccount,
   getBankAccounts,
+  fetchBankAccount,
   updateChartAccount,
   deleteChartAccount,
 };

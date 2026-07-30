@@ -8,6 +8,7 @@ import{
   getChartAccountByIdController,
   getChartByAccountController,
   getBankAccountsController,
+  fetchBankAccountController,
   updateChartAccountController,
   deleteChartAccountController,
 } from "../controllers/ChartAccount.controller.js";
@@ -23,7 +24,9 @@ router.get("/getChartAccount/:id", authMiddleware, getChartAccountByIdController
 
 router.get("/getChartByAccount", authMiddleware, getChartByAccountController);
 
-router.get("/fetchBankAccounts", authMiddleware, getBankAccountsController);
+router.get("/fetchAllBankAccounts", authMiddleware, getBankAccountsController);
+
+router.get("/fetchBankAccounts", authMiddleware, fetchBankAccountController);
 
 router.patch("/updateChartAccount/:id", authMiddleware, updateChartAccountController);
 

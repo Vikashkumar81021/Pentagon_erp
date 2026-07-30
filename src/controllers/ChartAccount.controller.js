@@ -7,6 +7,7 @@ import {
   getChartAccountById,
   getChartByAccount,
   getBankAccounts,
+  fetchBankAccount,
   updateChartAccount,
   deleteChartAccount,
 } from "../services/chartAccount.service.js";
@@ -80,6 +81,16 @@ const getChartByAccountController = async (req, res, next) => {
   }
 };
 
+const fetchBankAccountController = asyncHandler(async (req, res) => {
+  const banks = await fetchBankAccount();
+
+  return res.status(STATUS_CODE.SUCCESS).json({
+    success: true,
+    count: banks.length,
+    data: banks,
+  });
+});
+
 const getBankAccountsController = asyncHandler(async (req, res) => {
   const banks = await getBankAccounts();
 
@@ -128,6 +139,7 @@ export {
   getChartAccountByIdController,
   getChartByAccountController,
   getBankAccountsController,
+  fetchBankAccountController,
   updateChartAccountController,
   deleteChartAccountController,
 };
