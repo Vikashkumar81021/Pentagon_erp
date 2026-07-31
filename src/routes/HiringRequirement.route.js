@@ -7,7 +7,7 @@ import {
   updateHiringRequirementController,
   deleteHiringRequirementController,
   searchHiringRequirementController,
-} from "../controllers/hiringRequirement.controller.js";
+} from "../controllers/HiringRequirement.controller.js";
 
 const router = express.Router();
 
