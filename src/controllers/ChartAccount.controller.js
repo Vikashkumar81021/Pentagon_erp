@@ -10,12 +10,12 @@ import {
   fetchBankAccount,
   updateChartAccount,
   deleteChartAccount,
-} from "../services/chartAccount.service.js";
+} from "../services/ChartAccount.service.js";
 
 const createChartAccountController = async (req, res, next) => {
   try {
     const account = await createChartAccount(req.body);
-    console.log(req.body)
+    console.log(req.body);
 
     return res.status(STATUS_CODE.CREATED).json({
       success: true,
@@ -68,7 +68,6 @@ const getChartAccountByIdController = async (req, res, next) => {
 
 const getChartByAccountController = async (req, res, next) => {
   try {
-    
     const account = await getChartByAccount(req.query.balanceType);
 
     return res.status(STATUS_CODE.SUCCESS).json({
@@ -103,10 +102,7 @@ const getBankAccountsController = asyncHandler(async (req, res) => {
 
 const updateChartAccountController = async (req, res, next) => {
   try {
-    const account = await updateChartAccount(
-      req.params.id,
-      req.body
-    );
+    const account = await updateChartAccount(req.params.id, req.body);
 
     return res.status(STATUS_CODE.SUCCESS).json({
       success: true,
