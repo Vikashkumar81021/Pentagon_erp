@@ -15,7 +15,7 @@ const createJournalEntryController = async (req, res, next) => {
   try {
     const data = {
       ...req.body,
-      attachment: req.file ? req.file.path : null,
+      attachment: req.file ? req.file.filename : null,
     };
 
     const journal = await createJournalEntry(data);
@@ -23,7 +23,12 @@ const createJournalEntryController = async (req, res, next) => {
     return res.status(STATUS_CODE.CREATED).json({
       success: true,
       message: "Journal Entry created successfully",
-      data: journal,
+      data: {
+        ...journal,
+        attachment: journal.attachment
+          ? `${req.protocol}://${req.get("host")}/uploads/${journal.attachment}`
+          : null,
+      },
     });
   } catch (error) {
     next(error);
@@ -71,17 +76,20 @@ const getJournalEntryController = async (req, res, next) => {
   }
 };
 
-const viewJournalAttachmentController = async (req, res, next) => {
-  try {
-    const journal = await viewJournalAttachment(req.params.id);
+const viewJournalAttachmentController = async (req, res) => {
+  const journal = await viewJournalAttachment(req.params.id);
 
-    const filePath = path.resolve(journal.attachment);
+  let filePath;
 
-    return res.sendFile(filePath);
-  } catch (error) {
-    next(error);
+  if (!journal.attachment.includes(":")) {
+    filePath = path.join(
+      process.cwd(),
+      "uploads",
+      journal.attachment
+    );
   }
-};
+  return res.sendFile(filePath);
+}; 
 
 const updateJournalEntryController = async (req, res, next) => {
   try {

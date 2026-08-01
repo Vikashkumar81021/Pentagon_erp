@@ -233,6 +233,17 @@ model ExpenseClaim {
   remarks             String?
 }
 
+model IncomingBill{
+  id                  Int          @id @default(autoincrement())
+  vendor              String
+  duedate            String
+  costcategory       String
+  invoicevalue       String
+
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+}
+
 model SalesVisit {
   id                  Int          @id @default(autoincrement())
 
