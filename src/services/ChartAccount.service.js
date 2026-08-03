@@ -70,7 +70,7 @@ const getChartByAccount = async (account) => {
     balanceType:account
   },select:{
     accountName:true,
-    balanceType:true
+    normalBalance:true
   }
  })
 };
