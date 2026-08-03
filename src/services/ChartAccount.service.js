@@ -8,10 +8,12 @@ const createChartAccount = async (data) => {
       accountName: data.accountName,
       classification: data.classification,
       subClassification: data.subClassification,
-      balanceType: data.balanceType,
+      normalBalance: data.normalBalance,
       openingBalance: data.openingBalance,
       status: data.status,
       description: data.description,
+      accountType: data.accountType,
+      ownerType: data.ownerType,
     },
   });
 };
@@ -94,22 +96,33 @@ const getBankAccounts = async () => {
 
 const fetchBankAccount = async () => {
   return await prisma.chartAccount.findMany({
-    where: {
-      accountName: {
-        in: [
-          "ICICI Bank - Pentagon Current Account",
-          "ICICI Bank - Pentagon Overdraft Account",
-          "IndusInd Bank - Smart Current Account",
-          "IndusInd Bank - Pentagon Current Account",
-          "ICICI Bank - SEST Current Account",
-        ],
-      },
-    },
     select: {
       accountName: true,
+      // status: true,
+      // accountType: true,
+      // accountType: true,
     },
     orderBy: {
       accountName: "asc",
+    },
+  });
+};
+
+const filterChartAccounts = async (query) => {
+  const where = {};
+
+  Object.entries(query).forEach(([key, value]) => {
+    if (value !== undefined && value !== null && value !== "") {
+      where[key] = value;
+    }
+  });
+
+  console.log("Where:", where);
+
+  return await prisma.chartAccount.findMany({
+    where,
+    orderBy: {
+      createdAt: "desc",
     },
   });
 };
@@ -138,8 +151,8 @@ const updateChartAccount = async (id, data) => {
       ...(data.subClassification && {
         subClassification: data.subClassification,
       }),
-      ...(data.balanceType && {
-        balanceType: data.balanceType,
+      ...(data.normalBalance && {
+        normalBalance: data.normalBalance,
       }),
       ...(data.openingBalance !== undefined && {
         openingBalance: data.openingBalance,
@@ -149,6 +162,12 @@ const updateChartAccount = async (id, data) => {
       }),
       ...(data.description !== undefined && {
         description: data.description,
+      }),
+      ...(data.accountType !== undefined && {
+        accountType: data.accountType,
+      }),
+      ...(data.ownerType !== undefined &&{
+        ownerType: data.ownerType,
       }),
     },
   });
@@ -182,6 +201,7 @@ export {
   getChartByAccount,
   getBankAccounts,
   fetchBankAccount,
+  filterChartAccounts,
   updateChartAccount,
   deleteChartAccount,
 };

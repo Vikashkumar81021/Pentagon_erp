@@ -132,13 +132,15 @@ enum InvoiceStatus {
 model ChartAccount {
   id                Int                 @id @default(autoincrement())
   code              String              @unique
-  accountName       String
+  accountName       String              @unique
   classification    String
   subClassification String
-  balanceType       BalanceType
+  normalBalance     BalanceType
   openingBalance    Decimal             @db.Decimal(12,2)
   status            AccountStatus       @default(Active)
   description       String?
+  accountType       String?
+  ownerType         String?
 
   createdAt         DateTime            @default(now())
   updatedAt         DateTime            @updatedAt

@@ -17,7 +17,7 @@ const chartAccountSchema = z.object({
 
   subClassification: z.string(),
 
-  balanceType: z.enum([
+  normalBalance: z.enum([
     "Debit",
     "Credit",
   ]),
@@ -34,6 +34,8 @@ const chartAccountSchema = z.object({
   ]),
 
   description: z.string().optional(),
+  accountType: z.string().optional(),
+  ownerType: z.string().optional(),
 });
 
 export const createChartAccountSchema = z.object({

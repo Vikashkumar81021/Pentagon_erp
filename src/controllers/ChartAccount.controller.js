@@ -8,6 +8,7 @@ import {
   getChartByAccount,
   getBankAccounts,
   fetchBankAccount,
+  filterChartAccounts,
   updateChartAccount,
   deleteChartAccount,
 } from "../services/ChartAccount.service.js";
@@ -15,7 +16,6 @@ import {
 const createChartAccountController = async (req, res, next) => {
   try {
     const account = await createChartAccount(req.body);
-    console.log(req.body);
 
     return res.status(STATUS_CODE.CREATED).json({
       success: true,
@@ -100,6 +100,17 @@ const getBankAccountsController = asyncHandler(async (req, res) => {
   });
 });
 
+const filterChartAccountController = asyncHandler(async (req, res) => {
+  console.log("node",req.query)
+  const accounts = await filterChartAccounts(req.query);
+
+  return res.status(STATUS_CODE.SUCCESS).json({
+    success: true,
+    count: accounts.length,
+    data: accounts,
+  });
+});
+
 const updateChartAccountController = async (req, res, next) => {
   try {
     const account = await updateChartAccount(req.params.id, req.body);
@@ -136,6 +147,7 @@ export {
   getChartByAccountController,
   getBankAccountsController,
   fetchBankAccountController,
+  filterChartAccountController,
   updateChartAccountController,
   deleteChartAccountController,
 };
