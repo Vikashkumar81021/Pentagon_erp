@@ -81,25 +81,32 @@ const getJournalEntry = async () => {
       journalDate: "asc",
     },
   });
-
   let balance = 0;
-
-  return journals.map((journal) => {
-    const debit = Number(journal.amount);
-    const credit = Number(journal.amount);
-
-    balance += debit - credit;
-
-    return {
+  const ledger = [];
+  for (const journal of journals) {
+    const amount = Number(journal.amount);
+    balance += amount;
+    ledger.push({
       date: journal.journalDate,
       reference: journal.reference,
-      account: `${journal.debitAccount} / ${journal.creditAccount}`,
+      account: journal.debitAccount,
       description: journal.description,
-      debit,
-      credit,
+      debit: amount,
+      credit: 0,
       balance,
-    };
-  });
+    });
+    balance -= amount;
+    ledger.push({
+      date: journal.journalDate,
+      reference: journal.reference,
+      account: journal.creditAccount,
+      description: journal.description,
+      debit: 0,
+      credit: amount,
+      balance,
+    });
+  }
+  return ledger;
 };
 
 const viewJournalAttachment = async (id) => {
