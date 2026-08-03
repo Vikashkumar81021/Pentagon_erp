@@ -1,22 +1,66 @@
 import prisma from "../config/db.js";
 import { NotFoundError } from "../utils/error.js";
 
-const createChartAccount = async (data) => {
-  return await prisma.chartAccount.create({
-    data: {
-      code: data.code,
-      accountName: data.accountName,
-      classification: data.classification,
-      subClassification: data.subClassification,
-      normalBalance: data.normalBalance,
-      openingBalance: data.openingBalance,
-      status: data.status,
-      description: data.description,
-      accountType: data.accountType,
-      ownerType: data.ownerType,
-    },
-  });
+const getNormalBalance = (accountType) => {
+
+  switch (accountType) {
+
+    case "Bank":
+    case "Cash":
+    case "Customer":
+    case "Investment":
+    case "Inventory":
+    case "Fixed Asset":
+      return "Debit";
+
+    case "Vendor":
+    case "Loan":
+    case "Tax":
+      return "Credit";
+
+    default:
+      return "Debit";
+
+  }
+
 };
+
+const createChartAccount = async (data) => {
+
+  const normalBalance =
+    getNormalBalance(data.accountType);
+
+  return await prisma.chartAccount.create({
+
+    data: {
+
+      code: data.code,
+
+      accountName: data.accountName,
+
+      classification: data.classification,
+
+      subClassification: data.subClassification,
+
+      normalBalance,
+
+      openingBalance: data.openingBalance,
+
+      status: data.status,
+
+      description: data.description,
+
+      accountType: data.accountType,
+
+      ownerType: data.ownerType,
+
+    },
+
+  });
+
+};
+
+
 
 const createAmountInBank = async (data) => {
   const bank = await prisma.chartAccount.findFirst({
@@ -113,11 +157,12 @@ const filterChartAccounts = async (query) => {
 
   Object.entries(query).forEach(([key, value]) => {
     if (value !== undefined && value !== null && value !== "") {
-      where[key] = value;
+      where[key] ={
+      equals: value,
+      mode: "insensitive",
+    };
     }
   });
-
-  console.log("Where:", where);
 
   return await prisma.chartAccount.findMany({
     where,
