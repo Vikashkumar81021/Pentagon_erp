@@ -67,7 +67,7 @@ const getChartAccountById = async (id) => {
 const getChartByAccount = async (account) => {
  return await prisma.chartAccount.findMany({
   where:{
-    balanceType:account
+    normalBalance:account
   },select:{
     accountName:true,
     normalBalance:true
