@@ -12,7 +12,7 @@ import{
 const router = express.Router();
 
 router.post("/createIncomingBill", authMiddleware, createIncomingBillController);
-router.get("/fetchtAllIncomingBills", authMiddleware, getAllIncomingBillsController);
+router.get("/fetchAllIncomingBills", authMiddleware, getAllIncomingBillsController);
 router.get("/fetchIncomingBillById/:id", authMiddleware, getIncomingBillByIdController);
 router.patch("/updateIncomingBill/:id", authMiddleware, updateIncomingBillController);
 router.delete("/deleteIncomingBill/:id", authMiddleware, deleteIncomingBillController);
