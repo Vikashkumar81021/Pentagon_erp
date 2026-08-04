@@ -5,9 +5,9 @@ const createIncomingBill = async (data) => {
   return await prisma.incomingBill.create({
     data: {
       vendor: data.vendor,
-      duedate: data.duedate,
-      costcategory: data.costcategory,
-      invoicevalue: data.invoicevalue,
+      dueDate: data.dueDate,
+      costCategory: data.costCategory,
+      invoiceValue: data.invoiceValue,
     },
   });
 };
@@ -51,12 +51,12 @@ const updateIncomingBill = async (id, data) => {
     },
     data: {
       ...(data.vendor && { vendor: data.vendor }),
-      ...(data.dueDate && { duedate: data.duedate }),
-      ...(data.costcategory && {
-        costcategory: data.costcategory,
+      ...(data.dueDate && { dueDate: data.dueDate }),
+      ...(data.costCategory && {
+        costCategory: data.costCategory,
       }),
-      ...(data.invoicevalue && {
-        invoicevalue: data.invoicevalue,
+      ...(data.invoiceValue && {
+        invoiceValue: data.invoiceValue,
       }),
     },
   });
