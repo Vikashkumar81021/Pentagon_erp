@@ -222,17 +222,17 @@ model InvoiceItem {
 }
 
 model ExpenseClaim {
-  id                  Int          @id @default(autoincrement())
-  claimId             Int          
-  employee            String
-  category            String
-  date                String
-  amount              Int
-  status              String       @default("Pending")
-  workflow            String?
-  description         String
-  decision            String?
-  remarks             String?
+  id          Int      @id @default(autoincrement())
+  claimId     String   @unique
+  employee    String
+  category    String
+  date        String
+  amount      Int
+  status      String   @default("Pending")
+  workflow    String?
+  description String
+  decision    String?
+  remarks     String?
 }
 
 model IncomingBill {

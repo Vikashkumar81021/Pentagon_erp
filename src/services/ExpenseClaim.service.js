@@ -2,15 +2,18 @@ import prisma from "../config/db.js";
 import { NotFoundError } from "../utils/error.js";
 
 const createExpenseClaim = async (data) => {
+  const claimId = `EXP-${Date.now()}`;
+
   return await prisma.expenseClaim.create({
     data: {
+      claimId,
       employee: data.employee,
       category: data.category,
       date: data.date,
       amount: Number(data.amount),
       description: data.description,
-      workflow: data.workflow,
-      status: data.status,
+      workflow: "Completed",
+      status: "Pending",
       decision: data.decision,
       remarks: data.remarks,
     },
@@ -18,17 +21,19 @@ const createExpenseClaim = async (data) => {
 };
 
 const getAllExpenseClaims = async () => {
-  return await prisma.expenseClaim.findMany({
+  const claims = await prisma.expenseClaim.findMany({
     orderBy: {
       claimId: "desc",
     },
   });
+
+  return claims.map(({ workflow, ...claim }) => claim);
 };
 
 const getExpenseClaimById = async (id) => {
   const claim = await prisma.expenseClaim.findUnique({
     where: {
-      claimId: Number(id),
+      id: Number(id),
     },
   });
 
@@ -36,13 +41,15 @@ const getExpenseClaimById = async (id) => {
     throw new NotFoundError("Expense Claim not found");
   }
 
-  return claim;
+  const { workflow, ...response } = claim;
+
+  return response;
 };
 
 const updateExpenseClaim = async (id, data) => {
   const claim = await prisma.expenseClaim.findUnique({
     where: {
-      claimId: Number(id),
+      id: Number(id),
     },
   });
 
@@ -52,7 +59,7 @@ const updateExpenseClaim = async (id, data) => {
 
   return await prisma.expenseClaim.update({
     where: {
-      claimId: Number(id),
+      id: Number(id),
     },
     data: {
       ...(data.employee && { employee: data.employee }),
@@ -64,13 +71,17 @@ const updateExpenseClaim = async (id, data) => {
       ...(data.description && {
         description: data.description,
       }),
-      ...(data.workflow !== undefined && {
-        workflow: data.workflow,
+
+      workflow: "Completed",
+
+      ...(data.status && {
+        status: data.status,
       }),
-      ...(data.status && { status: data.status }),
+
       ...(data.decision !== undefined && {
         decision: data.decision,
       }),
+
       ...(data.remarks !== undefined && {
         remarks: data.remarks,
       }),
@@ -81,7 +92,7 @@ const updateExpenseClaim = async (id, data) => {
 const deleteExpenseClaim = async (id) => {
   const claim = await prisma.expenseClaim.findUnique({
     where: {
-      claimId: Number(id),
+      id: Number(id),
     },
   });
 
@@ -91,7 +102,7 @@ const deleteExpenseClaim = async (id) => {
 
   await prisma.expenseClaim.delete({
     where: {
-      claimId: Number(id),
+      id: Number(id),
     },
   });
 

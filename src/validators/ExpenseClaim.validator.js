@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const expenseClaimSchema = z.object({
+const expenseClaimSchema = z.object({
   employee: z.string().min(1, "Employee is required"),
 
   category: z.string().min(1, "Category is required"),
@@ -13,11 +13,11 @@ export const expenseClaimSchema = z.object({
 
   workflow: z.string().optional(),
 
-  status: z
-    .enum(["Pending", "Approved", "Rejected"])
-    .optional(),
+  status: z.enum(["Pending", "Approved", "Rejected"]).optional(),
 
   decision: z.string().optional(),
 
   remarks: z.string().optional(),
 });
+export const updateExpenseClaimSchema =
+  expenseClaimSchema.partial();
