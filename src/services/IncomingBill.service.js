@@ -2,21 +2,42 @@ import prisma from "../config/db.js";
 import { NotFoundError } from "../utils/error.js";
 
 const createIncomingBill = async (data) => {
+  const billNumber = `BILL-${Date.now()}`;
+
+  let status = "Due Soon";
+
+  if (new Date(data.dueDate) < new Date()) {
+    status = "Overdue";
+  }
+
   return await prisma.incomingBill.create({
     data: {
       vendor: data.vendor,
       dueDate: data.dueDate,
       costCategory: data.costCategory,
       invoiceValue: data.invoiceValue,
+      billNumber,
+      status,
     },
   });
 };
 
 const getAllIncomingBills = async () => {
-  return await prisma.incomingBill.findMany({
+  const bills = await prisma.incomingBill.findMany({
     orderBy: {
       createdAt: "desc",
     },
+  });
+
+  return bills.map((bill) => {
+    if (
+      bill.status !== "Paid" &&
+      new Date(bill.dueDate) < new Date()
+    ) {
+      bill.status = "Overdue";
+    }
+
+    return bill;
   });
 };
 
@@ -45,6 +66,18 @@ const updateIncomingBill = async (id, data) => {
     throw new NotFoundError("Incoming Bill not found");
   }
 
+  let status = bill.status;
+
+  if (data.status) {
+    status = data.status;
+  } else if (
+    data.dueDate &&
+    status !== "Paid" &&
+    new Date(data.dueDate) < new Date()
+  ) {
+    status = "Overdue";
+  }
+
   return await prisma.incomingBill.update({
     where: {
       id: Number(id),
@@ -58,6 +91,7 @@ const updateIncomingBill = async (id, data) => {
       ...(data.invoiceValue && {
         invoiceValue: data.invoiceValue,
       }),
+      status,
     },
   });
 };

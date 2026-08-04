@@ -241,6 +241,9 @@ model IncomingBill {
   dueDate       String
   costCategory  String
   invoiceValue  String
+  billNumber    String   @unique
+  status        String   @default("Due Soon")
+
 
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
