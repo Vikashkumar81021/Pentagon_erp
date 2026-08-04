@@ -27,6 +27,7 @@ const getAllInvoiceservice = async () => {
       id: "desc",
     },
     select: {
+      id:true,
       items: true,
       invoiceId: true,
       customer: true,
@@ -37,6 +38,7 @@ const getAllInvoiceservice = async () => {
   });
 
   return invoices.map((invoice) => ({
+    id:invoice.id,
     invoiceId: invoice.invoiceId,
     customer: invoice.customer,
     issueDate: invoice.createdAt,
@@ -57,10 +59,21 @@ const updateInvoiceservice = async (id, data) => {
       id: Number(id),
     },
     data: {
-      invoiceId: data.invoiceId,
-      customer: data.customer,
-      dueDate: data.dueDate,
-      status: data.status,
+      ...(data.invoiceId !== undefined && {
+        invoiceId: data.invoiceId,
+      }),
+
+      ...(data.customer !== undefined && {
+        customer: data.customer,
+      }),
+
+      ...(data.dueDate !== undefined && {
+        dueDate: data.dueDate,
+      }),
+
+      ...(data.status !== undefined && {
+        status: data.status,
+      }),
 
       ...(data.items && {
         items: {
