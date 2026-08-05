@@ -1,13 +1,14 @@
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { STATUS_CODE } from "../constants/status.code.js";
-import { 
-  fetchDashboardStats, 
-  fetchClientAccountCRMStats, 
-  getApprovedLeaveStatsService 
+import {
+  fetchDashboardStats,
+  fetchClientAccountCRMStats,
+  getApprovedLeaveStatsService,
 } from "../services/dashboard.stats.service.js";
 
 const fetchDashboardStatsController = asyncHandler(async (req, res) => {
-  const stats = await fetchDashboardStats();
+  const currentUser = req.user;
+  const stats = await fetchDashboardStats(currentUser);
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
     message: "Dashboard stats fetched successfully",
@@ -38,8 +39,8 @@ const getApprovedLeaveStatsController = asyncHandler(async (req, res) => {
   });
 });
 
-export { 
-  fetchDashboardStatsController, 
-  fetchClientAccountCRMStatsController, 
-  getApprovedLeaveStatsController, 
+export {
+  fetchDashboardStatsController,
+  fetchClientAccountCRMStatsController,
+  getApprovedLeaveStatsController,
 };

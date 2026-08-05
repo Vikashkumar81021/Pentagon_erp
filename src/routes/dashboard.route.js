@@ -9,7 +9,7 @@ import authMiddleware from "../middleware/auth.middleware.js";
 
 const router = express.Router();
 
-router.get("/dashboard/stats", fetchDashboardStatsController);
+router.get("/dashboard/stats", authMiddleware, fetchDashboardStatsController);
 router.get(
   "/dashboard/client-account-stats",
   fetchClientAccountCRMStatsController,
