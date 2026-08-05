@@ -12,7 +12,7 @@ const createExpenseClaim = async (data) => {
       date: data.date,
       amount: Number(data.amount),
       description: data.description,
-      workflow: "Completed",
+      workflow: "Waiting Approval",
       status: "Pending",
       decision: data.decision,
       remarks: data.remarks,
@@ -26,8 +26,8 @@ const getAllExpenseClaims = async () => {
       claimId: "desc",
     },
   });
-
-  return claims.map(({ workflow, ...claim }) => claim);
+  return claims;
+  // return claims.map(({ workflow, ...claim }) => claim);
 };
 
 const getExpenseClaimById = async (id) => {
@@ -71,8 +71,8 @@ const updateExpenseClaim = async (id, data) => {
       ...(data.description && {
         description: data.description,
       }),
-
-      workflow: "Completed",
+   
+     workflow: "Completed",
 
       ...(data.status && {
         status: data.status,
