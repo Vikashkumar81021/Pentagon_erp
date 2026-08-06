@@ -249,6 +249,23 @@ model IncomingBill {
   updatedAt     DateTime @updatedAt
 }
 
+model PayRoll {
+  id          Int      @id @default(autoincrement())
+
+  employeeId  Int
+  employee    Employee @relation(fields: [employeeId], references: [id])
+
+  gross       Int
+  tds         Int
+  pf          Int
+  status      String
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("pay_rolls")
+}
+
 model SalesVisit {
   id                  Int          @id @default(autoincrement())
 
@@ -364,6 +381,7 @@ model Employee {
   accountNumber  String
   onboardProcess      EmployeeOnboard?
    attendanceLogs   AttendanceLog[]
+   payrolls      PayRoll[]
 }
 enum PunchType {
   IN
