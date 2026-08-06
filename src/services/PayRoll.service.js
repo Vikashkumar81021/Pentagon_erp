@@ -73,7 +73,7 @@ const updatePayroll = async (id, data) => {
     },
     data: {
       ...(data.employeeId && {
-        employeeId: data.employeeId,
+        employeeId: Number(data.employeeId),
       }),
       ...(data.gross !== undefined && {
         gross: Number(data.gross),
@@ -86,6 +86,23 @@ const updatePayroll = async (id, data) => {
       }),
       ...(data.status && {
         status: data.status,
+      }),
+
+      // New Fields
+      ...(data.transaction_reference !== undefined && {
+        transaction_reference: data.transaction_reference,
+      }),
+      ...(data.remarks !== undefined && {
+        remarks: data.remarks,
+      }),
+      ...(data.payment_method !== undefined && {
+        payment_method: data.payment_method,
+      }),
+      ...(data.payment_date !== undefined && {
+        payment_date: data.payment_date,
+      }),
+      ...(data.deductions !== undefined && {
+        deductions: data.deductions,
       }),
     },
     include: {

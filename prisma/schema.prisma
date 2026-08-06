@@ -259,6 +259,11 @@ model PayRoll {
   tds         Int
   pf          Int
   status      String
+  transaction_reference   String?
+  remarks     String?
+  payment_method          String?
+  payment_date            String?
+  deductions              String?
 
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
