@@ -266,6 +266,20 @@ model PayRoll {
   @@map("pay_rolls")
 }
 
+model Assets {
+  id                  Int          @id @default(autoincrement())
+  assetsId            String
+  asset               String
+  category            String
+  department          String
+  asset_value         String
+  depreciation        String
+  status              String
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
 model SalesVisit {
   id                  Int          @id @default(autoincrement())
 
