@@ -286,39 +286,52 @@ model Assets {
 }
 
 model SalesVisit {
-  id                  Int          @id @default(autoincrement())
+  id                        Int      @id @default(autoincrement())
 
-  executive_name      String
+  executive_name            String
+  designation               String
+  visit_date                DateTime
+  visit_type                String
+  customer_name             String
+  customer_address          String?
+  contact_person            String
+  contact_number            String
+  customer_email            String?
 
-  visit_date          DateTime
+  product_type              String
+  product_description       String?
+  quantity                  Int?
 
-  visit_type          String
-  lead_type           LeadType
-  designation         String
-  customer_name       String
-  customer_address    String?
+  remarks                   String?
+  lead_type                 LeadType
 
-  contact_person      String
-  contact_number      String
+  reporting_location        String?
+  activity_type             String?
+  client_type               String?
+  lead_priority             String?
+  discussion_summary        String?
+  current_status            String?
+  expected_business_value   Int?
+  proposal_sent             String?
+  order_closed              String?
+  expected_closure_date     String?
+  next_followup_date        String?
+  management_support_required String?
+  additional_remarks        String?
 
-  customer_email      String?
+  meeting_photo             String?
 
-  product_type        String
-  product_description String?
- closure_date       String?
+  closure_date              String?
+  basic_amount              Int?
+  status                    String?
 
-  basic_amount         Int?
-  quantity            Int?
-
-  remarks             String?
-
-  status              String?
- userId Int
-  user   User @relation(fields: [userId], references: [id])
-  
-  createdAt           DateTime     @default(now())
-  updatedAt           DateTime     @updatedAt
+  userId                    Int
+  user                      User @relation(fields: [userId], references: [id])
+  type                      String?
+  createdAt                 DateTime @default(now())
+  updatedAt                 DateTime @updatedAt
 }
+
 model CallLog {
   id                  Int                 @id @default(autoincrement())
 

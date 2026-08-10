@@ -9,11 +9,11 @@ import {
   getFailedSalesVisistController,
 } from "../controllers/salesVisit.controller.js";
 import authMiddleware from "../middleware/auth.middleware.js";
-
+import upload from "../middleware/upload.middleware.js";
 
 const router = express.Router();
 
-router.post("/create",authMiddleware, createSalesVisitController);
+router.post("/create",authMiddleware, upload.single("meeting_photo"), createSalesVisitController);
 router.get("/get", authMiddleware, getSalesVisitsController);
 router.put("/update/:id", updateSalesVisitController);
 router.delete("/delete/:id", deleteSalesVisitController);

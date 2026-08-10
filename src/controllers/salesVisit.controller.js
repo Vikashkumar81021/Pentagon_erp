@@ -1,6 +1,7 @@
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { STATUS_CODE } from "../constants/status.code.js";
 import { salesVisitValidator } from "../validators/salesVisit.validator.js";
+import path from "path";
 import {
   getSalesVisitsService,
   salesVisitService,
@@ -13,9 +14,10 @@ import {
 
 const createSalesVisitController = asyncHandler(async (req, res, next) => {
   const validateData = salesVisitValidator.parse(req.body);
-
-
-  console.log("validate", validateData);
+  const data = {
+      ...req.body,
+      meeting_photo: req.file ? req.file.filename : null,
+    };
 
   const salesVisit = await salesVisitService({
     ...validateData,
