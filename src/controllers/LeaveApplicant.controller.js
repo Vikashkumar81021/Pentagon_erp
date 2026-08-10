@@ -1,0 +1,135 @@
+import { asyncHandler } from "../utils/asyncHandler.js";
+import { STATUS_CODE } from "../constants/status.code.js";
+import {
+    createLeaveApplicantValidator,
+    updateLeaveApplicantValidator,
+} from "../validators/LeaveApplicant.validator.js";
+import {
+    createLeaveApplicantService,
+    getLeaveApplicantService,
+    getLeaveApplicantsService,
+    getLeaveApplicantByIdService,
+    updateLeaveApplicantService,
+    deleteLeaveApplicantService,
+    getLeaveByDateService,
+} from "../services/LeaveApplicant.service.js";
+
+const createLeaveApplicantController = asyncHandler(async (req, res) => {
+  const validateData = createLeaveApplicantValidator.parse(req.body);
+
+  const leave = await createLeaveApplicantService(validateData);
+
+  return res.status(STATUS_CODE.CREATED).json({
+    success: true,
+    message: "Leave applied successfully",
+    data: leave,
+  });
+});
+
+const getLeaveApplicantController = asyncHandler(async (req, res) => {
+  const leaves = await getLeaveApplicantService();
+
+  return res.status(STATUS_CODE.SUCCESS).json({
+    success: true,
+    message: "Leave applications fetched successfully",
+    data: leaves,
+    leaveCount:leaves.length
+  });
+});
+
+const getLeaveApplicantsController = asyncHandler(async (req, res) => {
+  const leaves = await getLeaveApplicantsService();
+
+  return res.status(STATUS_CODE.SUCCESS).json({
+    success: true,
+    message: "Leave applications fetched successfully",
+    data: leaves,
+    leaveCount:leaves.length
+  });
+});
+
+const getLeaveApplicantByIdController = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  const leave = await getLeaveApplicantByIdService(id);
+
+  if (!leave) {
+    return res.status(404).json({
+      success: false,
+      message: "Leave application not found",
+    });
+  }
+  return res.status(STATUS_CODE.SUCCESS).json({
+    success: true,
+    message: "Leave application fetched successfully",
+    data: leave,
+  });
+});
+
+const updateLeaveApplicantController = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  const validateData = updateLeaveApplicantValidator.parse(req.body);
+
+  const leave = await updateLeaveApplicantService(id, validateData);
+
+  return res.status(STATUS_CODE.SUCCESS).json({
+    success: true,
+    message: "Leave updated successfully",
+    data: leave,
+  });
+});
+
+const deleteLeaveApplicantController = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  await deleteLeaveApplicantService(id);
+
+  return res.status(STATUS_CODE.SUCCESS).json({
+    success: true,
+    message: "Leave deleted successfully",
+  });
+});
+
+const getLeaveByDateController = asyncHandler(async (req, res) => {
+  const { startDate, endDate } = req.query;
+ 
+
+  if (!startDate) {
+    return res.status(400).json({
+      success: false,
+      message: "startDate  are required",
+    });
+  }
+
+  const leaves = await getLeaveByDateService(startDate, endDate);
+
+  const mappedLeaves = leaves.map((leave) => ({
+    id: leave.id,
+    applicant_name: leave.applicant_name,
+    leave_category: leave.leave_category,
+    from_date: leave.from_date,
+    to_date: leave.to_date,
+    leave_approve: leave.leave_approve,
+    reason_absence: leave.reason_absence,
+    createdAt: leave.createdAt,
+    updatedAt: leave.updatedAt,
+  }));
+
+  return res.status(STATUS_CODE.SUCCESS).json({
+    success: true,
+    message: "Leave applications fetched successfully",
+    count: mappedLeaves.length,
+    data: mappedLeaves,
+  });
+});
+
+export {
+  createLeaveApplicantController,
+  getLeaveApplicantController,
+  getLeaveApplicantsController,
+  getLeaveApplicantByIdController,
+  getLeaveByDateController,
+  updateLeaveApplicantController,
+  deleteLeaveApplicantController,
+};

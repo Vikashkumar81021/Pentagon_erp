@@ -1,0 +1,28 @@
+import express from "express";
+import authMiddleware from "../middleware/auth.middleware.js";
+import {
+  createEmployeeController,
+  getEmployeesController,
+  getEmployeeByIdController,
+  updateEmployeeController,
+  deleteEmployeeController,
+  filterEmployeeController,
+  searchEmployeController,
+  getEmployeController,
+  generateEmpCodeController,
+  getEmployeeNameDesignationController,
+} from "../controllers/employee.controller.js";
+
+const router = express.Router();
+
+router.post("/employee/create", createEmployeeController);
+router.get("/fetchEmp", authMiddleware, getEmployeesController);
+router.get("/fetchEmp/:id", authMiddleware, getEmployeeByIdController);
+router.put("/updateEmp/:id", authMiddleware, updateEmployeeController);
+router.delete("/deleteEmp/:id", authMiddleware, deleteEmployeeController);
+router.get("/filter", filterEmployeeController);
+router.get("/search", searchEmployeController);
+router.get("/getEmp", getEmployeController);
+router.post("/generateEmpCode", generateEmpCodeController);
+router.get("/employee-name-designation", authMiddleware, getEmployeeNameDesignationController);
+export default router;

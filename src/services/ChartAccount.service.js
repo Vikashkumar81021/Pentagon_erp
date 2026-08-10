@@ -1,0 +1,252 @@
+import prisma from "../config/db.js";
+import { NotFoundError } from "../utils/error.js";
+
+const getNormalBalance = (accountType) => {
+
+  switch (accountType) {
+
+    case "Bank":
+    case "Cash":
+    case "Customer":
+    case "Investment":
+    case "Inventory":
+    case "Fixed Asset":
+      return "Debit";
+
+    case "Vendor":
+    case "Loan":
+    case "Tax":
+      return "Credit";
+
+    default:
+      return "Debit";
+
+  }
+
+};
+
+const createChartAccount = async (data) => {
+
+  const normalBalance =
+    getNormalBalance(data.accountType);
+
+  return await prisma.chartAccount.create({
+
+    data: {
+
+      code: data.code,
+
+      accountName: data.accountName,
+
+      classification: data.classification,
+
+      subClassification: data.subClassification,
+
+      normalBalance,
+
+      openingBalance: data.openingBalance,
+
+      status: data.status,
+
+      description: data.description,
+
+      accountType: data.accountType,
+
+      ownerType: data.ownerType,
+
+    },
+
+  });
+
+};
+
+
+
+const createAmountInBank = async (data) => {
+  const bank = await prisma.chartAccount.findFirst({
+    where: {
+      accountName: data.accountName,
+    },
+  });
+
+  if (!bank) {
+    throw new NotFoundError("Bank Account not found");
+  }
+
+  const updatedBalance =
+    Number(bank.openingBalance) + Number(data.amount);
+
+  return await prisma.chartAccount.update({
+    where: {
+      id: bank.id,
+    },
+    data: {
+      openingBalance: updatedBalance,
+    },
+  });
+};
+
+const getAllChartAccounts = async () => {
+  return await prisma.chartAccount.findMany({
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+};
+
+const getChartAccountById = async (id) => {
+  const account = await prisma.chartAccount.findUnique({
+    where: {
+      id: Number(id),
+    },
+  });
+
+  if (!account) {
+    throw new NotFoundError("Chart Account not found");
+  }
+
+  return account;
+};
+
+const getChartByAccount = async (account) => {
+ return await prisma.chartAccount.findMany({
+  where:{
+    normalBalance:account
+  },select:{
+    accountName:true,
+    normalBalance:true
+  }
+ })
+};
+
+const getBankAccounts = async () => {
+  return await prisma.chartAccount.findMany({
+    where: {
+      classification: "Assets",
+      accountName: {
+        contains: "Bank",
+        mode: "insensitive",
+      },
+    },
+    select: {
+      id: true,
+      accountName: true,
+    },
+    orderBy: {
+      accountName: "asc",
+    },
+  });
+};
+
+const fetchBankAccount = async () => {
+  return await prisma.chartAccount.findMany({
+    select: {
+      accountName: true,
+      // status: true,
+      // accountType: true,
+      // accountType: true,
+    },
+    orderBy: {
+      accountName: "asc",
+    },
+  });
+};
+
+const filterChartAccounts = async (query) => {
+  const where = {};
+
+  Object.entries(query).forEach(([key, value]) => {
+    if (value !== undefined && value !== null && value !== "") {
+      where[key] ={
+      equals: value,
+      mode: "insensitive",
+    };
+    }
+  });
+
+  return await prisma.chartAccount.findMany({
+    where,
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+};
+
+const updateChartAccount = async (id, data) => {
+  const account = await prisma.chartAccount.findUnique({
+    where: {
+      id: Number(id),
+    },
+  });
+
+  if (!account) {
+    throw new NotFoundError("Chart Account not found");
+  }
+
+  return await prisma.chartAccount.update({
+    where: {
+      id: Number(id),
+    },
+    data: {
+      ...(data.code && { code: data.code }),
+      ...(data.accountName && { accountName: data.accountName }),
+      ...(data.classification && {
+        classification: data.classification,
+      }),
+      ...(data.subClassification && {
+        subClassification: data.subClassification,
+      }),
+      ...(data.normalBalance && {
+        normalBalance: data.normalBalance,
+      }),
+      ...(data.openingBalance !== undefined && {
+        openingBalance: data.openingBalance,
+      }),
+      ...(data.status && {
+        status: data.status,
+      }),
+      ...(data.description !== undefined && {
+        description: data.description,
+      }),
+      ...(data.accountType !== undefined && {
+        accountType: data.accountType,
+      }),
+      ...(data.ownerType !== undefined &&{
+        ownerType: data.ownerType,
+      }),
+    },
+  });
+};
+
+const deleteChartAccount = async (id) => {
+  const account = await prisma.chartAccount.findUnique({
+    where: {
+      id: Number(id),
+    },
+  });
+
+  if (!account) {
+    throw new NotFoundError("Chart Account not found");
+  }
+
+  await prisma.chartAccount.delete({
+    where: {
+      id: Number(id),
+    },
+  });
+
+  return account;
+};
+
+export {
+  createChartAccount,
+  createAmountInBank,
+  getAllChartAccounts,
+  getChartAccountById,
+  getChartByAccount,
+  getBankAccounts,
+  fetchBankAccount,
+  filterChartAccounts,
+  updateChartAccount,
+  deleteChartAccount,
+};

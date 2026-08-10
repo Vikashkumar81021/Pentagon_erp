@@ -1,10 +1,12 @@
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { STATUS_CODE } from "../constants/status.code.js";
+import { BillingSchema } from "../validators/billingOrder.validator.js";
 
 import {
   createBillingOrder,
   getBillingOrders,
   updateBillingOrder,
+  deleteBillingOrder,
 } from "../services/billingOrder.service.js";
 
 const createBillingOrderController = asyncHandler(async (req, res) => {
@@ -39,8 +41,20 @@ const updateBillingOrderController = asyncHandler(async (req, res) => {
   });
 });
 
+const deleteBillingOrderController = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  await deleteBillingOrder(id);
+
+  return res.status(STATUS_CODE.SUCCESS).json({
+    success: true,
+    message: "Billing Order deleted successfully",
+  });
+});
+
 export {
   createBillingOrderController,
   getBillingOrdersController,
   updateBillingOrderController,
+  deleteBillingOrderController,
 };

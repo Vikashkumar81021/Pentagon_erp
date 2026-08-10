@@ -1,0 +1,74 @@
+import prisma from "../config/db.js";
+
+const createLeaveApplicantService = async (data) => {
+  return await prisma.leaveApplicant.create({
+    data,
+  });
+};
+
+const getLeaveApplicantService = async () => {
+  return await prisma.leaveApplicant.findMany({
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+
+};
+
+const getLeaveApplicantsService = async () => {
+  return await prisma.leaveApplicant.findMany({
+    orderBy: {
+      createdAt: "desc",
+    },
+    where:{
+      leave_approve:"PENDING"
+    }
+  });
+
+};
+
+const getLeaveApplicantByIdService = async (id) => {
+  return await prisma.leaveApplicant.findUnique({
+    where: {
+      id: Number(id),
+    },
+  });
+};
+
+const updateLeaveApplicantService = async (id, data) => {
+  return await prisma.leaveApplicant.update({
+    where: {
+      id: Number(id),
+    },
+    data,
+  });
+};
+
+const deleteLeaveApplicantService = async (id) => {
+  return await prisma.leaveApplicant.delete({
+    where: {
+      id: Number(id),
+    },
+  });
+};
+
+const getLeaveByDateService = async (startDate, endDate) => {
+  return await prisma.leaveApplicant.findMany({
+    where: {
+      createdAt: {
+        gte: new Date(startDate),
+        lte: new Date(endDate),
+      },
+    },
+   
+  });
+};
+export {
+  createLeaveApplicantService,
+  getLeaveApplicantService,
+  getLeaveApplicantsService,
+  getLeaveApplicantByIdService,
+  updateLeaveApplicantService,
+  deleteLeaveApplicantService,
+  getLeaveByDateService,
+};

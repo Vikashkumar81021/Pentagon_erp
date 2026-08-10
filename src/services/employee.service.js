@@ -1,0 +1,177 @@
+import prisma from "../config/db.js";
+import { BadRequestError } from "../utils/error.js";
+
+const createEmployeeService = async (empdata) => {
+  const existEmpEmail = await prisma.employee.findFirst({
+    where: {
+      workEmail: empdata.workEmail,
+    },
+  });
+  if (existEmpEmail) {
+    throw new BadRequestError("Employee Already Exists.");
+  }
+  const employeedata = await prisma.employee.create({
+    data: empdata,
+  });
+
+  return employeedata;
+};
+
+const getEmployeesService = async () => {
+  return prisma.employee.findMany({
+    include: {
+      onboardProcess: true,
+    },
+  });
+};
+
+const getEmployeeByIdService = async (id) => {
+  return await prisma.employee.findUnique({
+    where: {
+      id: Number(id),
+    },
+  });
+};
+
+const updateEmployeeService = async (id, data) => {
+  return prisma.employee.update({
+    where: {
+      id: Number(id),
+    },
+    data,
+  });
+};
+
+const deleteEmployeeService = async (id) => {
+  return prisma.employee.delete({
+    where: {
+      id: Number(id),
+    },
+  });
+};
+
+const filterEmployees = async (filters) => {
+  const { department, status_desgnation } = filters;
+  const where = {};
+  if (department) where.department = department;
+
+  if (status_desgnation) where.status_desgnation = status_desgnation;
+  return await prisma.employee.findMany({
+    where,
+    select: {
+      status_desgnation: true,
+      department: true,
+    },
+  });
+};
+const searchEmployeService = async (search) => {
+  const { full_name } = search;
+
+  const where = {};
+  if (full_name) {
+    where.full_name = {
+      contains: full_name,
+      mode: "insensitive",
+    };
+  }
+  return await prisma.employee.findMany({
+    where,
+    select: {
+      full_name: true,
+    },
+  });
+};
+
+const getEmployeService = async (page = 1, limit = 10) => {
+  page = Number(page);
+  limit = Number(limit);
+
+  const skip = (page - 1) * limit;
+
+  const [employees, totalEmployees] = await Promise.all([
+    prisma.employee.findMany({
+      skip,
+      take: limit,
+      orderBy: {
+        id: "desc",
+      },
+      select: {
+        id: true,
+        fullName: true,
+        workEmail: true,
+        desgination: true,
+        department: true,
+        salary: true,
+        status: true,
+        bankName: true,
+        panNumber: true,
+        aadhaarNumber: true,
+        accountNumber: true,
+      },
+    }),
+    prisma.employee.count(),
+  ]);
+
+  return {
+    employees,
+    pagination: {
+      currentPage: page,
+      limit,
+      totalEmployees,
+      totalPages: Math.ceil(totalEmployees / limit),
+      hasNextPage: page < Math.ceil(totalEmployees / limit),
+      hasPreviousPage: page > 1,
+    },
+  };
+};
+const generateEmpCode = async (empId) => {
+  const employeId = await prisma.employee.findFirst({
+    where: {
+      id: empId,
+    },
+  });
+  if (!employeId) {
+    throw new BadRequestError("EmployeeId not found.");
+  }
+  const dateObj = new Date(employeId.dob);
+  const dd = String(dateObj.getDate()).padStart(2, "0");
+  const mm = String(dateObj.getMonth() + 1).padStart(2, "0");
+  const yy = String(dateObj.getFullYear()).slice(-2);
+  const dobPart = `${dd}${mm}${yy}`;
+  const finalEmpCode = `${employeId.org_name}${dobPart}`;
+  const empIds = await prisma.employee.update({
+    where: {
+      id: empId,
+    },
+    data: {
+      employeeCode: finalEmpCode,
+    },
+  });
+
+  return empIds.employeeCode;
+};
+
+const getEmployeeNameDesignationService = async () => {
+  return await prisma.employee.findMany({
+    select: {
+      id: true,
+      fullName: true,
+      designation: true,
+    },
+    orderBy: {
+      fullName: "asc",
+    },
+  });
+};
+export {
+  createEmployeeService,
+  getEmployeesService,
+  getEmployeeByIdService,
+  updateEmployeeService,
+  deleteEmployeeService,
+  filterEmployees,
+  searchEmployeService,
+  getEmployeService,
+  generateEmpCode,
+  getEmployeeNameDesignationService,
+};

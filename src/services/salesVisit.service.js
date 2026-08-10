@@ -1,6 +1,7 @@
 import prisma from "../config/db.js";
 
 const salesVisitService = async (salesVisitData) => {
+  //future mein isme db mein ek parmater add hoga isPermission ka true ya false jb mangment permisison approved hoga tb jb ui pe calltoaction show krega 
   const salesVisit = await prisma.salesVisit.create({
     data: salesVisitData,
   });
@@ -37,6 +38,25 @@ const getFailedLeads = async () => {
   });
   return convertedLeads;
 };
+
+const getSalesVisitsByType = async (type) => {
+  const where = {};
+
+  if (type) {
+    where.type = {
+      equals: type,
+      mode: "insensitive",
+    };
+  }
+
+  return await prisma.salesVisit.findMany({
+    where,
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+};
+
 const updateSalesVisit = async (id, data) => {
   return await prisma.salesVisit.update({
     where: {
@@ -70,5 +90,6 @@ export {
   deleteSalesVisit,
   mySalesVisitsService,
   getConvertedLeads,
+  getSalesVisitsByType,
   getFailedLeads,
 };

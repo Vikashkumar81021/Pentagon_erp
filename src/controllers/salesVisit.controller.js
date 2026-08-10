@@ -1,6 +1,7 @@
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { STATUS_CODE } from "../constants/status.code.js";
 import { salesVisitValidator } from "../validators/salesVisit.validator.js";
+import path from "path";
 import {
   getSalesVisitsService,
   salesVisitService,
@@ -8,14 +9,16 @@ import {
   deleteSalesVisit,
   mySalesVisitsService,
   getConvertedLeads,
+  getSalesVisitsByType,
   getFailedLeads,
 } from "../services/salesVisit.service.js";
 
 const createSalesVisitController = asyncHandler(async (req, res, next) => {
   const validateData = salesVisitValidator.parse(req.body);
-  console.log("userId", req.user.id);
-
-  console.log("validate", validateData);
+  const data = {
+      ...req.body,
+      meeting_photo: req.file ? req.file.filename : null,
+    };
 
   const salesVisit = await salesVisitService({
     ...validateData,
@@ -81,6 +84,22 @@ const getFailedSalesVisistController = asyncHandler(async (req, res, next) => {
   });
 });
 
+const getSalesVisitsByTypeController = async (req, res, next) => {
+  try {
+    const { type } = req.query;
+
+    const salesVisits = await getSalesVisitsByType(type);
+
+    return res.status(STATUS_CODE.SUCCESS).json({
+      success: true,
+      count: salesVisits.length,
+      data: salesVisits,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export {
   createSalesVisitController,
   getSalesVisitsController,
@@ -89,4 +108,5 @@ export {
   mySalesVisitsController,
   getConvertedSalesVisitController,
   getFailedSalesVisistController,
+  getSalesVisitsByTypeController,
 };

@@ -18,7 +18,6 @@ model User {
   password String
   empcode  String  @unique
   orders   Order[]
-
   procurementRequests ProcurementRequest[]
   approvedRequests    ProcurementRequest[] @relation("ApprovedBy")
   roles               UserRole[]
@@ -49,6 +48,31 @@ enum LeadPriority {
   MEDIUM
   HIGH
 }
+enum CallType {
+  PHONE
+  WHATSAPP
+   VIDEO_CALL
+   MEETING
+}
+enum DiscussionOutcome {
+   INTERESTED
+   FOLLOW_UP
+   NEGOTIATION
+  QUOTATION_REQUIRED
+   NOT_INTERESTED
+  CONVERTED
+}
+enum FollowupMode {
+  PHONE
+   WHATSAPP
+   EMAIL
+  MEETING
+}
+enum ApprovalStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
 
 enum CustomerType {
   COLD
@@ -64,43 +88,354 @@ enum SalesStatus {
   CLOSED
 }
 
-enum VisitType {
-  WARM
-  HOT
+enum LeadType {
+  WARM_PROSPECTS
+  HOT_PROSPECTS
+  DSR
+}
+
+enum ApprovedType {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum statusDesgnation{
+  Active 
+  Probation 
+  On_Leave
+}
+
+enum TransactionType {
+  CREDIT
+  DEBIT
 }
 
 
-model SalesVisit {
+enum BalanceType {
+  Debit
+  Credit
+}
+
+enum AccountStatus {
+  Active
+  Inactive
+}
+
+enum InvoiceStatus {
+  Paid
+  Outstanding
+  Overdue
+  Draft
+}
+
+model ChartAccount {
+  id                Int                 @id @default(autoincrement())
+  code              String              @unique
+  accountName       String              @unique
+  classification    String
+  subClassification String
+  normalBalance     BalanceType
+  openingBalance    Decimal             @db.Decimal(12,2)
+  status            AccountStatus       @default(Active)
+  description       String?
+  accountType       String?
+  ownerType         String?
+
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+
+  @@map("chart_accounts")
+}
+
+model LedgerTransaction {
+  id          Int                  @id @default(autoincrement())
+  date        DateTime
+  description String
+  category    String
+  transactionId String
+  account     String
+  amount      Decimal              @db.Decimal(12,2)
+  type        String
+
+  createdAt   DateTime             @default(now())
+  updatedAt   DateTime             @updatedAt
+
+  @@map("ledger_transactions")
+}
+
+model JournalEntry{
+  id          Int      @id @default(autoincrement())
+  voucherNo   String
+
+  journalDate  String
+
+  reference  String
+
+  description  String
+
+  debitAccount  String
+
+  creditAccount  String
+
+  amount  Int
+
+  narration String
+
+  attachment String?
+
+  status           String   @default("Pending")
+
+  postImmediately  Boolean  @default(false)
+}
+
+model Invoice {
+  id         Int            @id @default(autoincrement())
+  invoiceId  String?
+  customer   String
+  dueDate    String
+  status     InvoiceStatus @default(Outstanding)
+  totalAmount Decimal?        @db.Decimal(12,2)
+
+  items       InvoiceItem[]
+
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @updatedAt
+
+  @@map("invoices")
+}
+
+model InvoiceItem {
+  id          Int      @id @default(autoincrement())
+  item        Json?
+  description String
+  quantity    Int
+  price       Decimal  @db.Decimal(12,2)
+
+  invoiceId   Int
+  invoice     Invoice  @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("invoice_items")
+}
+
+model ExpenseClaim {
+  id          Int      @id @default(autoincrement())
+  claimId     String   @unique
+  employee    String
+  category    String
+  date        String
+  amount      Int
+  status      String   @default("Pending")
+  workflow    String?
+  description String
+  decision    String?
+  remarks     String?
+}
+
+model IncomingBill {
+  id            Int      @id @default(autoincrement())
+  vendor        String
+  dueDate       String
+  costCategory  String
+  invoiceValue  String
+  billNumber    String   @unique
+  status        String   @default("Due Soon")
+
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model PayRoll {
+  id          Int      @id @default(autoincrement())
+
+  employeeId  Int
+  employee    Employee @relation(fields: [employeeId], references: [id])
+
+  gross       Int
+  tds         Int
+  pf          Int
+  status      String
+  transaction_reference   String?
+  remarks     String?
+  payment_method          String?
+  payment_date            String?
+  deductions              String?
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("pay_rolls")
+}
+
+model Assets {
   id                  Int          @id @default(autoincrement())
+  assetsId            String
+  asset               String
+  category            String
+  department          String
+  asset_value         String
+  depreciation        String
+  status              String
 
-  executive_name      String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
 
-  visit_date          DateTime
+model SalesVisit {
+  id                        Int      @id @default(autoincrement())
 
-  visit_type          String
-  lead_type           String
+  executive_name            String
+  designation               String
+  visit_date                DateTime
+  visit_type                String
+  customer_name             String
+  customer_address          String?
+  contact_person            String
+  contact_number            String
+  customer_email            String?
+
+  product_type              String
+  product_description       String?
+  quantity                  Int?
+
+  remarks                   String?
+  lead_type                 LeadType
+
+  reporting_location        String?
+  activity_type             String?
+  client_type               String?
+  lead_priority             String?
+  discussion_summary        String?
+  current_status            String?
+  expected_business_value   Int?
+  proposal_sent             String?
+  order_closed              String?
+  expected_closure_date     String?
+  next_followup_date        String?
+  management_support_required String?
+  additional_remarks        String?
+
+  meeting_photo             String?
+
+  closure_date              String?
+  basic_amount              Int?
+  status                    String?
+
+  userId                    Int
+  user                      User @relation(fields: [userId], references: [id])
+  type                      String?
+  createdAt                 DateTime @default(now())
+  updatedAt                 DateTime @updatedAt
+}
+
+model CallLog {
+  id                  Int                 @id @default(autoincrement())
 
   customer_name       String
-  customer_address    String?
-
   contact_person      String
   contact_number      String
 
-  customer_email      String?
+  call_type           CallType
+  discussion_outcome  DiscussionOutcome
 
-  product_type        String
-  product_description String?
- closure_date       String?
+  discussion_notes    String?
 
-  basic_amount         Int?
-  quantity            Int?
+  followup_date       DateTime?
+  followup_mode       FollowupMode?
 
-  remarks             String?
+  approval_status     ApprovalStatus @default(PENDING)
+  approved_by         String?
 
-  status              String?
- userId Int
-  user   User @relation(fields: [userId], references: [id])
-  
+  approved_date       DateTime? @default(now())
+
+  management_remarks  String 
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+}
+model LeaveApplicant {
+  id     Int @id @default(autoincrement())
+  applicant_name  String
+  leave_category  String
+  from_date      DateTime
+  to_date      DateTime
+  leave_approve    ApprovedType @default(PENDING)
+  reason_absence String
+  reason_reject  String?
+  createdAt           DateTime     @default(now())
+  updatedAt           DateTime     @updatedAt
+}
+model EmployeeOnboard{
+  id Int @id @default(autoincrement())
+  joiningDate   DateTime
+  employeeId   Int @unique
+  employee  Employee  @relation(fields: [employeeId],references: [id])
+  taskCheckLists  TaskChecklist[]
+}
+
+model Holidays {
+  id          Int      @id @default(autoincrement())
+  holidayName String
+  holidayDate String
+  day         String
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model TaskChecklist {
+  id     Int @id @default(autoincrement())
+
+  category  String
+  text String
+  completed  Boolean @default(false)
+ employeeOnboardId Int
+ employeeOnboard   EmployeeOnboard @relation(fields: [employeeOnboardId], references: [id], onDelete: Cascade)
+}
+model Employee {
+  id Int @id @default(autoincrement())
+   fullName   String
+    employeeCode  String?   @unique
+  workEmail    String  @unique
+  mobileNumber BigInt
+  designation  String
+  department   String
+  salary       Int
+  org_name  String?
+  dob    DateTime?
+  status statusDesgnation
+ bankName    String
+  panNumber    String
+ aadhaarNumber  String
+  accountNumber  String
+  onboardProcess      EmployeeOnboard?
+   attendanceLogs   AttendanceLog[]
+   payrolls      PayRoll[]
+}
+enum PunchType {
+  IN
+  OUT
+}
+model AttendanceLog {
+  id  Int @id @default(autoincrement())
+
+    employeeCode  String
+    punch_time  DateTime
+    punch_type PunchType
+    empolyee   Employee @relation(fields: [employeeCode],references: [employeeCode])
+}
+model HiringRequirement{
+
+  id Int @id @default(autoincrement())
+  jobTitle   String
+  department  String
+  employmentType  String
+  jobStatus   String  @default("OPEN")
+  description  String
+  applications JobApplication[]
   createdAt           DateTime     @default(now())
   updatedAt           DateTime     @updatedAt
 }
@@ -141,6 +476,18 @@ model LeadActivity {
   responses    String? // Mail body summaries
   createdAt    DateTime  @default(now())
 }
+model JobApplication {
+  id                  Int @id @default(autoincrement())
+
+  hiringRequirementId Int
+  hiringRequirement   HiringRequirement @relation(fields: [hiringRequirementId], references: [id], onDelete: Cascade)
+
+  candidateName       String
+  email               String
+  mobile              String
+
+  appliedAt           DateTime @default(now())
+}
 
 model ClientAccount {
   id Int @id @default(autoincrement())
@@ -169,12 +516,44 @@ model ClientAccount {
 }
 model BillingOrder {
   id                  Int      @id @default(autoincrement())
+
+  // Billing Information
   date                DateTime
   particulars         String
   item_details        String
   taxable_amount      Float
-  support_of          String
-  monthly_business  Int
+  business_value      Int
+
+  // Customer
+  customer_name       String
+
+  // Customer Contact (Purchase Order)
+  po_contact_name     String
+  po_contact_email    String
+  po_contact_phone    String
+
+  // Billing Contact
+  billing_contact_name  String
+  billing_contact_email String
+  billing_contact_phone String
+
+  // Invoice Recipient
+  recipient_name      String
+  recipient_email     String
+  recipient_phone     String
+
+  // Accounts / Payment Contact
+  accounts_phone      String
+
+  // Project Execution Contact
+  execution_phone     String
+
+  // Post Implementation Support Contact
+  support_phone       String
+
+  // Partner / Support Reference
+  support_name        String
+  support_contact_phone String
 
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt
@@ -196,6 +575,8 @@ model InstitutionVisit {
 }
 model Notice {
   id        Int      @id @default(autoincrement())
+  title     String
+  type      String
   text      String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
