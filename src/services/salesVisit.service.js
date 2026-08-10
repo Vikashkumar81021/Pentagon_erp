@@ -1,6 +1,7 @@
 import prisma from "../config/db.js";
 
 const salesVisitService = async (salesVisitData) => {
+  console.log(salesVisitData)
   //future mein isme db mein ek parmater add hoga isPermission ka true ya false jb mangment permisison approved hoga tb jb ui pe calltoaction show krega 
   const salesVisit = await prisma.salesVisit.create({
     data: salesVisitData,
