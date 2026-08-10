@@ -38,6 +38,25 @@ const getFailedLeads = async () => {
   });
   return convertedLeads;
 };
+
+const getSalesVisitsByType = async (type) => {
+  const where = {};
+
+  if (type) {
+    where.type = {
+      equals: type,
+      mode: "insensitive",
+    };
+  }
+
+  return await prisma.salesVisit.findMany({
+    where,
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+};
+
 const updateSalesVisit = async (id, data) => {
   return await prisma.salesVisit.update({
     where: {
@@ -71,5 +90,6 @@ export {
   deleteSalesVisit,
   mySalesVisitsService,
   getConvertedLeads,
+  getSalesVisitsByType,
   getFailedLeads,
 };

@@ -9,6 +9,7 @@ import {
   deleteSalesVisit,
   mySalesVisitsService,
   getConvertedLeads,
+  getSalesVisitsByType,
   getFailedLeads,
 } from "../services/salesVisit.service.js";
 
@@ -83,6 +84,22 @@ const getFailedSalesVisistController = asyncHandler(async (req, res, next) => {
   });
 });
 
+const getSalesVisitsByTypeController = async (req, res, next) => {
+  try {
+    const { type } = req.query;
+
+    const salesVisits = await getSalesVisitsByType(type);
+
+    return res.status(STATUS_CODE.SUCCESS).json({
+      success: true,
+      count: salesVisits.length,
+      data: salesVisits,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export {
   createSalesVisitController,
   getSalesVisitsController,
@@ -91,4 +108,5 @@ export {
   mySalesVisitsController,
   getConvertedSalesVisitController,
   getFailedSalesVisistController,
+  getSalesVisitsByTypeController,
 };

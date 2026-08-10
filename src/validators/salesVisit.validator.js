@@ -1,3 +1,4 @@
+import { type } from "node:os";
 import { z } from "zod";
 
 export const LeadTypeEnum = z.enum([
@@ -52,9 +53,7 @@ export const salesVisitValidator = z.object({
     .optional(),
 
   quantity: z
-    .number()
-    .int()
-    .positive()
+      .int()
     .optional(),
 
   remarks: z
@@ -125,6 +124,7 @@ export const salesVisitValidator = z.object({
     .nonnegative()
     .optional(),
 
+  type:z.string().optional(),
   status: z
     .string()
     .optional(),
