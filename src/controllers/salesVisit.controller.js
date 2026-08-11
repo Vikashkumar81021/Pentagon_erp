@@ -14,13 +14,15 @@ import {
 } from "../services/salesVisit.service.js";
 
 const createSalesVisitController = asyncHandler(async (req, res, next) => {
-  const validateData = salesVisitValidator.parse(req.body);
-  const data = {
+    const data = {
       ...req.body,
-      meeting_photo: req.file ? req.file.filename : null,
+      meeting_photo: req.file ? req.file.path : null,
     };
 
+  const validateData = salesVisitValidator.parse(req.body,data);
+
   const salesVisit = await salesVisitService({
+    meeting_photo:req.file.path,
     ...validateData,
     userId: req.user.id,
   });

@@ -43,7 +43,7 @@ const getSalesVisitsByType = async (type) => {
   const where = {};
 
   if (type) {
-    where.type = {
+    where.visit_type = {
       equals: type,
       mode: "insensitive",
     };
