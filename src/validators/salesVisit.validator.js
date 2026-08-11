@@ -1,20 +1,9 @@
-import { type } from "node:os";
 import { z } from "zod";
-
-export const LeadTypeEnum = z.enum([
-  "WARM_PROSPECTS",
-  "HOT_PROSPECTS",
-  "DSR",
-]);
 
 export const salesVisitValidator = z.object({
   executive_name: z
     .string()
     .min(1, "Executive name is required"),
-
-  designation: z
-    .string()
-    .min(1, "Designation is required"),
 
   visit_date: z.coerce.date(),
 
@@ -44,23 +33,20 @@ export const salesVisitValidator = z.object({
     .optional()
     .or(z.literal("")),
 
-  product_type: z
-    .string()
-    .min(1, "Product type is required"),
-
   product_description: z
     .string()
     .optional(),
 
   quantity: z
-      .int()
+    .coerce
+    .number()
+    .int()
+    .positive()
     .optional(),
 
   remarks: z
     .string()
     .optional(),
-
-  lead_type: LeadTypeEnum,
 
   reporting_location: z
     .string()
@@ -74,9 +60,7 @@ export const salesVisitValidator = z.object({
     .enum(["NEW", "EXISTING"])
     .optional(),
 
-  lead_priority: z
-    .enum(["HOT", "WARM", "COLD"])
-    .optional(),
+  lead_priority: z.string(),
 
   discussion_summary: z
     .string()
@@ -87,6 +71,7 @@ export const salesVisitValidator = z.object({
     .optional(),
 
   expected_business_value: z
+    .coerce
     .number()
     .nonnegative()
     .optional(),
@@ -115,17 +100,25 @@ export const salesVisitValidator = z.object({
     .string()
     .optional(),
 
+  meeting_photo: z
+    .string()
+    .optional(),
+
   closure_date: z
     .string()
     .optional(),
 
   basic_amount: z
+    .coerce
     .number()
     .nonnegative()
     .optional(),
 
-  type:z.string().optional(),
   status: z
+    .string()
+    .optional(),
+
+  type: z
     .string()
     .optional(),
 });
