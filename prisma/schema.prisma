@@ -88,12 +88,6 @@ enum SalesStatus {
   CLOSED
 }
 
-enum LeadType {
-  WARM_PROSPECTS
-  HOT_PROSPECTS
-  DSR
-}
-
 enum ApprovedType {
   PENDING
   APPROVED
@@ -289,7 +283,6 @@ model SalesVisit {
   id                        Int      @id @default(autoincrement())
 
   executive_name            String
-  designation               String
   visit_date                DateTime
   visit_type                String
   customer_name             String
@@ -298,17 +291,15 @@ model SalesVisit {
   contact_number            String
   customer_email            String?
 
-  product_type              String
   product_description       String?
   quantity                  Int?
 
   remarks                   String?
-  lead_type                 LeadType
 
   reporting_location        String?
   activity_type             String?
   client_type               String?
-  lead_priority             String?
+  lead_priority             String
   discussion_summary        String?
   current_status            String?
   expected_business_value   Int?
