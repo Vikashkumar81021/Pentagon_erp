@@ -121,4 +121,6 @@ export const salesVisitValidator = z.object({
   type: z
     .string()
     .optional(),
+
+  userId: z.coerce.number().int().positive(),
 });

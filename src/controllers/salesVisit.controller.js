@@ -14,18 +14,20 @@ import {
 } from "../services/salesVisit.service.js";
 
 const createSalesVisitController = asyncHandler(async (req, res, next) => {
-    const data = {
-      ...req.body,
-      meeting_photo: req.file ? req.file.path : null,
-    };
+  
+  const data = {
+    ...req.body,
 
-  const validateData = salesVisitValidator.parse(req.body,data);
+    meeting_photo: req.file
+      ? `/uploads/${req.file.filename}`
+      : undefined,
 
-  const salesVisit = await salesVisitService({
-    meeting_photo:req.file.path,
-    ...validateData,
-    userId: req.user.id,
-  });
+   userId: Number(req.user.id),
+  };
+  const validateData = salesVisitValidator.parse(data);
+
+  const salesVisit = await salesVisitService(validateData);
+
   return res.status(STATUS_CODE.CREATED).json({
     success: true,
     message: "Sales Visit created successfully",
