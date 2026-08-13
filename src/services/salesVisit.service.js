@@ -33,11 +33,6 @@ const createSalesVisit = async (data) => {
 
 const getSalesVisits = async () => {
   return await prisma.salesVisit.findMany({
-    where: {
-      visit_type: {
-        not: "TELECALL",
-      },
-    },
     orderBy: {
       createdAt: "desc",
     },
@@ -70,12 +65,6 @@ const createTelecalling = async (data) => {
 
 const getTelecalling = async () => {
   return await prisma.salesVisit.findMany({
-    where: {
-      visit_type: {
-        equals: "TELECALL",
-        mode: "insensitive",
-      },
-    },
     orderBy: {
       createdAt: "desc",
     },
