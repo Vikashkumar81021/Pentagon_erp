@@ -66,6 +66,27 @@ const searchHiringRequirement = async (search) => {
   });
 };
 
+const getOpenHiringRequirements = async () => {
+  return await prisma.hiringRequirement.findMany({
+    where: {
+      jobStatus: {
+        equals: "OPEN",
+        mode: "insensitive",
+      },
+    },
+    include: {
+      _count: {
+        select: {
+          applications: true,
+        },
+      },
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+};
+
 export{
     createHiringRequirement,
     getHiringRequirement,
@@ -73,4 +94,5 @@ export{
     updateHiringRequirement,
     deleteHiringRequirement,
     searchHiringRequirement,
+    getOpenHiringRequirements,
 };

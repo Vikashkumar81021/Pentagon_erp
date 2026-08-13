@@ -7,6 +7,7 @@ import {
   updateHiringRequirementController,
   deleteHiringRequirementController,
   searchHiringRequirementController,
+  getOpenHiringRequirementsController,
 } from "../controllers/HiringRequirement.controller.js";
 
 const router = express.Router();
@@ -17,5 +18,6 @@ router.get("/hiringId/:id", getHiringRequirementByIdController);
 router.put("/hiring/:id", updateHiringRequirementController);
 router.delete("/hiring/:id", deleteHiringRequirementController);
 router.get("/hiring/search", searchHiringRequirementController);
+router.get("/fetchOpenHiringRequirement", getOpenHiringRequirementsController);
 
 export default router;

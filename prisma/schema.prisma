@@ -290,6 +290,7 @@ model SalesVisit {
   contact_person            String
   contact_number            String
   customer_email            String?
+  city                      String
 
   product_description       String?
   quantity                  Int?
@@ -305,6 +306,11 @@ model SalesVisit {
   expected_business_value   Int?
   proposal_sent             String?
   order_closed              String?
+  order_lost_reason         String?
+  total_calls_made          Int?
+  connected_calls           Int?
+  meetings_scheduled        Int?
+  new_leads_generated       Int?
   expected_closure_date     String?
   next_followup_date        String?
   management_support_required String?
@@ -424,6 +430,13 @@ model HiringRequirement{
   jobTitle   String
   department  String
   employmentType  String
+  openings        Int
+  experienceRequired    String
+  qualification       String
+  location          String[]
+  salaryRange       String
+  applicationDeadline     String
+  hiringManager         String         
   jobStatus   String  @default("OPEN")
   description  String
   applications JobApplication[]

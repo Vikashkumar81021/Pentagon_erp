@@ -33,6 +33,11 @@ export const salesVisitValidator = z.object({
     .optional()
     .or(z.literal("")),
 
+  // NEW
+  city: z
+    .string()
+    .min(1, "City is required"),
+
   product_description: z
     .string()
     .optional(),
@@ -60,7 +65,9 @@ export const salesVisitValidator = z.object({
     .enum(["NEW", "EXISTING"])
     .optional(),
 
-  lead_priority: z.string(),
+  lead_priority: z
+    .string()
+    .min(1, "Lead priority is required"),
 
   discussion_summary: z
     .string()
@@ -82,6 +89,43 @@ export const salesVisitValidator = z.object({
 
   order_closed: z
     .enum(["YES", "NO"])
+    .optional(),
+
+  // NEW
+  order_lost_reason: z
+    .string()
+    .optional(),
+
+  // NEW
+  total_calls_made: z
+    .coerce
+    .number()
+    .int()
+    .nonnegative()
+    .optional(),
+
+  // NEW
+  connected_calls: z
+    .coerce
+    .number()
+    .int()
+    .nonnegative()
+    .optional(),
+
+  // NEW
+  meetings_scheduled: z
+    .coerce
+    .number()
+    .int()
+    .nonnegative()
+    .optional(),
+
+  // NEW
+  new_leads_generated: z
+    .coerce
+    .number()
+    .int()
+    .nonnegative()
     .optional(),
 
   expected_closure_date: z
@@ -122,5 +166,9 @@ export const salesVisitValidator = z.object({
     .string()
     .optional(),
 
-  userId: z.coerce.number().int().positive(),
+  userId: z
+    .coerce
+    .number()
+    .int()
+    .positive(),
 });
