@@ -13,12 +13,7 @@
 
 */
 -- AlterTable
-ALTER TABLE "ExpenseClaim" DROP CONSTRAINT "ExpenseClaim_pkey",
-ADD COLUMN     "id" SERIAL NOT NULL,
-ALTER COLUMN "claimId" DROP DEFAULT,
-ALTER COLUMN "claimId" SET DATA TYPE TEXT,
-ADD CONSTRAINT "ExpenseClaim_pkey" PRIMARY KEY ("id");
-DROP SEQUENCE "ExpenseClaim_claimId_seq";
+
 
 -- AlterTable
 ALTER TABLE "SalesVisit" DROP COLUMN "designation",
