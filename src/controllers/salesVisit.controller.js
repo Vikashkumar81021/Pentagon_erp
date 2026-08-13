@@ -5,6 +5,7 @@ import path from "path";
 import {
   createSalesVisit,
   getSalesVisits,
+  fetchclientname,
 } from "../services/salesVisit.service.js";
 
 const createSalesVisitController = asyncHandler(async (req, res) => {
@@ -33,7 +34,17 @@ const getSalesVisitsController = asyncHandler(async (req, res) => {
   });
 });
 
+const fetchclientnameController = asyncHandler(async (req, res) => {
+  const salesVisits = await fetchclientname();
+
+  return res.status(STATUS_CODE.SUCCESS).json({
+    success: true,
+    message: "Client Name fetched successfully",
+    data: salesVisits,
+  });
+});
 export {
   createSalesVisitController,
   getSalesVisitsController,
+  fetchclientnameController,
 };

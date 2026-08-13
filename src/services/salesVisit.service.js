@@ -38,7 +38,15 @@ const getSalesVisits = async () => {
   });
 };
 
+const fetchclientname = async () => {
+  return await prisma.salesVisit.findMany({
+    select:{
+      customer_name:true
+    }
+  })
+}
 export {
   createSalesVisit,
   getSalesVisits,
+  fetchclientname,
 };
