@@ -1,6 +1,5 @@
 import prisma from "../config/db.js";
 
-        //physical meeting
 const createSalesVisit = async (data) => {
   return await prisma.salesVisit.create({
     data: {
@@ -39,41 +38,7 @@ const getSalesVisits = async () => {
   });
 };
 
-        //Telecalling
-
-const createTelecalling = async (data) => {
-  return await prisma.salesVisit.create({
-    data: {
-      executive_name: data.executive_name,
-      visit_date: data.visit_date,
-      visit_type: "TELECALL",
-      customer_name: data.customer_name,
-      contact_person: data.contact_person,
-      contact_number: data.contact_number,
-      customer_email: data.customer_email,
-      city: data.city,
-      lead_priority: data.lead_priority,
-      total_calls_made: data.total_calls_made,
-      connected_calls: data.connected_calls,
-      meetings_scheduled: data.meetings_scheduled,
-      new_leads_generated: data.new_leads_generated,
-      remarks: data.remarks,
-      userId: data.userId,
-    },
-  });
-};
-
-const getTelecalling = async () => {
-  return await prisma.salesVisit.findMany({
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
-};
-
 export {
   createSalesVisit,
   getSalesVisits,
-  createTelecalling,
-  getTelecalling,
 };
