@@ -56,7 +56,7 @@ const createTelecallingController = asyncHandler(async (req, res) => {
 const getTelecallingController = asyncHandler(async (req, res) => {
   const telecalling = await getTelecalling();
 
-  return res.status(STATUS_CODE.OK).json({
+  return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
     message: "Telecalling fetched successfully",
     data: telecalling,
