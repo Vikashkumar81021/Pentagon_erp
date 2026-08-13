@@ -284,7 +284,7 @@ model SalesVisit {
 
   executive_name            String
   visit_date                DateTime
-  visit_type                String
+  visit_type                String?
   customer_name             String
   customer_address          String?
   contact_person            String

@@ -9,6 +9,7 @@ export const salesVisitValidator = z.object({
 
   visit_type: z
     .string()
+    .optional()
     .min(1, "Visit type is required"),
 
   customer_name: z
