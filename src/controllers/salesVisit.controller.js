@@ -10,14 +10,14 @@ import {
 } from "../services/salesVisit.service.js";
 
 const createSalesVisitController = asyncHandler(async (req, res) => {
-  console.log(req.body)
+  console.log(req.body);
   const data = {
     ...req.body,
     visit_date: new Date(req.body.visit_date),
     meeting_photo: req.file ? req.file.path : null,
     userId: Number(req.user.id),
   };
-console.log(data)
+  console.log(data);
   const salesVisit = await createSalesVisit(data);
 
   return res.status(STATUS_CODE.CREATED).json({
