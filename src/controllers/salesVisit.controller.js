@@ -29,6 +29,7 @@ const createSalesVisitController = asyncHandler(async (req, res) => {
 
 const getSalesVisitsController = asyncHandler(async (req, res) => {
   const salesVisits = await getSalesVisits();
+  console.log("sales visis", salesVisits);
 
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
