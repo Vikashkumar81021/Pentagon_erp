@@ -1,0 +1,48 @@
+import { asyncHandler } from "../utils/asyncHandler.js";
+import { STATUS_CODE } from "../constants/status.code.js";
+import{
+    createCallDiscussion,
+    getAllCallDiscussions,
+    deleteCallDiscussion,
+} from "../services/CallDiscussion.service.js";
+
+const createCallDiscussionController = asyncHandler(
+  async (req, res) => {
+    const callDiscussion = await createCallDiscussion(req.body);
+
+    return res.status(STATUS_CODE.CREATED).json({
+      success: true,
+      message: "Call Discussion created successfully",
+      data: callDiscussion,
+    });
+  }
+);
+
+const getAllCallDiscussionsController = asyncHandler(
+  async (req, res) => {
+    const callDiscussions = await getAllCallDiscussions();
+
+    return res.status(STATUS_CODE.SUCCESS).json({
+      success: true,
+      message: "Call Discussions fetched successfully",
+      data: callDiscussions,
+    });
+  }
+);
+
+const deleteCallDiscussionController = asyncHandler(
+  async (req, res) => {
+    await deleteCallDiscussion(req.params.id);
+
+    return res.status(STATUS_CODE.SUCCESS).json({
+      success: true,
+      message: "Call Discussion deleted successfully",
+    });
+  }
+);
+
+export{
+    createCallDiscussionController,
+    getAllCallDiscussionsController,
+    deleteCallDiscussionController,
+}
