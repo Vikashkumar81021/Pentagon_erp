@@ -1,12 +1,10 @@
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { STATUS_CODE } from "../constants/status.code.js";
 import { telecallingValidator } from "../validators/teleCalling.validator.js";
-import * as telecallingService from "../services/Telecalling.service.js";
+import * as telecallingService from "../services/teleCalling.service.js";
 
 const createTelecallingController = asyncHandler(async (req, res) => {
-  const telecalling = await telecallingService.createTelecalling(
-    req.body
-  );
+  const telecalling = await telecallingService.createTelecalling(req.body);
 
   return res.status(STATUS_CODE.CREATED).json({
     success: true,
@@ -16,8 +14,7 @@ const createTelecallingController = asyncHandler(async (req, res) => {
 });
 
 const getAllTelecallingController = asyncHandler(async (req, res) => {
-  const telecalling =
-    await telecallingService.getAllTelecalling();
+  const telecalling = await telecallingService.getAllTelecalling();
 
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
@@ -26,14 +23,11 @@ const getAllTelecallingController = asyncHandler(async (req, res) => {
   });
 });
 
-
-
 const updateTelecallingController = asyncHandler(async (req, res) => {
-  const telecalling =
-    await telecallingService.updateTelecalling(
-      req.params.id,
-      req.body
-    );
+  const telecalling = await telecallingService.updateTelecalling(
+    req.params.id,
+    req.body,
+  );
 
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
