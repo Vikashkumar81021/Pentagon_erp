@@ -338,8 +338,35 @@ model SalesVisit {
   userId                    Int
   user                      User @relation(fields: [userId], references: [id])
   type                      String?
+  callDiscussions           CallDiscussion[]
   createdAt                 DateTime @default(now())
   updatedAt                 DateTime @updatedAt
+}
+
+model CallDiscussion {
+  id                  Int         @id @default(autoincrement())
+
+  sales_visit_id      Int
+  salesVisit          SalesVisit  @relation(fields: [sales_visit_id], references: [id], onDelete: Cascade)
+
+  call_date           String
+  call_time           String
+  call_type           String
+  duration            Int
+  discussion          String
+  requirement         String
+  solution            String
+  outcome             String
+  expected_amount     Int
+  next_followup_date  String
+  followup_mode       String
+  remarks             String
+
+  createdAt           DateTime    @default(now())
+  updatedAt           DateTime    @updatedAt
+
+  @@index([sales_visit_id])
+  @@map("call_discussions")
 }
 
 model CallLog {
