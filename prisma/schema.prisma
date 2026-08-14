@@ -122,7 +122,7 @@ enum InvoiceStatus {
   Overdue
   Draft
 }
-model Telecall{
+model Telecalling{
    id                Int                 @id @default(autoincrement())
    executive_name    String
    visit_date       String
@@ -133,6 +133,8 @@ model Telecall{
    city              String
    lead_priority   String
    remarks         String
+   createdAt        DateTime @default(now())
+    updatedAt        DateTime @updatedAt
 }
 model ChartAccount {
   id                Int                 @id @default(autoincrement())
