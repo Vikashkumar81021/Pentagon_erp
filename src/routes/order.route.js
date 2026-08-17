@@ -1,16 +1,17 @@
 import express from "express";
+import authMiddleware from "../middleware/auth.middleware.js";
 import {
   createOrderController,
-  fetchOdersController,
-  updateOrderController,
+  getOrdersController,
   deleteOrderController,
 } from "../controllers/order.controller.js";
-import authMiddleware from "../middleware/auth.middleware.js";
 
 const router = express.Router();
 
-router.post("/createOrder", authMiddleware, createOrderController);
-router.get("/fetchOrders", fetchOdersController);
-router.put("/updateOrder/:id", authMiddleware, updateOrderController);
+router.post("/orderCreate", createOrderController);
+
+router.get("/fetchOrders", authMiddleware, getOrdersController);
+
 router.delete("/deleteOrder/:id", authMiddleware, deleteOrderController);
+
 export default router;

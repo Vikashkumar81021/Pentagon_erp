@@ -1,75 +1,75 @@
 import prisma from "../config/db.js";
+import { NotFoundError } from "../utils/error.js";
 
-const createOrderService = async (orderData, userId) => {
-  const order = await prisma.order.create({
+const createOrder = async (data) => {
+  return await prisma.order.create({
     data: {
-      ...orderData,
-      salesPersonId: userId,
+      customerName: data.customerName,
+      phone: data.phone,
+      email: data.email,
+      purchaseOrderNumber: data.purchaseOrderNumber,
+      orderDate: data.orderDate,
+      deliveryTargetDate: data.deliveryTargetDate,
+
+      upfrontAdvancePayment: data.upfrontAdvancePayment,
+
+      advanceAmount:
+        data.advanceAmount !== undefined
+          ? Number(data.advanceAmount)
+          : undefined,
+
+      depositAccount: data.depositAccount,
+      paymentMode: data.paymentMode,
+      paymentReference: data.paymentReference,
+      termsAndNotes: data.termsAndNotes,
+
+      items: {
+        create: data.items.map((item) => ({
+          description: item.description,
+          quantity: Number(item.quantity),
+          unitPrice: Number(item.unitPrice),
+        })),
+      },
     },
 
     include: {
-      salesPerson: {
-        select: {
-          id: true,
-          name: true,
-          //   empcode: true,
-        },
-      },
-
-      clientAccount: true,
+      items: true,
     },
   });
-
-  return order;
 };
 
-const fetechOrders = async () => {
-  const totalOrders = await prisma.order.findMany({
+const getOrders = async () => {
+  return await prisma.order.findMany({
     include: {
-      salesPerson: {
-        select: {
-          name: true,
-        },
-      },
-      clientAccount: {
-        select: {
-          organization_name: true,
-        },
-      },
+      items: true,
     },
     orderBy: {
       createdAt: "desc",
     },
   });
-  return totalOrders;
 };
 
-const updateOrderService = async (orderId, updateData) => {
-  const updatedOrder = await prisma.order.update({
+const deleteOrder = async (id) => {
+  const order = await prisma.order.findUnique({
     where: {
-      id: Number(orderId),
-    },
-    data: updateData,
-    include: {
-      salesPerson: {
-        select: {
-          id: true,
-          name: true,
-        },
-      },
-      clientAccount: true,
+      id: Number(id),
     },
   });
-  return order;
-};
 
-const deleteOrderService = async (orderId) => {
-  const deletedOrder = await prisma.order.delete({
+  if (!order) {
+    throw new NotFoundError("Order not found");
+  }
+
+  return await prisma.order.delete({
     where: {
-      id: Number(orderId),
+      id: Number(id),
     },
   });
-  return order;
 };
 
-export { createOrderService, fetechOrders, updateOrderService, deleteOrderService };
+
+export {
+  createOrder,
+  getOrders,
+  deleteOrder,
+};
