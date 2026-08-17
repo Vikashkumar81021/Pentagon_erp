@@ -3,6 +3,7 @@ import { STATUS_CODE } from "../constants/status.code.js";
 import{
     createCallDiscussion,
     getAllCallDiscussions,
+    updateCallDiscussion,
     deleteCallDiscussion,
 } from "../services/CallDiscussion.service.js";
 
@@ -30,6 +31,21 @@ const getAllCallDiscussionsController = asyncHandler(
   }
 );
 
+const updateCallDiscussionController = asyncHandler(
+  async (req, res) => {
+    const callDiscussion = await updateCallDiscussion(
+      req.params.id,
+      req.body
+    );
+
+    return res.status(STATUS_CODE.SUCCESS).json({
+      success: true,
+      message: "Call Discussion updated successfully",
+      data: callDiscussion,
+    });
+  }
+);
+
 const deleteCallDiscussionController = asyncHandler(
   async (req, res) => {
     await deleteCallDiscussion(req.params.id);
@@ -44,5 +60,6 @@ const deleteCallDiscussionController = asyncHandler(
 export{
     createCallDiscussionController,
     getAllCallDiscussionsController,
+    updateCallDiscussionController,
     deleteCallDiscussionController,
 }
