@@ -1,8 +1,10 @@
-import express from "express";
+import express, { Router } from "express";
 import authMiddleware from "../middleware/auth.middleware.js";
 import {
   createOrderController,
   getOrdersController,
+  updateOrderController,
+  searchOrdersController,
   deleteOrderController,
 } from "../controllers/order.controller.js";
 
@@ -11,6 +13,10 @@ const router = express.Router();
 router.post("/orderCreate", createOrderController);
 
 router.get("/fetchOrders", authMiddleware, getOrdersController);
+
+router.patch("/updateOrder/:id", authMiddleware, updateOrderController);
+
+router.get("/searchOrders", authMiddleware, searchOrdersController);
 
 router.delete("/deleteOrder/:id", authMiddleware, deleteOrderController);
 
