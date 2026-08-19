@@ -49,6 +49,50 @@ const getOrders = async () => {
   });
 };
 
+const updateOrder = async (id, data) => {
+  const orderId = Number(id);
+
+  const order = await prisma.order.findUnique({
+    where: { id: orderId },
+  });
+
+  if (!order) {
+    throw new NotFoundError("Order not found");
+  }
+
+  const { items, ...orderData } = data;
+
+  return await prisma.$transaction(async (tx) => {
+    if (items !== undefined) {
+      await tx.orderItem.deleteMany({
+        where: { orderId },
+      });
+    }
+
+    return await tx.order.update({
+      where: { id: orderId },
+
+      data: {
+        ...orderData,
+
+        ...(items !== undefined && {
+          items: {
+            create: items.map((item) => ({
+              description: item.description,
+              quantity: Number(item.quantity),
+              unitPrice: Number(item.unitPrice),
+            })),
+          },
+        }),
+      },
+
+      include: {
+        items: true,
+      },
+    });
+  });
+};
+
 const deleteOrder = async (id) => {
   const order = await prisma.order.findUnique({
     where: {
@@ -71,5 +115,6 @@ const deleteOrder = async (id) => {
 export {
   createOrder,
   getOrders,
+  updateOrder,
   deleteOrder,
 };

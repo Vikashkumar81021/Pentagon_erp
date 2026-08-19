@@ -4,6 +4,7 @@ import { STATUS_CODE } from "../constants/status.code.js";
 import {
   createOrder,
   getOrders,
+  updateOrder,
   deleteOrder,
 } from "../services/order.service.js";
 
@@ -29,6 +30,19 @@ const getOrdersController = asyncHandler(async (req, res) => {
   });
 });
 
+const updateOrderController = asyncHandler(async (req, res) => {
+  const order = await updateOrder(
+    req.params.id,
+    req.body
+  );
+
+  return res.status(STATUS_CODE.SUCCESS).json({
+    success: true,
+    message: "Order updated successfully",
+    data: order,
+  });
+});
+
 const deleteOrderController = asyncHandler(async (req, res) => {
   await deleteOrder(req.params.id);
 
@@ -42,5 +56,6 @@ const deleteOrderController = asyncHandler(async (req, res) => {
 export {
   createOrderController,
   getOrdersController,
+  updateOrderController,
   deleteOrderController,
 };
