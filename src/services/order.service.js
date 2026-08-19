@@ -93,6 +93,69 @@ const updateOrder = async (id, data) => {
   });
 };
 
+const searchOrders = async (query, page = 1, limit = 10) => {
+  const skip = (Number(page) - 1) * Number(limit);
+
+  const where = query
+    ? {
+        OR: [
+          {
+            customerName: {
+              contains: query,
+              mode: "insensitive",
+            },
+          },
+          {
+            phone: {
+              contains: query,
+              mode: "insensitive",
+            },
+          },
+          {
+            email: {
+              contains: query,
+              mode: "insensitive",
+            },
+          },
+          {
+            purchaseOrderNumber: {
+              contains: query,
+              mode: "insensitive",
+            },
+          },
+        ],
+      }
+    : {};
+
+  const [orders, total] = await prisma.$transaction([
+    prisma.order.findMany({
+      where,
+      skip,
+      take: Number(limit),
+      include: {
+        items: true,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    }),
+
+    prisma.order.count({
+      where,
+    }),
+  ]);
+
+  return {
+    orders,
+    pagination: {
+      total,
+      page: Number(page),
+      limit: Number(limit),
+      totalPages: Math.ceil(total / Number(limit)),
+    },
+  };
+};
+
 const deleteOrder = async (id) => {
   const order = await prisma.order.findUnique({
     where: {
@@ -116,5 +179,6 @@ export {
   createOrder,
   getOrders,
   updateOrder,
+  searchOrders,
   deleteOrder,
 };

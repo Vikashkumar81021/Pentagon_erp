@@ -4,6 +4,7 @@ import {
   createOrderController,
   getOrdersController,
   updateOrderController,
+  searchOrdersController,
   deleteOrderController,
 } from "../controllers/order.controller.js";
 
@@ -14,6 +15,8 @@ router.post("/orderCreate", createOrderController);
 router.get("/fetchOrders", authMiddleware, getOrdersController);
 
 router.patch("/updateOrder/:id", authMiddleware, updateOrderController);
+
+router.get("/searchOrders", authMiddleware, searchOrdersController);
 
 router.delete("/deleteOrder/:id", authMiddleware, deleteOrderController);
 

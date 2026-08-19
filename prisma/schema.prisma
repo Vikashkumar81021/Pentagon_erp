@@ -282,17 +282,23 @@ model InvoiceItem {
 }
 
 model ExpenseClaim {
-  id          Int     @id @default(autoincrement())
-  claimId     String  @unique
-  employee    String
+  id          Int      @id @default(autoincrement())
+  claimId     String   @unique
+
+  employeeId  Int
+  employee    Employee @relation(fields: [employeeId], references: [id])
+
   category    String
   date        String
   amount      Int
-  status      String  @default("Pending")
+  status      String   @default("Pending")
   workflow    String?
   description String
   decision    String?
   remarks     String?
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 model IncomingBill {
@@ -505,6 +511,7 @@ model Employee {
   accountNumber  String
   onboardProcess EmployeeOnboard?
   attendanceLogs AttendanceLog[]
+  expenseClaims     ExpenseClaim[]
   payrolls       PayRoll[]
 }
 

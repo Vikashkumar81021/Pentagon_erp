@@ -5,6 +5,7 @@ import {
   createOrder,
   getOrders,
   updateOrder,
+  searchOrders,
   deleteOrder,
 } from "../services/order.service.js";
 
@@ -43,6 +44,27 @@ const updateOrderController = asyncHandler(async (req, res) => {
   });
 });
 
+const searchOrdersController = asyncHandler(async (req, res) => {
+  const {
+    search = "",
+    page = 1,
+    limit = 10,
+  } = req.query;
+
+  const result = await searchOrders(
+    search,
+    page,
+    limit
+  );
+
+  return res.status(200).json({
+    success: true,
+    message: "Orders fetched successfully",
+    data: result.orders,
+    pagination: result.pagination,
+  });
+});
+
 const deleteOrderController = asyncHandler(async (req, res) => {
   await deleteOrder(req.params.id);
 
@@ -57,5 +79,6 @@ export {
   createOrderController,
   getOrdersController,
   updateOrderController,
+  searchOrdersController,
   deleteOrderController,
 };
