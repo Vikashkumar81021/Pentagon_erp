@@ -41,7 +41,7 @@ const app = express();
 app.use(express.json());
 app.use(
   cors({
-    origin: ["http://localhost:4200", "https://pentagon-erp.vercel.app"],
+    origin: ["http://localhost:4200", "https://pentagon-erp.vercel.app", "https://pentagontech.in"],
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
