@@ -10,7 +10,7 @@ const options = {
     },
     servers: [
       {
-        url: "http://localhost:3000",
+        url: "https://pentagon-erp.onrender.com",
       },
     ],
   },
