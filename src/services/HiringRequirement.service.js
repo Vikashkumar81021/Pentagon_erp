@@ -9,7 +9,21 @@ const createHiringRequirement = async (data) => {
 
 const getHiringRequirement = async () => {
   return await prisma.hiringRequirement.findMany({
-    include: {
+    select: {
+      id: true,
+      jobTitle: true,
+      department: true,
+      employmentType: true,
+      openings: true,
+      experienceRequired: true,
+      qualification: true,
+      location: true,
+      applicationDeadline: true,
+      jobStatus: true,
+      description: true,
+      createdAt: true,
+      updatedAt: true,
+
       _count: {
         select: {
           applications: true,

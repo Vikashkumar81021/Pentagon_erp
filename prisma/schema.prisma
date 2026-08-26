@@ -538,9 +538,9 @@ model HiringRequirement {
   experienceRequired  String
   qualification       String
   location            String[]
-  salaryRange         String
+  salaryRange         String?
   applicationDeadline String
-  hiringManager       String
+  hiringManager       String?
   jobStatus           String           @default("OPEN")
   description         String
   applications        JobApplication[]

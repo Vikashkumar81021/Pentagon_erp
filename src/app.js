@@ -41,11 +41,17 @@ const app = express();
 app.use(express.json());
 app.use(
   cors({
-    origin: ["http://localhost:4200", "https://pentagon-erp.vercel.app"],
+    origin: [
+      "http://localhost:4200",
+      "http://localhost:4000",
+      "https://pentagon-erp.vercel.app",
+      "https://pentagontech.in",
+      "https://pentagon-erp.onrender.com",
+    ],
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
-  }),
+  })
 );
 app.use(
   helmet({

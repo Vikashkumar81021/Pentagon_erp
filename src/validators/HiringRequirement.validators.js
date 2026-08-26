@@ -34,7 +34,7 @@ export const createHiringRequirementValidator = z.object({
 
   salaryRange: z
     .string()
-    .min(1, "Salary range is required"),
+    .optional(),
 
   applicationDeadline: z
     .string()
@@ -42,7 +42,7 @@ export const createHiringRequirementValidator = z.object({
 
   hiringManager: z
     .string()
-    .min(1, "Hiring manager is required"),
+    .optional(),
 
   jobStatus: z
     .string()

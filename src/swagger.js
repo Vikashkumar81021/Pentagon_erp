@@ -8,11 +8,11 @@ const options = {
       version: "1.0.0",
       description: "API Documentation",
     },
-    servers: [
-      {
-        url: "http://localhost:3000",
-      },
-    ],
+   servers: [
+  {
+    url: "https://pentagon-erp.onrender.com/api/v1",
+  },
+],
   },
   apis: ["./src/routes/*.js"],
 };
