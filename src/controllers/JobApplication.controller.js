@@ -1,19 +1,19 @@
 import {
   createJobApplication,
+  getJobApplicationCv,
   getJobApplications,
 } from "../services/JobApplication.service.js";
 
-import {
-    createJobApplicationValidator 
-} from "../validators/JobApplication.validator.js";
+import { createJobApplicationValidator } from "../validators/JobApplication.validator.js";
 
-import {asyncHandler} from "../utils/asyncHandler.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
 import { STATUS_CODE } from "../constants/status.code.js";
 
 const createJobApplicationController = asyncHandler(async (req, res) => {
   const payload = createJobApplicationValidator.parse(req.body);
+  console.log("req file", req.file);
 
-  const application = await createJobApplication(payload);
+  const application = await createJobApplication(payload, req.file);
 
   return res.status(STATUS_CODE.CREATED).json({
     success: true,
@@ -29,8 +29,27 @@ const getAllJobApplicationController = asyncHandler(async (req, res) => {
     data: applications,
   });
 });
+const getJobApplicationCvController = asyncHandler(async (req, res) => {
+  const cvUrl = await getJobApplicationCv(req.params.id);
 
+  const response = await fetch(cvUrl);
+
+  if (!response.ok) {
+    throw new BadRequestError("Unable to fetch CV from Cloudinary");
+  }
+
+  const pdfBuffer = Buffer.from(await response.arrayBuffer());
+
+  res.setHeader("Content-Type", "application/pdf");
+
+  res.setHeader("Content-Disposition", "inline");
+
+  res.setHeader("Content-Length", pdfBuffer.length);
+
+  return res.send(pdfBuffer);
+});
 export {
   createJobApplicationController,
   getAllJobApplicationController,
+  getJobApplicationCvController,
 };

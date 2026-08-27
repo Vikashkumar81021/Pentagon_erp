@@ -594,7 +594,7 @@ model JobApplication {
   candidateName String
   email         String
   mobile        String
-
+  cvUrl         String?
   appliedAt DateTime @default(now())
 }
 

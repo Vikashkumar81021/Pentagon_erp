@@ -14,21 +14,21 @@ const getHiringRequirement = async () => {
       jobTitle: true,
       department: true,
       employmentType: true,
-      openings: true,
+      // openings: true,
       experienceRequired: true,
       qualification: true,
       location: true,
       applicationDeadline: true,
       jobStatus: true,
       description: true,
-      createdAt: true,
-      updatedAt: true,
+      // createdAt: true,
+      // updatedAt: true,
 
-      _count: {
-        select: {
-          applications: true,
-        },
-      },
+      // _count: {
+      //   select: {
+      //     applications: true,
+      //   },
+      // },
     },
   });
 };
@@ -101,12 +101,12 @@ const getOpenHiringRequirements = async () => {
   });
 };
 
-export{
-    createHiringRequirement,
-    getHiringRequirement,
-    getHiringRequirementById,
-    updateHiringRequirement,
-    deleteHiringRequirement,
-    searchHiringRequirement,
-    getOpenHiringRequirements,
+export {
+  createHiringRequirement,
+  getHiringRequirement,
+  getHiringRequirementById,
+  updateHiringRequirement,
+  deleteHiringRequirement,
+  searchHiringRequirement,
+  getOpenHiringRequirements,
 };
