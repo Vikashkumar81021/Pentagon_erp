@@ -93,15 +93,15 @@ const getOpenHiringRequirementsController = asyncHandler(
       message: "Open hiring requirements fetched successfully",
       data: hiringRequirements,
     });
-  }
+  },
 );
 
-export{
-    createHiringRequirementController,
-    getHiringRequirementController,
-    getHiringRequirementByIdController,
-    updateHiringRequirementController,
-    deleteHiringRequirementController,
-    searchHiringRequirementController,
-    getOpenHiringRequirementsController,
+export {
+  createHiringRequirementController,
+  getHiringRequirementController,
+  getHiringRequirementByIdController,
+  updateHiringRequirementController,
+  deleteHiringRequirementController,
+  searchHiringRequirementController,
+  getOpenHiringRequirementsController,
 };

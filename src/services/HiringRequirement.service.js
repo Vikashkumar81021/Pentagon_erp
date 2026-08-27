@@ -24,11 +24,11 @@ const getHiringRequirement = async () => {
       // createdAt: true,
       // updatedAt: true,
 
-      // _count: {
-      //   select: {
-      //     applications: true,
-      //   },
-      // },
+      _count: {
+        select: {
+          applications: true,
+        },
+      },
     },
   });
 };
