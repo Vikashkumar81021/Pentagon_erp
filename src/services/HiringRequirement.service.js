@@ -14,7 +14,7 @@ const getHiringRequirement = async () => {
       jobTitle: true,
       department: true,
       employmentType: true,
-      // openings: true,
+      openings: true,
       experienceRequired: true,
       qualification: true,
       location: true,
