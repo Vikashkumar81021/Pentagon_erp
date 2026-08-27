@@ -29,6 +29,7 @@ const router = express.Router();
  *               - candidateName
  *               - email
  *               - mobile
+ *               - cv
  *             properties:
  *               hiringRequirementId:
  *                 type: integer
@@ -46,18 +47,15 @@ const router = express.Router();
  *               cv:
  *                 type: string
  *                 format: binary
- *                 description: Candidate CV in PDF format
+ *                 description: Upload candidate CV in PDF format
  *     responses:
  *       201:
  *         description: Job application created successfully
  *       400:
- *         description: Bad request
- *       404:
- *         description: Hiring requirement not found
+ *         description: Validation error
  *       500:
  *         description: Internal server error
  */
-
 router.post(
   "/jobApplication",
   upload.single("cv"),
