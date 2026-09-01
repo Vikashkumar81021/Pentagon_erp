@@ -8,29 +8,40 @@ const createHiringRequirement = async (data) => {
 };
 
 const getHiringRequirement = async () => {
-  return await prisma.hiringRequirement.findMany({
-    select: {
-      id: true,
-      jobTitle: true,
-      department: true,
-      employmentType: true,
-      openings: true,
-      experienceRequired: true,
-      qualification: true,
-      location: true,
-      applicationDeadline: true,
-      jobStatus: true,
-      description: true,
-      // createdAt: true,
-      // updatedAt: true,
+  // return await prisma.hiringRequirement.findMany({
+  //   select: {
+  //     id: true,
+  //     jobTitle: true,
+  //     department: true,
+  //     employmentType: true,
+  //     openings: true,
+  //     experienceRequired: true,
+  //     qualification: true,
+  //     location: true,
+  //     applicationDeadline: true,
+  //     jobStatus: true,
+  //     description: true,
+  //     // createdAt: true,
+  //     // updatedAt: true,
 
-      _count: {
-        select: {
-          applications: true,
-        },
+  //     _count: {
+  //       select: {
+  //         applications: true,
+  //       },
+  //     },
+  //   },
+  // });
+  const today = new Date().toISOString().split("T")[0];
+
+  const fetchjob = await prisma.hiringRequirement.findMany({
+    where: {
+      applicationDeadline: {
+        gte: today,
       },
+      jobStatus: "OPEN",
     },
   });
+  return fetchjob;
 };
 
 const getHiringRequirementById = async (id) => {
