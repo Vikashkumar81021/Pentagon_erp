@@ -1,24 +1,32 @@
 /*
   Warnings:
 
-  - The primary key for the `ExpenseClaim` table will be changed. If it partially fails, the table could be left without primary key constraint.
   - You are about to drop the column `designation` on the `SalesVisit` table. All the data in the column will be lost.
   - You are about to drop the column `lead_type` on the `SalesVisit` table. All the data in the column will be lost.
   - You are about to drop the column `product_type` on the `SalesVisit` table. All the data in the column will be lost.
   - You are about to drop the column `balanceType` on the `chart_accounts` table. All the data in the column will be lost.
   - A unique constraint covering the columns `[claimId]` on the table `ExpenseClaim` will be added. If there are existing duplicate values, this will fail.
   - A unique constraint covering the columns `[accountName]` on the table `chart_accounts` will be added. If there are existing duplicate values, this will fail.
+  - Added the required column `applicationDeadline` to the `HiringRequirement` table without a default value. This is not possible if the table is not empty.
+  - Added the required column `experienceRequired` to the `HiringRequirement` table without a default value. This is not possible if the table is not empty.
+  - Added the required column `openings` to the `HiringRequirement` table without a default value. This is not possible if the table is not empty.
+  - Added the required column `qualification` to the `HiringRequirement` table without a default value. This is not possible if the table is not empty.
+  - Added the required column `city` to the `SalesVisit` table without a default value. This is not possible if the table is not empty.
   - Added the required column `lead_priority` to the `SalesVisit` table without a default value. This is not possible if the table is not empty.
   - Added the required column `normalBalance` to the `chart_accounts` table without a default value. This is not possible if the table is not empty.
 
 */
 -- AlterTable
-ALTER TABLE "ExpenseClaim" DROP CONSTRAINT "ExpenseClaim_pkey",
-ADD COLUMN     "id" SERIAL NOT NULL,
-ALTER COLUMN "claimId" DROP DEFAULT,
-ALTER COLUMN "claimId" SET DATA TYPE TEXT,
-ADD CONSTRAINT "ExpenseClaim_pkey" PRIMARY KEY ("id");
-DROP SEQUENCE "ExpenseClaim_claimId_seq";
+ALTER TABLE "HiringRequirement" ADD COLUMN     "applicationDeadline" TEXT NOT NULL,
+ADD COLUMN     "experienceRequired" TEXT NOT NULL,
+ADD COLUMN     "hiringManager" TEXT,
+ADD COLUMN     "location" TEXT[],
+ADD COLUMN     "openings" INTEGER NOT NULL,
+ADD COLUMN     "qualification" TEXT NOT NULL,
+ADD COLUMN     "salaryRange" TEXT;
+
+-- AlterTable
+ALTER TABLE "JobApplication" ADD COLUMN     "cvUrl" TEXT;
 
 -- AlterTable
 ALTER TABLE "SalesVisit" DROP COLUMN "designation",
@@ -26,7 +34,9 @@ DROP COLUMN "lead_type",
 DROP COLUMN "product_type",
 ADD COLUMN     "activity_type" TEXT,
 ADD COLUMN     "additional_remarks" TEXT,
+ADD COLUMN     "city" TEXT NOT NULL,
 ADD COLUMN     "client_type" TEXT,
+ADD COLUMN     "connected_calls" INTEGER,
 ADD COLUMN     "current_status" TEXT,
 ADD COLUMN     "discussion_summary" TEXT,
 ADD COLUMN     "expected_business_value" INTEGER,
@@ -34,10 +44,14 @@ ADD COLUMN     "expected_closure_date" TEXT,
 ADD COLUMN     "lead_priority" TEXT NOT NULL,
 ADD COLUMN     "management_support_required" TEXT,
 ADD COLUMN     "meeting_photo" TEXT,
+ADD COLUMN     "meetings_scheduled" INTEGER,
+ADD COLUMN     "new_leads_generated" INTEGER,
 ADD COLUMN     "next_followup_date" TEXT,
 ADD COLUMN     "order_closed" TEXT,
+ADD COLUMN     "order_lost_reason" TEXT,
 ADD COLUMN     "proposal_sent" TEXT,
 ADD COLUMN     "reporting_location" TEXT,
+ADD COLUMN     "total_calls_made" INTEGER,
 ADD COLUMN     "type" TEXT;
 
 -- AlterTable

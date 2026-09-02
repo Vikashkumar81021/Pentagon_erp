@@ -1,16 +1,23 @@
-import express from "express";
+import express, { Router } from "express";
+import authMiddleware from "../middleware/auth.middleware.js";
 import {
   createOrderController,
-  fetchOdersController,
+  getOrdersController,
   updateOrderController,
+  searchOrdersController,
   deleteOrderController,
 } from "../controllers/order.controller.js";
-import authMiddleware from "../middleware/auth.middleware.js";
 
 const router = express.Router();
 
-router.post("/createOrder", authMiddleware, createOrderController);
-router.get("/fetchOrders", fetchOdersController);
-router.put("/updateOrder/:id", authMiddleware, updateOrderController);
+router.post("/orderCreate", createOrderController);
+
+router.get("/fetchOrders", authMiddleware, getOrdersController);
+
+router.patch("/updateOrder/:id", authMiddleware, updateOrderController);
+
+router.get("/searchOrders", authMiddleware, searchOrdersController);
+
 router.delete("/deleteOrder/:id", authMiddleware, deleteOrderController);
+
 export default router;

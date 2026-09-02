@@ -32,6 +32,8 @@ import ExpenseClaimRoute from "./routes/ExpenseClaim.route.js";
 import IncomingBillRoute from "./routes/IncomingBill.route.js";
 import PayRollRoute from "./routes/PayRoll.route.js";
 import AssestsRoute from "./routes/Assets.routes.js";
+import teleCallingRoute from "./routes/teleCalling.route.js";
+import CallDiscussionRoute from "./routes/CallDiscussion.route.js";
 import { reqLogger } from "./middleware/req.middleware.js";
 import cors from "cors";
 const app = express();
@@ -39,7 +41,13 @@ const app = express();
 app.use(express.json());
 app.use(
   cors({
-    origin: ["http://localhost:4200", "https://pentagon-erp.vercel.app"],
+    origin: [
+      "http://localhost:4200",
+      "http://localhost:4000",
+      "https://pentagon-erp.vercel.app",
+      "https://pentagontech.in",
+      "https://pentagon-erp.onrender.com",
+    ],
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
@@ -86,4 +94,6 @@ app.use("/api/v1", ExpenseClaimRoute);
 app.use("/api/v1", IncomingBillRoute);
 app.use("/api/v1", PayRollRoute);
 app.use("/api/v1", AssestsRoute);
+app.use("/api/v1", teleCallingRoute);
+app.use("/api/v1", CallDiscussionRoute);
 export default app;

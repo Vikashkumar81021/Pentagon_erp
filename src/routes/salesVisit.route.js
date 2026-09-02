@@ -2,24 +2,14 @@ import express from "express";
 import {
   createSalesVisitController,
   getSalesVisitsController,
-  updateSalesVisitController,
-  deleteSalesVisitController,
-  mySalesVisitsController,
-  getConvertedSalesVisitController,
-  getFailedSalesVisistController,
-  getSalesVisitsByTypeController,
+  fetchclientnameController,
 } from "../controllers/salesVisit.controller.js";
 import authMiddleware from "../middleware/auth.middleware.js";
 import upload from "../middleware/upload.middleware.js";
 
 const router = express.Router();
 
-router.post("/create",authMiddleware, upload.single("meeting_photo"), createSalesVisitController);
-router.get("/get", authMiddleware, getSalesVisitsController);
-router.put("/update/:id", updateSalesVisitController);
-router.delete("/delete/:id", deleteSalesVisitController);
-router.get("/my-visits", authMiddleware, mySalesVisitsController);
-router.get("/convert", authMiddleware, getConvertedSalesVisitController );
-router.get("/failed", authMiddleware, getFailedSalesVisistController );
-router.get("/fetchSalesVisitsByType", authMiddleware, getSalesVisitsByTypeController);
+router.post("/createSalesVisit", upload.single("meeting_photo"),authMiddleware, createSalesVisitController);
+router.get("/fetchSalesVisits", authMiddleware, getSalesVisitsController);
+router.get("/fetchclientname", authMiddleware, fetchclientnameController);
 export default router;

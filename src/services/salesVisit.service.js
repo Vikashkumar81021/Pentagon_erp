@@ -1,95 +1,52 @@
 import prisma from "../config/db.js";
 
-const salesVisitService = async (salesVisitData) => {
-  //future mein isme db mein ek parmater add hoga isPermission ka true ya false jb mangment permisison approved hoga tb jb ui pe calltoaction show krega 
-  const salesVisit = await prisma.salesVisit.create({
-    data: salesVisitData,
-  });
-  return salesVisit;
-};
-const getSalesVisitsService = async () => {
-  const salesVisits = await prisma.salesVisit.findMany({
-    orderBy: {
-      createdAt: "desc",
+const createSalesVisit = async (data) => {
+  return await prisma.salesVisit.create({
+    data: {
+      executive_name: data.executive_name,
+      reporting_location: data.reporting_location,
+      visit_date: data.visit_date,
+      activity_type: data.activity_type,
+      visit_type: data.visit_type,
+      customer_name: data.customer_name,
+      contact_person: data.contact_person,
+      contact_number: data.contact_number,
+      city: data.city,
+      client_type: data.client_type,
+      lead_priority: data.lead_priority,
+      discussion_summary: data.discussion_summary,
+      current_status: data.current_status,
+      expected_business_value: data.expected_business_value,
+      proposal_sent: data.proposal_sent,
+      order_closed: data.order_closed,
+      order_lost_reason: data.order_lost_reason,
+      expected_closure_date: data.expected_closure_date,
+      next_followup_date: data.next_followup_date,
+      management_support_required: data.management_support_required,
+      additional_remarks: data.additional_remarks,
+      meeting_photo: data.meeting_photo,
+      userId: data.userId,
     },
   });
-  return salesVisits;
-};
-const getConvertedLeads = async () => {
-  const convertedLeads = await prisma.salesVisit.findMany({
-    where: {
-      status: "Converted",
-    },
-    orderBy: {
-      updatedAt: "desc",
-    },
-  });
-  return convertedLeads;
 };
 
-const getFailedLeads = async () => {
-  const convertedLeads = await prisma.salesVisit.findMany({
-    where: {
-      status: "Failed",
-    },
-    orderBy: {
-      updatedAt: "desc",
-    },
-  });
-  return convertedLeads;
-};
-
-const getSalesVisitsByType = async (type) => {
-  const where = {};
-
-  if (type) {
-    where.visit_type = {
-      equals: type,
-      mode: "insensitive",
-    };
-  }
-
+const getSalesVisits = async () => {
   return await prisma.salesVisit.findMany({
-    where,
     orderBy: {
       createdAt: "desc",
     },
   });
 };
 
-const updateSalesVisit = async (id, data) => {
-  return await prisma.salesVisit.update({
-    where: {
-      id: Number(id),
-    },
-    data,
-  });
-};
-const deleteSalesVisit = async (id) => {
-  return await prisma.salesVisit.delete({
-    where: {
-      id: Number(id),
-    },
-  });
-};
-const mySalesVisitsService = async (userId) => {
+const fetchclientname = async () => {
   return await prisma.salesVisit.findMany({
-    where: {
-      userId: Number(userId),
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
-};
-
+    select:{
+      customer_name:true
+    }
+  })
+}
 export {
-  salesVisitService,
-  getSalesVisitsService,
-  updateSalesVisit,
-  deleteSalesVisit,
-  mySalesVisitsService,
-  getConvertedLeads,
-  getSalesVisitsByType,
-  getFailedLeads,
+  createSalesVisit,
+  getSalesVisits,
+  fetchclientname,
 };

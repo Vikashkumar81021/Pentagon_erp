@@ -144,7 +144,7 @@ const generateEmpCodeController = asyncHandler(async (req, res) => {
 const getEmployeeNameDesignationController = asyncHandler(async (req, res) => {
   const employees = await getEmployeeNameDesignationService();
 
-  return res.status(200).json({
+  return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
     data: employees,
   });

@@ -1,26 +1,29 @@
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { STATUS_CODE } from "../constants/status.code.js";
-import { orderSchema } from "../validators/order.validator.js";
-import { BadRequestError } from "../utils/error.js";
+
 import {
-   createOrderService, 
-   fetechOrders, 
-   updateOrderService, 
-   deleteOrderService,
-   } from "../services/order.service.js";
+  createOrder,
+  getOrders,
+  updateOrder,
+  searchOrders,
+  deleteOrder,
+} from "../services/order.service.js";
 
 const createOrderController = asyncHandler(async (req, res) => {
-  const validateData = orderSchema.parse(req.body);
-  const order = await createOrderService(validateData, req.user.id);
+  console.log(req);
+  
+  const order = await createOrder(req.body);
+
   return res.status(STATUS_CODE.CREATED).json({
     success: true,
-    message: "order created successfully",
+    message: "Order created successfully",
     data: order,
   });
 });
 
-const fetchOdersController = asyncHandler(async (req, res) => {
-  const orders = await fetechOrders();
+const getOrdersController = asyncHandler(async (req, res) => {
+  const orders = await getOrders();
+
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
     message: "Orders fetched successfully",
@@ -29,23 +32,53 @@ const fetchOdersController = asyncHandler(async (req, res) => {
 });
 
 const updateOrderController = asyncHandler(async (req, res) => {
-  req.body.salesPersonId = req.user.id;
-  const orderId = req.params.id;
-  const updatedOrder = await updateOrderService(orderId, req.body);
+  const order = await updateOrder(
+    req.params.id,
+    req.body
+  );
+
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
     message: "Order updated successfully",
-    data: updatedOrder,
+    data: order,
+  });
+});
+
+const searchOrdersController = asyncHandler(async (req, res) => {
+  const {
+    search = "",
+    page = 1,
+    limit = 10,
+  } = req.query;
+
+  const result = await searchOrders(
+    search,
+    page,
+    limit
+  );
+
+  return res.status(200).json({
+    success: true,
+    message: "Orders fetched successfully",
+    data: result.orders,
+    pagination: result.pagination,
   });
 });
 
 const deleteOrderController = asyncHandler(async (req, res) => {
-  const orderId = req.params.id;
-  await deleteOrderService(orderId);
+  await deleteOrder(req.params.id);
+
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
     message: "Order deleted successfully",
   });
 });
 
-export { createOrderController, fetchOdersController, updateOrderController, deleteOrderController };
+
+export {
+  createOrderController,
+  getOrdersController,
+  updateOrderController,
+  searchOrdersController,
+  deleteOrderController,
+};

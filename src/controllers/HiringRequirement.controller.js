@@ -8,6 +8,7 @@ import {
   updateHiringRequirement,
   deleteHiringRequirement,
   searchHiringRequirement,
+  getOpenHiringRequirements,
 } from "../services/HiringRequirement.service.js";
 
 import {
@@ -83,11 +84,24 @@ const searchHiringRequirementController = asyncHandler(async (req, res) => {
   });
 });
 
-export{
-    createHiringRequirementController,
-    getHiringRequirementController,
-    getHiringRequirementByIdController,
-    updateHiringRequirementController,
-    deleteHiringRequirementController,
-    searchHiringRequirementController,
+const getOpenHiringRequirementsController = asyncHandler(
+  async (req, res, next) => {
+    const hiringRequirements = await getOpenHiringRequirements();
+
+    return res.status(STATUS_CODE.SUCCESS).json({
+      success: true,
+      message: "Open hiring requirements fetched successfully",
+      data: hiringRequirements,
+    });
+  },
+);
+
+export {
+  createHiringRequirementController,
+  getHiringRequirementController,
+  getHiringRequirementByIdController,
+  updateHiringRequirementController,
+  deleteHiringRequirementController,
+  searchHiringRequirementController,
+  getOpenHiringRequirementsController,
 };
