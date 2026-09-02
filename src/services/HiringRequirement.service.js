@@ -8,29 +8,6 @@ const createHiringRequirement = async (data) => {
 };
 
 const getHiringRequirement = async () => {
-  // return await prisma.hiringRequirement.findMany({
-  //   select: {
-  //     id: true,
-  //     jobTitle: true,
-  //     department: true,
-  //     employmentType: true,
-  //     openings: true,
-  //     experienceRequired: true,
-  //     qualification: true,
-  //     location: true,
-  //     applicationDeadline: true,
-  //     jobStatus: true,
-  //     description: true,
-  //     // createdAt: true,
-  //     // updatedAt: true,
-
-  //     _count: {
-  //       select: {
-  //         applications: true,
-  //       },
-  //     },
-  //   },
-  // });
   const today = new Date().toISOString().split("T")[0];
 
   const fetchjob = await prisma.hiringRequirement.findMany({
@@ -40,9 +17,76 @@ const getHiringRequirement = async () => {
       },
       jobStatus: "OPEN",
     },
+
+    include: {
+      _count: {
+        select: {
+          applications: true,
+        },
+      },
+    },
+
+    orderBy: {
+      applicationDeadline: "asc",
+    },
   });
+
   return fetchjob;
 };
+
+// const getHiringRequirement = async () => {
+//   // return await prisma.hiringRequirement.findMany({
+//   //   select: {
+//   //     id: true,
+//   //     jobTitle: true,
+//   //     department: true,
+//   //     employmentType: true,
+//   //     openings: true,
+//   //     experienceRequired: true,
+//   //     qualification: true,
+//   //     location: true,
+//   //     applicationDeadline: true,
+//   //     jobStatus: true,
+//   //     description: true,
+//   //     // createdAt: true,
+//   //     // updatedAt: true,
+
+//   //     _count: {
+//   //       select: {
+//   //         applications: true,
+//   //       },
+//   //     },
+//   //   },
+//   // });
+//   const today = new Date().toISOString().split("T")[0];
+
+//   const fetchjob = await prisma.hiringRequirement.findMany({
+//     where: {
+//       applicationDeadline: {
+//         gte: today,
+//       },
+//       jobStatus: "OPEN",
+//     },
+//      _count:{
+//       select:{
+//       applications:true,
+//       id: true,
+//       jobTitle: true,
+//       department: true,
+//       employmentType: true,
+//       openings: true,
+//       experienceRequired: true,
+//       qualification: true,
+//       location: true,
+//       applicationDeadline: true,
+//       jobStatus: true,
+//         }
+//       }
+
+    
+//   });
+//   return fetchjob;
+// };
 
 const getHiringRequirementById = async (id) => {
   const hiringRequirement = await prisma.hiringRequirement.findUnique({
