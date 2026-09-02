@@ -48,9 +48,9 @@ const getJobApplications = async () => {
     // where: {
     //   id: Number(id),
     // },
-    // select: {
-    //   cvUrl: true,
-    // },
+    select: {
+      cvUrl: true,
+    },
   });
 
   // if (!application) {
