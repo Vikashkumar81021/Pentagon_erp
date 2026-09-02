@@ -114,10 +114,33 @@ const getJobApplicationsBySelection = async (selected) => {
   return applications;
 };
 
+const deleteJobApplication = async (id) => {
+  const application = await prisma.jobApplication.findUnique({
+    where: {
+      id: Number(id),
+    },
+  });
+
+  if (!application) {
+    throw new BadRequestError("Job Application not found");
+  }
+
+  await prisma.jobApplication.delete({
+    where: {
+      id: Number(id),
+    },
+  });
+
+  return {
+    message: "Job Application deleted successfully",
+  };
+};
+
 export {
   createJobApplication,
   getJobApplications,
   getJobApplicationCv,
   updateJobApplicationSelection,
   getJobApplicationsBySelection,
+  deleteJobApplication,
 };

@@ -4,6 +4,7 @@ import {
   getJobApplications,
   updateJobApplicationSelection,
   getJobApplicationsBySelection,
+  deleteJobApplication,
 } from "../services/JobApplication.service.js";
 
 import { createJobApplicationValidator } from "../validators/JobApplication.validator.js";
@@ -69,14 +70,14 @@ const filterJobApplications = async (req, res, next) => {
   try { 
     const { selected } = req.query; 
     if (!selected) { 
-      return res.status(400).json({ 
+      return res.status(STATUS_CODE.BAD_REQUESTS).json({ 
         success: false, 
         message: "selected query parameter is required", 
       }); 
     } 
     const applications = await getJobApplicationsBySelection(selected);
 
-    res.status(200).json({ 
+    res.status(STATUS_CODE.SUCCESS).json({ 
       success: true, 
       count: applications.length, 
       data: applications, 
@@ -86,10 +87,26 @@ const filterJobApplications = async (req, res, next) => {
     } 
 };
 
+const removeJobApplication = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    const result = await deleteJobApplication(id);
+
+    res.status(STATUS_CODE.SUCCESS).json({
+      success: true,
+      message: result.message,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export {
   createJobApplicationController,
   getAllJobApplicationController,
   getJobApplicationCvController,
   updateJobApplicationSelectionController,
   filterJobApplications,
+  removeJobApplication,
 };

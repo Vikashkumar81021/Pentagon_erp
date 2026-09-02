@@ -6,6 +6,7 @@ import {
   getJobApplicationCvController,
   updateJobApplicationSelectionController,
   filterJobApplications,
+  removeJobApplication,
 } from "../controllers/JobApplication.controller.js";
 import upload from "../utils/upload.js";
 
@@ -67,5 +68,6 @@ router.get("/jobApplication/:id/cv", getJobApplicationCvController);
 router.get("/jobApplication", getAllJobApplicationController);
 router.patch("/updatejobApplication/:id", updateJobApplicationSelectionController);
 router.get("/filterjobApplication", filterJobApplications);
+router.delete("/deletejobApplication/:id", removeJobApplication);
 
 export default router;
