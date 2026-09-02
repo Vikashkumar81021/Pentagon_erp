@@ -24,7 +24,6 @@ const createJobApplicationController = asyncHandler(async (req, res) => {
 
 const getAllJobApplicationController = asyncHandler(async (req, res) => {
   const applications = await getJobApplications();
-  console.log("application", applications);
 
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
@@ -56,7 +55,7 @@ const updateJobApplicationSelectionController = asyncHandler(
     const { id } = req.params;
     const { status } = req.body;
 
-    const application = await updateJobApplicationSelection(id, selected);
+    const application = await updateJobApplicationSelection(id, status);
 
     return res.status(STATUS_CODE.SUCCESS).json({
       success: true,
@@ -75,7 +74,7 @@ const filterJobApplications = async (req, res, next) => {
         message: "selected query parameter is required", 
       }); 
     } 
-    const applications = await getJobApplicationsBySelection(selected);
+    const applications = await getJobApplicationsBySelection(status);
 
     res.status(STATUS_CODE.SUCCESS).json({ 
       success: true, 

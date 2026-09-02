@@ -84,7 +84,7 @@ const getJobApplicationCv = async (id) => {
   return application.cvUrl;
 };
 
-const updateJobApplicationSelection = async (id, selected) => {
+const updateJobApplicationSelection = async (id, status) => {
   const application = await prisma.jobApplication.findUnique({
     where: { id: Number(id) },
   });
@@ -99,10 +99,10 @@ const updateJobApplicationSelection = async (id, selected) => {
   });
 };
 
-const getJobApplicationsBySelection = async (selected) => {
+const getJobApplicationsBySelection = async (status) => {
   const applications = await prisma.jobApplication.findMany({
     where: {
-      status: selected,
+      status: status,
     },
     include: {
       hiringRequirement: true,
