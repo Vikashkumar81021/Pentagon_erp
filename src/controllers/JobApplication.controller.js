@@ -2,6 +2,8 @@ import {
   createJobApplication,
   getJobApplicationCv,
   getJobApplications,
+  updateJobApplicationSelection,
+  getJobApplicationsBySelection,
 } from "../services/JobApplication.service.js";
 
 import { createJobApplicationValidator } from "../validators/JobApplication.validator.js";
@@ -47,8 +49,47 @@ const getJobApplicationCvController = asyncHandler(async (req, res) => {
 
   return res.send(pdfBuffer);
 });
+
+const updateJobApplicationSelectionController = asyncHandler(
+  async (req, res) => {
+    const { id } = req.params;
+    const { selected } = req.body;
+
+    const application = await updateJobApplicationSelection(id, selected);
+
+    return res.status(STATUS_CODE.SUCCESS).json({
+      success: true,
+      message: "Job application selection updated successfully",
+      data: application,
+    });
+  },
+);
+
+const filterJobApplications = async (req, res, next) => { 
+  try { 
+    const { selected } = req.query; 
+    if (!selected) { 
+      return res.status(400).json({ 
+        success: false, 
+        message: "selected query parameter is required", 
+      }); 
+    } 
+    const applications = await getJobApplicationsBySelection(selected);
+
+    res.status(200).json({ 
+      success: true, 
+      count: applications.length, 
+      data: applications, 
+    });
+  } catch (error) {
+     next(error);
+    } 
+};
+
 export {
   createJobApplicationController,
   getAllJobApplicationController,
   getJobApplicationCvController,
+  updateJobApplicationSelectionController,
+  filterJobApplications,
 };

@@ -1,9 +1,11 @@
-import express from "express";
+import express, { Router } from "express";
 
 import {
   createJobApplicationController,
   getAllJobApplicationController,
   getJobApplicationCvController,
+  updateJobApplicationSelectionController,
+  filterJobApplications,
 } from "../controllers/JobApplication.controller.js";
 import upload from "../utils/upload.js";
 
@@ -63,5 +65,7 @@ router.post(
 );
 router.get("/jobApplication/:id/cv", getJobApplicationCvController);
 router.get("/jobApplication", getAllJobApplicationController);
+router.patch("/updatejobApplication/:id", updateJobApplicationSelectionController);
+router.get("/filterjobApplication", filterJobApplications);
 
 export default router;
