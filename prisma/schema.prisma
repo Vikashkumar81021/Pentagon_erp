@@ -595,7 +595,7 @@ model JobApplication {
   email         String
   mobile        String
   cvUrl         String?
-  selected      String?
+  status      String?
   appliedAt DateTime @default(now())
 }
 

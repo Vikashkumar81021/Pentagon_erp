@@ -54,7 +54,7 @@ const getJobApplicationCvController = asyncHandler(async (req, res) => {
 const updateJobApplicationSelectionController = asyncHandler(
   async (req, res) => {
     const { id } = req.params;
-    const { selected } = req.body;
+    const { status } = req.body;
 
     const application = await updateJobApplicationSelection(id, selected);
 
@@ -68,8 +68,8 @@ const updateJobApplicationSelectionController = asyncHandler(
 
 const filterJobApplications = async (req, res, next) => { 
   try { 
-    const { selected } = req.query; 
-    if (!selected) { 
+    const { status } = req.query; 
+    if (!status) { 
       return res.status(STATUS_CODE.BAD_REQUESTS).json({ 
         success: false, 
         message: "selected query parameter is required", 

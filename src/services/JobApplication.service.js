@@ -95,14 +95,14 @@ const updateJobApplicationSelection = async (id, selected) => {
 
   return await prisma.jobApplication.update({
     where: { id: Number(id) },
-    data: { selected },
+    data: { status },
   });
 };
 
 const getJobApplicationsBySelection = async (selected) => {
   const applications = await prisma.jobApplication.findMany({
     where: {
-      selected: selected,
+      status: selected,
     },
     include: {
       hiringRequirement: true,
