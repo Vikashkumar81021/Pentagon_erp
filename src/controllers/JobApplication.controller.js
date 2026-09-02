@@ -11,8 +11,6 @@ import { STATUS_CODE } from "../constants/status.code.js";
 
 const createJobApplicationController = asyncHandler(async (req, res) => {
   const payload = createJobApplicationValidator.parse(req.body);
-  console.log("req file", req.file);
-
   const application = await createJobApplication(payload, req.file);
 
   return res.status(STATUS_CODE.CREATED).json({
@@ -23,6 +21,7 @@ const createJobApplicationController = asyncHandler(async (req, res) => {
 
 const getAllJobApplicationController = asyncHandler(async (req, res) => {
   const applications = await getJobApplications();
+  console.log("application", applications);
 
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,

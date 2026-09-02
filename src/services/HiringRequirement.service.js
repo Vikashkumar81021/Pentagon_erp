@@ -83,7 +83,6 @@ const getHiringRequirement = async () => {
 //         }
 //       }
 
-    
 //   });
 //   return fetchjob;
 // };

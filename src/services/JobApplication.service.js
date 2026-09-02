@@ -44,24 +44,24 @@ const createJobApplication = async (data, file) => {
 };
 
 const getJobApplications = async () => {
-  const application = await prisma.jobApplication.findUnique({
-    where: {
-      id: Number(id),
-    },
-    select: {
-      cvUrl: true,
-    },
+  const application = await prisma.jobApplication.findMany({
+    // where: {
+    //   id: Number(id),
+    // },
+    // select: {
+    //   cvUrl: true,
+    // },
   });
 
-  if (!application) {
-    throw new BadRequestError("Job application not found");
-  }
+  // if (!application) {
+  //   throw new BadRequestError("Job application not found");
+  // }
 
-  if (!application.cvUrl) {
-    throw new BadRequestError("CV not found");
-  }
+  // if (!application.cvUrl) {
+  //   throw new BadRequestError("CV not found");
+  // }
 
-  return application.cvUrl;
+  return application;
 };
 const getJobApplicationCv = async (id) => {
   const application = await prisma.jobApplication.findUnique({
