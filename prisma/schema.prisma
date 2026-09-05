@@ -388,7 +388,7 @@ model SalesVisit {
   additional_remarks          String?
 
   meeting_photo String?
-
+   reason        String?
   closure_date String?
   basic_amount Int?
   status       String?            @default("Pending")
