@@ -54,6 +54,10 @@ export const callDiscussionValidator = z.object({
   remarks: z
     .string()
     .optional(),
+
+  status:z
+    .string()
+    .optional(),
 });
 
 export const updateCallDiscussionValidator =
