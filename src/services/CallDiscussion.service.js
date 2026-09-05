@@ -129,6 +129,22 @@ const updateCallDiscussion = async (id, data) => {
     },
   });
 };
+
+const updateCallDiscussionStatus = async (id, status) => {
+  const callDiscussion = await prisma.callDiscussion.findUnique({
+    where: { id: Number(id) },
+  });
+
+  if (!callDiscussion) {
+    throw new BadRequestError("Call Discussion not found");
+  }
+
+  return await prisma.callDiscussion.update({
+    where: { id: Number(id) },
+    data: { status },
+  });
+};
+
 const deleteCallDiscussion = async (id) => {
   const callDiscussion = await prisma.callDiscussion.findUnique({
     where: {
@@ -153,5 +169,6 @@ export{
     createCallDiscussion,
     getAllCallDiscussions,
     updateCallDiscussion,
+    updateCallDiscussionStatus,
     deleteCallDiscussion,
 }

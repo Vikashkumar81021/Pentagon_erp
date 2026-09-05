@@ -4,6 +4,7 @@ import{
     createCallDiscussion,
     getAllCallDiscussions,
     updateCallDiscussion,
+    updateCallDiscussionStatus,
     deleteCallDiscussion,
 } from "../services/CallDiscussion.service.js";
 
@@ -46,6 +47,21 @@ const updateCallDiscussionController = asyncHandler(
   }
 );
 
+const updateCallDiscussionStatusController = asyncHandler(
+  async (req, res) => {
+    const { id } = req.params;
+    const { status } = req.body;
+
+    const data = await updateCallDiscussionStatus(id, status);
+
+    res.status(STATUS_CODE.SUCCESS).json({
+      success: true,
+      message: "Call Discussion status updated successfully",
+      data,
+    });
+  },
+);
+
 const deleteCallDiscussionController = asyncHandler(
   async (req, res) => {
     await deleteCallDiscussion(req.params.id);
@@ -61,5 +77,6 @@ export{
     createCallDiscussionController,
     getAllCallDiscussionsController,
     updateCallDiscussionController,
+    updateCallDiscussionStatusController,
     deleteCallDiscussionController,
 }
