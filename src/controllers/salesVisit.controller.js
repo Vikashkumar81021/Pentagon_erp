@@ -6,6 +6,7 @@ import {
   createSalesVisit,
   getSalesVisits,
   fetchclientname,
+  updateSalesVisitStatus,
 } from "../services/salesVisit.service.js";
 
 const createSalesVisitController = asyncHandler(async (req, res) => {
@@ -44,8 +45,20 @@ const fetchclientnameController = asyncHandler(async (req, res) => {
     data: salesVisits,
   });
 });
+
+const updateSalesVisitStatusController = asyncHandler(async (req, res) => {
+  const salesVisit = await updateSalesVisitStatus(req.body);
+
+  res.status(STATUS_CODE.SUCCESS).json({
+    success: true,
+    message: "Sales Visit updated successfully",
+    data: salesVisit,
+  });
+});
+
 export {
   createSalesVisitController,
   getSalesVisitsController,
   fetchclientnameController,
+  updateSalesVisitStatusController,
 };

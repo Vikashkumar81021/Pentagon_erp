@@ -45,8 +45,27 @@ const fetchclientname = async () => {
     }
   })
 }
+const updateSalesVisitStatus = async (data) => {
+  const salesVisit = await prisma.salesVisit.findUnique({
+    where: { id: Number(data.id) },
+  });
+
+  if (!salesVisit) {
+    throw new BadRequestError("Sales Visit not found");
+  }
+
+  return prisma.salesVisit.update({
+    where: { id: Number(data.id) },
+    data: {
+      ...(data.status !== undefined && { status: data.status }),
+      ...(data.reason !== undefined && { reason: data.reason }),
+    },
+  });
+};
+
 export {
   createSalesVisit,
   getSalesVisits,
   fetchclientname,
+  updateSalesVisitStatus,
 };
