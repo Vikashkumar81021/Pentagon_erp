@@ -391,7 +391,7 @@ model SalesVisit {
 
   closure_date String?
   basic_amount Int?
-  status       String?
+  status       String?            @default(PENDING)
 
   userId          Int
   user            User             @relation(fields: [userId], references: [id])
