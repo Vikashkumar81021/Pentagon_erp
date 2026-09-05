@@ -9,12 +9,6 @@ const users = [
     name: "Super Admin",
   },
   {
-    employeeCode: "DIR001",
-    password: "123456",
-    role: "DIRECTOR",
-    name: "Amit Sharma",
-  },
-  {
     employeeCode: "MAN001",
     password: "123456",
     role: "MANAGER",
@@ -187,5 +181,4 @@ async function seedUsers() {
     await prisma.$disconnect();
   }
 }
-
 seedUsers();

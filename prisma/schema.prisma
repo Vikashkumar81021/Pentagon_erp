@@ -419,7 +419,7 @@ model CallDiscussion {
   next_followup_date String
   followup_mode      String
   remarks            String
-
+  status             String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
