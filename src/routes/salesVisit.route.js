@@ -9,7 +9,6 @@ import {
 } from "../controllers/salesVisit.controller.js";
 import authMiddleware from "../middleware/auth.middleware.js";
 import upload from "../middleware/upload.middleware.js";
-import { rotate } from "pdfkit";
 
 const router = express.Router();
 
