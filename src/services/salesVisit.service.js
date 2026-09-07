@@ -72,7 +72,7 @@ const getApprovedStatus = async () => {
 const getRejectStatus = async () => {
   return prisma.salesVisit.findMany({
     where: {
-      status: "PENDING",
+      status: "REJECTED",
     },
   });
 };
