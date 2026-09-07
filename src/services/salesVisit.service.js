@@ -40,11 +40,11 @@ const getSalesVisits = async () => {
 
 const fetchclientname = async () => {
   return await prisma.salesVisit.findMany({
-    select:{
-      customer_name:true
-    }
-  })
-}
+    select: {
+      customer_name: true,
+    },
+  });
+};
 const updateSalesVisitStatus = async (data) => {
   const salesVisit = await prisma.salesVisit.findUnique({
     where: { id: Number(data.id) },
@@ -62,10 +62,25 @@ const updateSalesVisitStatus = async (data) => {
     },
   });
 };
-
+const getApprovedStatus = async () => {
+  return prisma.salesVisit.findMany({
+    where: {
+      status: "APPROVED",
+    },
+  });
+};
+const getRejectStatus = async () => {
+  return prisma.salesVisit.findMany({
+    where: {
+      status: "PENDING",
+    },
+  });
+};
 export {
   createSalesVisit,
   getSalesVisits,
   fetchclientname,
   updateSalesVisitStatus,
+  getApprovedStatus,
+  getRejectStatus,
 };

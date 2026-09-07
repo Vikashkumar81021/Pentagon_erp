@@ -7,6 +7,8 @@ import {
   getSalesVisits,
   fetchclientname,
   updateSalesVisitStatus,
+  getApprovedStatus,
+  getRejectStatus,
 } from "../services/salesVisit.service.js";
 
 const createSalesVisitController = asyncHandler(async (req, res) => {
@@ -55,10 +57,27 @@ const updateSalesVisitStatusController = asyncHandler(async (req, res) => {
     data: salesVisit,
   });
 });
-
+const getApprovedStausController = asyncHandler(async (req, res) => {
+  const approvedStatus = await getApprovedStatus();
+  return res.status(STATUS_CODE.SUCCESS).json({
+    success: true,
+    message: "Clent Approved Status  fetched successfully",
+    data: approvedStatus,
+  });
+});
+const getRejectStatusController = asyncHandler(async (req, res) => {
+  const getReject = await getRejectStatus();
+  return res.status(STATUS_CODE.SUCCESS).json({
+    success: true,
+    message: "Clent Reject Status  fetched successfully",
+    data: getReject,
+  });
+});
 export {
   createSalesVisitController,
   getSalesVisitsController,
   fetchclientnameController,
   updateSalesVisitStatusController,
+  getApprovedStausController,
+  getRejectStatusController,
 };
