@@ -2,6 +2,7 @@ import prisma from "../config/db.js";
 import bcrypt from "bcrypt";
 import { BadRequestError } from "../utils/error.js";
 import { generateAccessToken } from "../utils/generateToken.js";
+import { createAuditLog } from "./AuditLog.service.js";
 
 const loginService = async (empcode, password) => {
   const existingUser = await prisma.user.findUnique({
@@ -34,6 +35,13 @@ const loginService = async (empcode, password) => {
     roles,
   });
 
+   await createAuditLog({
+    userId: existingUser.id,
+    action: "LOGIN",
+    module: "AUTH",
+    activity: "User logged in successfully",
+  });
+  
   return {
     accessToken,
     user: existingUser,
