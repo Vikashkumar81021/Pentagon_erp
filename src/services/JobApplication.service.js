@@ -11,6 +11,15 @@ const createJobApplication = async (data, file) => {
   if (!hiringRequirement) {
     throw new BadRequestError("Hiring Requirement not found");
   }
+  const existingApplication = await prisma.jobApplication.findFirst({
+    where: {
+      email: data.email,
+      hiringRequirementId: data.hiringRequirementId,
+    },
+  });
+  if (existingApplication) {
+    throw new BadRequestError("You have already applied for this job");
+  }
   let cvUrl = null;
   if (file) {
     const uploadResult = await uploadToCloudinary(
@@ -39,7 +48,9 @@ const createJobApplication = async (data, file) => {
       hiringRequirement: true,
     },
   });
-
+  if (application.email) {
+    throw new BadRequestError("");
+  }
   return application;
 };
 
