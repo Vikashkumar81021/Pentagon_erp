@@ -13,11 +13,19 @@ import {
     deleteLeaveApplicantService,
     getLeaveByDateService,
 } from "../services/LeaveApplicant.service.js";
+import { createAuditLog } from "../services/AuditLog.service.js";
 
 const createLeaveApplicantController = asyncHandler(async (req, res) => {
   const validateData = createLeaveApplicantValidator.parse(req.body);
 
   const leave = await createLeaveApplicantService(validateData);
+
+  await createAuditLog({
+      userId: req.user.id,
+      action: "CREATE",
+      module: "LEAVE_APPLICANT",
+      activity: "Leave applied created successfully",
+  });
 
   return res.status(STATUS_CODE.CREATED).json({
     success: true,
@@ -29,6 +37,13 @@ const createLeaveApplicantController = asyncHandler(async (req, res) => {
 const getLeaveApplicantController = asyncHandler(async (req, res) => {
   const leaves = await getLeaveApplicantService();
 
+  await createAuditLog({
+      userId: req.user.id,
+      action: "GET",
+      module: "LEAVE_APPLICANT",
+      activity: "Leave applications fetched successfully",
+  });
+
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
     message: "Leave applications fetched successfully",
@@ -39,6 +54,13 @@ const getLeaveApplicantController = asyncHandler(async (req, res) => {
 
 const getLeaveApplicantsController = asyncHandler(async (req, res) => {
   const leaves = await getLeaveApplicantsService();
+
+  await createAuditLog({
+      userId: req.user.id,
+      action: "GET",
+      module: "LEAVE_APPLICANT",
+      activity: "Leave applications fetched successfully",
+  });
 
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
@@ -59,6 +81,14 @@ const getLeaveApplicantByIdController = asyncHandler(async (req, res) => {
       message: "Leave application not found",
     });
   }
+
+  await createAuditLog({
+      userId: req.user.id,
+      action: "GET",
+      module: "LEAVE_APPLICANT",
+      activity: "Leave applications fetched successfully",
+  });
+
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
     message: "Leave application fetched successfully",
@@ -73,6 +103,13 @@ const updateLeaveApplicantController = asyncHandler(async (req, res) => {
 
   const leave = await updateLeaveApplicantService(id, validateData);
 
+  await createAuditLog({
+      userId: req.user.id,
+      action: "PATCH",
+      module: "LEAVE_APPLICANT",
+      activity: "Leave updated successfully",
+  });
+
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
     message: "Leave updated successfully",
@@ -84,6 +121,13 @@ const deleteLeaveApplicantController = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
   await deleteLeaveApplicantService(id);
+
+  await createAuditLog({
+      userId: req.user.id,
+      action: "DELETE",
+      module: "LEAVE_APPLICANT",
+      activity: "Leave deleted successfully",
+  });
 
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
@@ -116,6 +160,13 @@ const getLeaveByDateController = asyncHandler(async (req, res) => {
     updatedAt: leave.updatedAt,
   }));
 
+  await createAuditLog({
+      userId: req.user.id,
+      action: "GET",
+      module: "LEAVE_APPLICANT",
+      activity: "Leave applications fetched successfully",
+  });
+  
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
     message: "Leave applications fetched successfully",

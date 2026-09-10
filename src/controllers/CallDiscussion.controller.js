@@ -1,5 +1,6 @@
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { STATUS_CODE } from "../constants/status.code.js";
+import { createAuditLog } from "../services/AuditLog.service.js";
 import{
     createCallDiscussion,
     getAllCallDiscussions,
@@ -12,6 +13,13 @@ const createCallDiscussionController = asyncHandler(
   async (req, res) => {
     const callDiscussion = await createCallDiscussion(req.body);
 
+    await createAuditLog({
+    userId: req.user.id,
+    action: "CREATE",
+    module: "CALL_DISCUSSION",
+    activity: "Call Disussion created successfully",
+  });
+
     return res.status(STATUS_CODE.CREATED).json({
       success: true,
       message: "Call Discussion created successfully",
@@ -23,6 +31,13 @@ const createCallDiscussionController = asyncHandler(
 const getAllCallDiscussionsController = asyncHandler(
   async (req, res) => {
     const callDiscussions = await getAllCallDiscussions();
+
+    await createAuditLog({
+    userId: req.user.id,
+    action: "GET",
+    module: "CALL_DISCUSSION",
+    activity: "Call Disussion fetched successfully",
+  });
 
     return res.status(STATUS_CODE.SUCCESS).json({
       success: true,
@@ -39,6 +54,13 @@ const updateCallDiscussionController = asyncHandler(
       req.body
     );
 
+    await createAuditLog({
+    userId: req.user.id,
+    action: "UPDATE",
+    module: "CALL_DISCUSSION",
+    activity: "Call Disussion updated successfully",
+  });
+
     return res.status(STATUS_CODE.SUCCESS).json({
       success: true,
       message: "Call Discussion updated successfully",
@@ -54,6 +76,13 @@ const updateCallDiscussionStatusController = asyncHandler(
 
     const data = await updateCallDiscussionStatus(id, status);
 
+    await createAuditLog({
+    userId: req.user.id,
+    action: "UPDATE",
+    module: "CALL_DISCUSSION",
+    activity: "Call Disussion Status updated successfully",
+  });
+
     res.status(STATUS_CODE.SUCCESS).json({
       success: true,
       message: "Call Discussion status updated successfully",
@@ -65,6 +94,13 @@ const updateCallDiscussionStatusController = asyncHandler(
 const deleteCallDiscussionController = asyncHandler(
   async (req, res) => {
     await deleteCallDiscussion(req.params.id);
+
+    await createAuditLog({
+    userId: req.user.id,
+    action: "DELETE",
+    module: "CALL_DISCUSSION",
+    activity: "Call Disussion deleted successfully",
+  });
 
     return res.status(STATUS_CODE.SUCCESS).json({
       success: true,
