@@ -35,13 +35,13 @@ const loginService = async (empcode, password) => {
     roles,
   });
 
-   await createAuditLog({
+  await createAuditLog({
     userId: existingUser.id,
     action: "LOGIN",
     module: "AUTH",
     activity: "User logged in successfully",
   });
-  
+
   return {
     accessToken,
     user: existingUser,

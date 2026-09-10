@@ -18,12 +18,12 @@ const createJobApplicationController = asyncHandler(async (req, res) => {
   const payload = createJobApplicationValidator.parse(req.body);
   const application = await createJobApplication(payload, req.file);
 
-  await createAuditLog({
-      userId: req.user.id,
-      action: "CREATE",
-      module: "JOB_APPLICATION",
-      activity: "Job Application created successfully",
-  });
+  // await createAuditLog({
+  //     userId: req.user.id,
+  //     action: "CREATE",
+  //     module: "JOB_APPLICATION",
+  //     activity: "Job Application created successfully",
+  // });
 
   return res.status(STATUS_CODE.CREATED).json({
     success: true,
@@ -35,10 +35,10 @@ const getAllJobApplicationController = asyncHandler(async (req, res) => {
   const applications = await getJobApplications();
 
   // await createAuditLog({
-  //     userId: req.user.id,
-  //     action: "GET",
-  //     module: "JOB_APPLICATION",
-  //     activity: "Job Application fetched successfully",
+  //   userId: req.user.id,
+  //   action: "GET",
+  //   module: "JOB_APPLICATION",
+  //   activity: "Job Application fetched successfully",
   // });
 
   return res.status(STATUS_CODE.SUCCESS).json({
@@ -73,12 +73,12 @@ const updateJobApplicationSelectionController = asyncHandler(
 
     const application = await updateJobApplicationSelection(id, status);
 
-    await createAuditLog({
-      userId: req.user.id,
-      action: "PATCH",
-      module: "JOB_APPLICATION",
-      activity: "Job application selection updated successfully",
-  });
+    // await createAuditLog({
+    //   userId: req.user.id,
+    //   action: "PATCH",
+    //   module: "JOB_APPLICATION",
+    //   activity: "Job application selection updated successfully",
+    // });
 
     return res.status(STATUS_CODE.SUCCESS).json({
       success: true,
@@ -88,32 +88,32 @@ const updateJobApplicationSelectionController = asyncHandler(
   },
 );
 
-const filterJobApplications = async (req, res, next) => { 
-  try { 
-    const { status } = req.query; 
-    if (!status) { 
-      return res.status(STATUS_CODE.BAD_REQUESTS).json({ 
-        success: false, 
-        message: "selected query parameter is required", 
-      }); 
-    } 
+const filterJobApplications = async (req, res, next) => {
+  try {
+    const { status } = req.query;
+    if (!status) {
+      return res.status(STATUS_CODE.BAD_REQUESTS).json({
+        success: false,
+        message: "selected query parameter is required",
+      });
+    }
     const applications = await getJobApplicationsBySelection(status);
 
-    await createAuditLog({
-      userId: req.user.id,
-      action: "GET",
-      module: "JOB_APPLICATION",
-      activity: "Job application fetched successfully",
-  });
+    // await createAuditLog({
+    //   userId: req.user.id,
+    //   action: "GET",
+    //   module: "JOB_APPLICATION",
+    //   activity: "Job application fetched successfully",
+    // });
 
-    res.status(STATUS_CODE.SUCCESS).json({ 
-      success: true, 
-      count: applications.length, 
-      data: applications, 
+    res.status(STATUS_CODE.SUCCESS).json({
+      success: true,
+      count: applications.length,
+      data: applications,
     });
   } catch (error) {
-     next(error);
-    } 
+    next(error);
+  }
 };
 
 const removeJobApplication = async (req, res, next) => {
@@ -122,12 +122,12 @@ const removeJobApplication = async (req, res, next) => {
 
     const result = await deleteJobApplication(id);
 
-    await createAuditLog({
-      userId: req.user.id,
-      action: "DELETE",
-      module: "JOB_APPLICATION",
-      activity: "Job application deleted successfully",
-  });
+    // await createAuditLog({
+    //   userId: req.user.id,
+    //   action: "DELETE",
+    //   module: "JOB_APPLICATION",
+    //   activity: "Job application deleted successfully",
+    // });
 
     res.status(STATUS_CODE.SUCCESS).json({
       success: true,
