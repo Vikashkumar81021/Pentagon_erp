@@ -10,6 +10,7 @@ import {
   searchHiringRequirement,
   getOpenHiringRequirements,
 } from "../services/HiringRequirement.service.js";
+import { createAuditLog } from "../services/AuditLog.service.js";
 
 import {
   createHiringRequirementValidator,
@@ -21,6 +22,13 @@ const createHiringRequirementController = asyncHandler(async (req, res) => {
 
   const result = await createHiringRequirement(validatedData);
 
+  await createAuditLog({
+    userId: req.user.id,
+    action: "CREARE",
+    module: "HIRING_REQUIREMENT",
+    activity: "Hiring requirement created successfully",
+  });
+
   return res.status(STATUS_CODE.CREATED).json({
     success: true,
     message: "Hiring requirement created successfully",
@@ -30,6 +38,13 @@ const createHiringRequirementController = asyncHandler(async (req, res) => {
 
 const getHiringRequirementController = asyncHandler(async (req, res) => {
   const result = await getHiringRequirement();
+
+  await createAuditLog({
+    userId: req.user.id,
+    action: "GET",
+    module: "HIRING_REQUIREMENT",
+    activity: "Hiring requirement fetched successfully",
+  });
 
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
@@ -41,6 +56,13 @@ const getHiringRequirementByIdController = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
   const result = await getHiringRequirementById(id);
+
+  await createAuditLog({
+    userId: req.user.id,
+    action: "GET",
+    module: "HIRING_REQUIREMENT",
+    activity: "Hiring requirement fetched successfully",
+  });
 
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
@@ -55,6 +77,13 @@ const updateHiringRequirementController = asyncHandler(async (req, res) => {
 
   const result = await updateHiringRequirement(id, validatedData);
 
+  await createAuditLog({
+    userId: req.user.id,
+    action: "PUT",
+    module: "HIRING_REQUIREMENT",
+    activity: "Hiring requirement updated successfully",
+  });
+
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
     message: "Updated successfully",
@@ -67,6 +96,13 @@ const deleteHiringRequirementController = asyncHandler(async (req, res) => {
 
   await deleteHiringRequirement(id);
 
+  await createAuditLog({
+    userId: req.user.id,
+    action: "DELETE",
+    module: "HIRING_REQUIREMENT",
+    activity: "Hiring requirement deleted successfully",
+  });
+
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
     message: "Deleted successfully",
@@ -78,6 +114,13 @@ const searchHiringRequirementController = asyncHandler(async (req, res) => {
 
   const result = await searchHiringRequirement({ job_Title });
 
+  await createAuditLog({
+    userId: req.user.id,
+    action: "GET",
+    module: "HIRING_REQUIREMENT",
+    activity: "Hiring requirement fetched successfully",
+  });
+
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
     data: result,
@@ -88,6 +131,13 @@ const getOpenHiringRequirementsController = asyncHandler(
   async (req, res, next) => {
     const hiringRequirements = await getOpenHiringRequirements();
 
+    await createAuditLog({
+    userId: req.user.id,
+    action: "GET",
+    module: "HIRING_REQUIREMENT",
+    activity: "Hiring requirement fetched successfully",
+  });
+  
     return res.status(STATUS_CODE.SUCCESS).json({
       success: true,
       message: "Open hiring requirements fetched successfully",

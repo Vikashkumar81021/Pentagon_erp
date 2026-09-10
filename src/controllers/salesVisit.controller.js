@@ -1,7 +1,5 @@
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { STATUS_CODE } from "../constants/status.code.js";
-import { salesVisitValidator } from "../validators/salesVisit.validator.js";
-import path from "path";
 import {
   createSalesVisit,
   getSalesVisits,
@@ -10,6 +8,7 @@ import {
   getApprovedStatus,
   getRejectStatus,
 } from "../services/salesVisit.service.js";
+import { createAuditLog } from "../services/AuditLog.service.js";
 
 const createSalesVisitController = asyncHandler(async (req, res) => {
   const data = {
@@ -20,6 +19,13 @@ const createSalesVisitController = asyncHandler(async (req, res) => {
   };
   const salesVisit = await createSalesVisit(data);
 
+  await createAuditLog({
+    userId: req.user.id,
+    action: "CREATE",
+    module: "SALES_VISIT",
+    activity: "Sales Visit created successfully",
+  });
+
   return res.status(STATUS_CODE.CREATED).json({
     success: true,
     message: "Sales Visit created successfully",
@@ -29,7 +35,12 @@ const createSalesVisitController = asyncHandler(async (req, res) => {
 
 const getSalesVisitsController = asyncHandler(async (req, res) => {
   const salesVisits = await getSalesVisits();
-  console.log("sales visis", salesVisits);
+  await createAuditLog({
+    userId: req.user.id,
+    action: "GET",
+    module: "SALES_VISIT",
+    activity: "Sales Visit fetched successfully",
+  });
 
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
@@ -41,6 +52,13 @@ const getSalesVisitsController = asyncHandler(async (req, res) => {
 const fetchclientnameController = asyncHandler(async (req, res) => {
   const salesVisits = await fetchclientname();
 
+  await createAuditLog({
+    userId: req.user.id,
+    action: "GET",
+    module: "SALES_VISIT",
+    activity: "Client name fetched successfully",
+  });
+
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
     message: "Client Name fetched successfully",
@@ -51,6 +69,13 @@ const fetchclientnameController = asyncHandler(async (req, res) => {
 const updateSalesVisitStatusController = asyncHandler(async (req, res) => {
   const salesVisit = await updateSalesVisitStatus(req.body);
 
+  await createAuditLog({
+    userId: req.user.id,
+    action: "UPDATE",
+    module: "SALES_VISIT",
+    activity: "Sales Visit status updated successfully",
+  });
+
   res.status(STATUS_CODE.SUCCESS).json({
     success: true,
     message: "Sales Visit updated successfully",
@@ -59,17 +84,30 @@ const updateSalesVisitStatusController = asyncHandler(async (req, res) => {
 });
 const getApprovedStausController = asyncHandler(async (req, res) => {
   const approvedStatus = await getApprovedStatus();
+
+  await createAuditLog({
+    userId: req.user.id,
+    action: "GET",
+    module: "SALES_VISIT",
+    activity: "Client approved status fetched successfully",
+  });
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
-    message: "Clent Approved Status  fetched successfully",
+    message: "Client Approved Status fetched successfully",
     data: approvedStatus,
   });
 });
 const getRejectStatusController = asyncHandler(async (req, res) => {
   const getReject = await getRejectStatus();
+  await createAuditLog({
+    userId: req.user.id,
+    action: "GET",
+    module: "SALES_VISIT",
+    activity: "Client Reject Status fetched successfully",
+  });
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
-    message: "Clent Reject Status  fetched successfully",
+    message: "Client Reject Status fetched successfully",
     data: getReject,
   });
 });

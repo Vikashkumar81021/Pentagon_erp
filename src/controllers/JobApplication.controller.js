@@ -8,6 +8,7 @@ import {
 } from "../services/JobApplication.service.js";
 
 import { createJobApplicationValidator } from "../validators/JobApplication.validator.js";
+import { createAuditLog } from "../services/AuditLog.service.js";
 
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { STATUS_CODE } from "../constants/status.code.js";
@@ -15,6 +16,13 @@ import { STATUS_CODE } from "../constants/status.code.js";
 const createJobApplicationController = asyncHandler(async (req, res) => {
   const payload = createJobApplicationValidator.parse(req.body);
   const application = await createJobApplication(payload, req.file);
+
+  await createAuditLog({
+      userId: req.user.id,
+      action: "CREATE",
+      module: "JOB_APPLICATION",
+      activity: "Job Application created successfully",
+  });
 
   return res.status(STATUS_CODE.CREATED).json({
     success: true,
@@ -24,6 +32,13 @@ const createJobApplicationController = asyncHandler(async (req, res) => {
 
 const getAllJobApplicationController = asyncHandler(async (req, res) => {
   const applications = await getJobApplications();
+
+  await createAuditLog({
+      userId: req.user.id,
+      action: "GET",
+      module: "JOB_APPLICATION",
+      activity: "Job Application fetched successfully",
+  });
 
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
@@ -57,6 +72,13 @@ const updateJobApplicationSelectionController = asyncHandler(
 
     const application = await updateJobApplicationSelection(id, status);
 
+    await createAuditLog({
+      userId: req.user.id,
+      action: "PATCH",
+      module: "JOB_APPLICATION",
+      activity: "Job application selection updated successfully",
+  });
+
     return res.status(STATUS_CODE.SUCCESS).json({
       success: true,
       message: "Job application selection updated successfully",
@@ -76,6 +98,13 @@ const filterJobApplications = async (req, res, next) => {
     } 
     const applications = await getJobApplicationsBySelection(status);
 
+    await createAuditLog({
+      userId: req.user.id,
+      action: "GET",
+      module: "JOB_APPLICATION",
+      activity: "Job application fetched successfully",
+  });
+
     res.status(STATUS_CODE.SUCCESS).json({ 
       success: true, 
       count: applications.length, 
@@ -91,6 +120,13 @@ const removeJobApplication = async (req, res, next) => {
     const { id } = req.params;
 
     const result = await deleteJobApplication(id);
+
+    await createAuditLog({
+      userId: req.user.id,
+      action: "DELETE",
+      module: "JOB_APPLICATION",
+      activity: "Job application deleted successfully",
+  });
 
     res.status(STATUS_CODE.SUCCESS).json({
       success: true,

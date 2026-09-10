@@ -8,11 +8,18 @@ import {
   searchOrders,
   deleteOrder,
 } from "../services/order.service.js";
+import { createAuditLog } from "../services/AuditLog.service.js";
 
 const createOrderController = asyncHandler(async (req, res) => {
-  console.log(req);
   
   const order = await createOrder(req.body);
+
+  await createAuditLog({
+      userId: req.user.id,
+      action: "CREATE",
+      module: "ORDER",
+      activity: "Order created successfully",
+  });
 
   return res.status(STATUS_CODE.CREATED).json({
     success: true,
@@ -23,6 +30,13 @@ const createOrderController = asyncHandler(async (req, res) => {
 
 const getOrdersController = asyncHandler(async (req, res) => {
   const orders = await getOrders();
+
+  await createAuditLog({
+      userId: req.user.id,
+      action: "GET",
+      module: "ORDER",
+      activity: "Order fetched successfully",
+  });
 
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
@@ -36,6 +50,13 @@ const updateOrderController = asyncHandler(async (req, res) => {
     req.params.id,
     req.body
   );
+
+  await createAuditLog({
+      userId: req.user.id,
+      action: "PATCH",
+      module: "ORDER",
+      activity: "Order updated successfully",
+  });
 
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
@@ -57,6 +78,13 @@ const searchOrdersController = asyncHandler(async (req, res) => {
     limit
   );
 
+  await createAuditLog({
+      userId: req.user.id,
+      action: "GET",
+      module: "ORDER",
+      activity: "Orders fetched successfully",
+  });
+
   return res.status(200).json({
     success: true,
     message: "Orders fetched successfully",
@@ -67,6 +95,13 @@ const searchOrdersController = asyncHandler(async (req, res) => {
 
 const deleteOrderController = asyncHandler(async (req, res) => {
   await deleteOrder(req.params.id);
+
+  await createAuditLog({
+      userId: req.user.id,
+      action: "DELETE",
+      module: "ORDER",
+      activity: "Order deleted successfully",
+  });
 
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
