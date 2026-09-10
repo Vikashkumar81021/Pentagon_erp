@@ -157,7 +157,7 @@ const fetchJobApplicationsbybackgroundcheck = async (req, res, next) => {
 };
 
 const fetchJobApplicationsbyhired = async (req, res, next) => {  
-    const applications = await getJobApplicationsByBackGroundCheck();
+    const applications = await getJobApplicationsByHired();
 
   //   await createAuditLog({
   //     userId: req.user.id,
