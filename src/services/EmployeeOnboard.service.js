@@ -126,22 +126,6 @@ const getEmployeeOnboardById = async (id) => {
   return onboard;
 };
 
-const fetchEmployeeNameByHiringStatus = async (status) => {
-  return await prisma.employeeOnboard.findMany({
-    where: {
-      hiringStatus: status,
-    },
-    select: {
-      employee: {
-        select: {
-          id: true,
-          name: true,
-        },
-      },
-    },
-  });
-};
-
 export {
   createEmployeeOnboard,
   fetchEmployeeOnboards,
@@ -150,5 +134,4 @@ export {
   getTaskChecklist,
   updateTaskChecklist,
   getEmployeeOnboardById,
-  fetchEmployeeNameByHiringStatus,
 };

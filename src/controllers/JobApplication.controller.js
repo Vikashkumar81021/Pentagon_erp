@@ -6,6 +6,7 @@ import {
   getJobApplicationsBySelection,
   deleteJobApplication,
   getJobApplicationsByBackGroundCheck,
+  getJobApplicationsByHired,
 } from "../services/JobApplication.service.js";
 
 import { createJobApplicationValidator } from "../validators/JobApplication.validator.js";
@@ -155,6 +156,23 @@ const fetchJobApplicationsbybackgroundcheck = async (req, res, next) => {
     });
 };
 
+const fetchJobApplicationsbyhired = async (req, res, next) => {  
+    const applications = await getJobApplicationsByBackGroundCheck();
+
+  //   await createAuditLog({
+  //     userId: req.user.id,
+  //     action: "GET",
+  //     module: "JOB_APPLICATION",
+  //     activity: "Job application fetched successfully",
+  // });
+
+    res.status(STATUS_CODE.SUCCESS).json({ 
+      success: true, 
+      count: applications.length, 
+      data: applications, 
+    });
+};
+
 export {
   createJobApplicationController,
   getAllJobApplicationController,
@@ -163,4 +181,5 @@ export {
   filterJobApplications,
   removeJobApplication,
   fetchJobApplicationsbybackgroundcheck,
+  fetchJobApplicationsbyhired,
 };
