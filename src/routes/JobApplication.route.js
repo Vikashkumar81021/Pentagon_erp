@@ -8,6 +8,7 @@ import {
   updateJobApplicationSelectionController,
   filterJobApplications,
   removeJobApplication,
+  fetchJobApplicationsbybackgroundcheck,
 } from "../controllers/JobApplication.controller.js";
 import upload from "../utils/upload.js";
 
@@ -66,5 +67,6 @@ router.get("/jobApplication", getAllJobApplicationController);
 router.patch("/updatejobApplication/:id", updateJobApplicationSelectionController);
 router.get("/filterjobApplication", filterJobApplications);
 router.delete("/deletejobApplication/:id",authMiddleware, removeJobApplication);
+router.get("/fetchBackGroundCheck", fetchJobApplicationsbybackgroundcheck)
 
 export default router;

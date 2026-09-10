@@ -5,6 +5,7 @@ import {
   updateJobApplicationSelection,
   getJobApplicationsBySelection,
   deleteJobApplication,
+  getJobApplicationsByBackGroundCheck,
 } from "../services/JobApplication.service.js";
 
 import { createJobApplicationValidator } from "../validators/JobApplication.validator.js";
@@ -33,12 +34,12 @@ const createJobApplicationController = asyncHandler(async (req, res) => {
 const getAllJobApplicationController = asyncHandler(async (req, res) => {
   const applications = await getJobApplications();
 
-  await createAuditLog({
-      userId: req.user.id,
-      action: "GET",
-      module: "JOB_APPLICATION",
-      activity: "Job Application fetched successfully",
-  });
+  // await createAuditLog({
+  //     userId: req.user.id,
+  //     action: "GET",
+  //     module: "JOB_APPLICATION",
+  //     activity: "Job Application fetched successfully",
+  // });
 
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
@@ -137,6 +138,23 @@ const removeJobApplication = async (req, res, next) => {
   }
 };
 
+const fetchJobApplicationsbybackgroundcheck = async (req, res, next) => {  
+    const applications = await getJobApplicationsByBackGroundCheck();
+
+  //   await createAuditLog({
+  //     userId: req.user.id,
+  //     action: "GET",
+  //     module: "JOB_APPLICATION",
+  //     activity: "Job application fetched successfully",
+  // });
+
+    res.status(STATUS_CODE.SUCCESS).json({ 
+      success: true, 
+      count: applications.length, 
+      data: applications, 
+    });
+};
+
 export {
   createJobApplicationController,
   getAllJobApplicationController,
@@ -144,4 +162,5 @@ export {
   updateJobApplicationSelectionController,
   filterJobApplications,
   removeJobApplication,
+  fetchJobApplicationsbybackgroundcheck,
 };

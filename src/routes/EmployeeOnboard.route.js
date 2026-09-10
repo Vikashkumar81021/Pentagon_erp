@@ -7,6 +7,7 @@ import {
   getTaskChecklistController,
   updateTaskChecklistController,
   fetchEmployeeOnboardByIdController,
+  getEmployeeOnboardStatusWithNameController,
 } from "../controllers/EmployeeOnboard.controller.js";
 import authMiddleware from "../middleware/auth.middleware.js";
 
@@ -19,4 +20,5 @@ router.delete("/onboard/:id", authMiddleware, deleteEmployeeOnboardController);
 router.get("/taskChecklist", authMiddleware, getTaskChecklistController);
 router.put("/taskChecklist/:id", authMiddleware, updateTaskChecklistController);
 router.get("/singleOnboard/:id", fetchEmployeeOnboardByIdController);
+router.get("/employeeOnboard/status", getEmployeeOnboardStatusWithNameController);
 export default router;

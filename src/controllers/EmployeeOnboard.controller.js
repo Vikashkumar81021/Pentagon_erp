@@ -10,6 +10,7 @@ import {
   getTaskChecklist,
   updateTaskChecklist,
   getEmployeeOnboardById,
+  fetchEmployeeNameByHiringStatus,
 } from "../services/EmployeeOnboard.service.js";
 import { createAuditLog } from "../services/AuditLog.service.js";
 
@@ -143,6 +144,18 @@ const fetchEmployeeOnboardByIdController = asyncHandler(async (req, res) => {
     data: serializeBigInt(onboard),
   });
 });
+
+const getEmployeeOnboardStatusWithNameController = asyncHandler(async (req, res) => {
+    const data = await fetchEmployeeNameByHiringStatus();
+
+    return res.status(STATUS_CODE.SUCCESS).json({
+      success: true,
+      message: "Employee onboarding status fetched successfully",
+      data,
+    });
+  },
+);
+
 export {
   createEmployeeOnboardController,
   getEmployeeOnboardController,
@@ -151,4 +164,5 @@ export {
   getTaskChecklistController,
   updateTaskChecklistController,
   fetchEmployeeOnboardByIdController,
+  getEmployeeOnboardStatusWithNameController,
 };

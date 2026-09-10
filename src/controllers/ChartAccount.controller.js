@@ -151,7 +151,6 @@ const getBankAccountsController = asyncHandler(async (req, res) => {
 });
 
 const filterChartAccountController = asyncHandler(async (req, res) => {
-  console.log("node",req.query)
   const accounts = await filterChartAccounts(req.query);
 
   await createAuditLog({

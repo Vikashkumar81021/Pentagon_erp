@@ -164,6 +164,21 @@ const deleteJobApplication = async (id) => {
   };
 };
 
+const getJobApplicationsByBackGroundCheck = async (status) => {
+  const applications = await prisma.jobApplication.findMany({
+    where: {
+      status: "BACKGROUND_CHECK",
+    },
+    include: {
+      hiringRequirement: true,
+    },
+    orderBy: {
+      appliedAt: "desc",
+    },
+  });
+  return applications;
+};
+
 export {
   createJobApplication,
   getJobApplications,
@@ -171,4 +186,5 @@ export {
   updateJobApplicationSelection,
   getJobApplicationsBySelection,
   deleteJobApplication,
+  getJobApplicationsByBackGroundCheck,
 };
