@@ -605,7 +605,7 @@ model JobApplication {
   email         String
   mobile        String
   cvUrl         String?
-  status      String?
+  status      String?@default("SCREENED")
   appliedAt DateTime @default(now())
 }
 
