@@ -190,7 +190,7 @@ const getJobApplicationsByBackGroundCheck = async (status) => {
   return applications;
 };
 
-const getJobApplicationsByHired = async (status) => {
+const getJobApplicationsByHired = async () => {
   const applications = await prisma.jobApplication.findMany({
     where: {
       status: "HIRED",
