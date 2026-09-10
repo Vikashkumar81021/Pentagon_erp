@@ -1,6 +1,7 @@
 import prisma from "../config/db.js";
 import { BadRequestError } from "../utils/error.js";
 import { uploadToCloudinary } from "../utils/uploadToCloudinary.js";
+import cloudinary from "../config/cloudinary.js";
 
 const createJobApplication = async (data, file) => {
   const hiringRequirement = await prisma.hiringRequirement.findUnique({
@@ -125,6 +126,33 @@ const deleteJobApplication = async (id) => {
     throw new BadRequestError("Job Application not found");
   }
 
+  if (application.cvUrl) {
+    try {
+      const url = new URL(application.cvUrl);
+      const parts = url.pathname.split("/");
+
+      const uploadIndex = parts.indexOf("upload");
+
+      if (uploadIndex !== -1) {
+        let publicIdParts = parts.slice(uploadIndex + 1);
+
+        if (/^v\d+$/.test(publicIdParts[0])) {
+          publicIdParts.shift();
+        }
+
+        const publicIdWithExtension = publicIdParts.join("/");
+
+        const publicId = publicIdWithExtension.replace(/\.[^/.]+$/, "");
+
+        await cloudinary.uploader.destroy(publicId, {
+          resource_type: "raw",
+        });
+      }
+    } catch (error) {
+      console.error("CV delete failed:", error.message);
+    }
+  }
+
   await prisma.jobApplication.delete({
     where: {
       id: Number(id),
@@ -132,7 +160,7 @@ const deleteJobApplication = async (id) => {
   });
 
   return {
-    message: "Job Application deleted successfully",
+    message: "Job Application and CV deleted successfully",
   };
 };
 

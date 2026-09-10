@@ -1,4 +1,5 @@
 import express, { Router } from "express";
+import authMiddleware from "../middleware/auth.middleware.js";
 
 import {
   createJobApplicationController,
@@ -59,15 +60,11 @@ const router = express.Router();
  *       500:
  *         description: Internal server error
  */
-router.post(
-  "/jobApplication",
-  upload.single("cv"),
-  createJobApplicationController,
-);
+router.post("/jobApplication", upload.single("cv"), createJobApplicationController,);
 router.get("/jobApplication/:id/cv", getJobApplicationCvController);
 router.get("/jobApplication", getAllJobApplicationController);
 router.patch("/updatejobApplication/:id", updateJobApplicationSelectionController);
 router.get("/filterjobApplication", filterJobApplications);
-router.delete("/deletejobApplication/:id", removeJobApplication);
+router.delete("/deletejobApplication/:id",authMiddleware, removeJobApplication);
 
 export default router;
