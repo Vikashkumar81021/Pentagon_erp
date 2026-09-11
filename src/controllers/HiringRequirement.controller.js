@@ -22,12 +22,12 @@ const createHiringRequirementController = asyncHandler(async (req, res) => {
 
   const result = await createHiringRequirement(validatedData);
 
-  await createAuditLog({
-    userId: req.user.id,
-    action: "CREARE",
-    module: "HIRING_REQUIREMENT",
-    activity: "Hiring requirement created successfully",
-  });
+  // await createAuditLog({
+  //   userId: req.user.id,
+  //   action: "CREARE",
+  //   module: "HIRING_REQUIREMENT",
+  //   activity: "Hiring requirement created successfully",
+  // });
 
   return res.status(STATUS_CODE.CREATED).json({
     success: true,
