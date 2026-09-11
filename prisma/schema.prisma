@@ -481,6 +481,8 @@ model EmployeeOnboard {
   employeeId     Int             @unique
   employee       Employee        @relation(fields: [employeeId], references: [id])
   taskCheckLists TaskChecklist[]
+  candidateName  String?
+  jobTitle       String?
 }
 
 model Holidays {
