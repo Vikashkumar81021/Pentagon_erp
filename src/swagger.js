@@ -19,6 +19,5 @@ const options = {
 };
 // console.log("options", options.definition.servers[0].url);
 const swaggerSpec = swaggerJsdoc(options);
-console.log("swager", swaggerSpec);
 
 export default swaggerSpec;
