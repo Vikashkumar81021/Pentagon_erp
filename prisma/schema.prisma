@@ -519,7 +519,6 @@ model Employee {
   panNumber      String
   aadhaarNumber  String
   accountNumber  String
-  onboardProcess EmployeeOnboard?
   attendanceLogs AttendanceLog[]
   expenseClaims     ExpenseClaim[]
   payrolls       PayRoll[]
