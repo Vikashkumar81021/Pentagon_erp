@@ -13,5 +13,5 @@ router.post("/createExpenseClaim", authMiddleware, createExpenseClaimController)
 router.get("/fetchAllExpenseClaims", authMiddleware, getAllExpenseClaimsController);
 router.get("/fetchExpenseClaim/:id", authMiddleware, getExpenseClaimByIdController);
 router.patch("/updateExpenseClaim/:id", authMiddleware, updateExpenseClaimController);
-router.delete("/deleteExpenseClaim", authMiddleware, deleteExpenseClaimController);
+router.delete("/deleteExpenseClaim/:id", authMiddleware, deleteExpenseClaimController);
 export default router;

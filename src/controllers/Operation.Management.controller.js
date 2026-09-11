@@ -3,11 +3,19 @@ import { STATUS_CODE } from "../constants/status.code.js";
 import { 
     getPayrollService, 
 } from "../services/Operation.Management.service.js";
+import { createAuditLog } from "../services/AuditLog.service.js";
 
 const getPayrollController = asyncHandler(async (req, res) => {
     const { id } = req.params;
   const employees = await getPayrollService(id);
 
+  await createAuditLog({
+      userId: req.user.id,
+      action: "GET",
+      module: "OPERATION_MANAGEMENT",
+      activity: "Operation Management data fetched successfully",
+  });
+  
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
     message: "Operation Management data fetched successfully",

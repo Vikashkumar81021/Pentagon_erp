@@ -10,6 +10,7 @@ import {
   updateJournalEntry,
   deleteJournalEntry,
 } from "../services/JournalEntry.service.js";
+import { createAuditLog } from "../services/AuditLog.service.js";
 
 const createJournalEntryController = async (req, res, next) => {
   try {
@@ -19,6 +20,13 @@ const createJournalEntryController = async (req, res, next) => {
     };
 
     const journal = await createJournalEntry(data);
+
+    await createAuditLog({
+      userId: req.user.id,
+      action: "CREATE",
+      module: "JOURNAL_ENTRY",
+      activity: "Journal Entry created successfully",
+  });
 
     return res.status(STATUS_CODE.CREATED).json({
       success: true,
@@ -39,6 +47,13 @@ const getAllJournalEntriesController = async (req, res, next) => {
   try {
     const journals = await getAllJournalEntries();
 
+    await createAuditLog({
+      userId: req.user.id,
+      action: "GET",
+      module: "JOURNAL_ENTRY",
+      activity: "Journal Entry fetched successfully",
+  });
+
     return res.status(STATUS_CODE.SUCCESS).json({
       success: true,
       count: journals.length,
@@ -53,6 +68,13 @@ const getJournalEntryByIdController = async (req, res, next) => {
   try {
     const journal = await getJournalEntryById(req.params.id);
 
+    await createAuditLog({
+      userId: req.user.id,
+      action: "GET",
+      module: "JOURNAL_ENTRY",
+      activity: "Journal Entry fetched successfully",
+  });
+
     return res.status(STATUS_CODE.SUCCESS).json({
       success: true,
       data: journal,
@@ -66,6 +88,12 @@ const getJournalEntryController = async (req, res, next) => {
   try {
     const data = await getJournalEntry();
 
+    await createAuditLog({
+      userId: req.user.id,
+      action: "GET",
+      module: "JOURNAL_ENTRY",
+      activity: "Journal Entry fetched successfully",
+  });
     return res.status(STATUS_CODE.SUCCESS).json({
       success: true,
       count: data.length,
@@ -107,6 +135,13 @@ const updateJournalEntryController = async (req, res, next) => {
       data
     );
 
+    await createAuditLog({
+      userId: req.user.id,
+      action: "PATCH",
+      module: "JOURNAL_ENTRY",
+      activity: "Journal Entry updated successfully",
+  });
+
     return res.status(STATUS_CODE.SUCCESS).json({
       success: true,
       message: "Journal Entry updated successfully",
@@ -121,6 +156,12 @@ const deleteJournalEntryController = async (req, res, next) => {
   try {
     await deleteJournalEntry(req.params.id);
 
+    await createAuditLog({
+      userId: req.user.id,
+      action: "DELETE",
+      module: "JOURNAL_ENTRY",
+      activity: "Journal Entry deleted successfully",
+  });
     return res.status(STATUS_CODE.SUCCESS).json({
       success: true,
       message: "Journal Entry deleted successfully",

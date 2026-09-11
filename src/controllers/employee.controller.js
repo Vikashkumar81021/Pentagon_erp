@@ -13,6 +13,7 @@ import {
   generateEmpCode,
   getEmployeeNameDesignationService,
 } from "../services/employee.service.js";
+import { createAuditLog } from "../services/AuditLog.service.js";
 
 import {
   createEmployeeValidator,
@@ -26,6 +27,13 @@ const createEmployeeController = asyncHandler(async (req, res) => {
     data.dob = new Date(data.dob);
   }
   const employee = await createEmployeeService(data);
+
+  await createAuditLog({
+    userId: req.user.id,
+    action: "CREATE",
+    module: "EMPLOYEE",
+    activity: "Employee created successfully",
+  });
 
   return res.status(STATUS_CODE.CREATED).json({
     success: true,
@@ -45,6 +53,14 @@ const getEmployeesController = asyncHandler(async (req, res) => {
       ...emp,
       mobileNumber: emp.mobileNumber?.toString(),
     }));
+
+    await createAuditLog({
+    userId: req.user.id,
+    action: "GET",
+    module: "EMPLOYEE",
+    activity: "Employee fetched successfully",
+  });
+
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
     data: safeEmployees,
@@ -66,6 +82,14 @@ const getEmployeeByIdController = asyncHandler(async (req, res) => {
     ...employee,
     mobileNumber: employee.mobileNumber ? String(employee.mobileNumber) : null,
   };
+
+  await createAuditLog({
+    userId: req.user.id,
+    action: "GET",
+    module: "EMPLOYEE",
+    activity: "Employee fetched successfully",
+  });
+
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
     message: "Employee fetched successfully",
@@ -80,6 +104,13 @@ const updateEmployeeController = asyncHandler(async (req, res) => {
 
   const employee = await updateEmployeeService(id, data);
 
+  await createAuditLog({
+    userId: req.user.id,
+    action: "PUT",
+    module: "EMPLOYEE",
+    activity: "Employee updated successfully",
+  });
+
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
     message: "Employee updated successfully",
@@ -92,6 +123,13 @@ const deleteEmployeeController = asyncHandler(async (req, res) => {
 
   await deleteEmployeeService(id);
 
+  await createAuditLog({
+    userId: req.user.id,
+    action: "DELETE",
+    module: "EMPLOYEE",
+    activity: "Employee deleted successfully",
+  });
+
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
     message: "Employee deleted successfully",
@@ -103,6 +141,13 @@ const filterEmployeeController = asyncHandler(async (req, res) => {
 
   const employees = await filterEmployees(filters);
 
+  await createAuditLog({
+    userId: req.user.id,
+    action: "GET",
+    module: "EMPLOYEE",
+    activity: "Employee fetched successfully",
+  });
+
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
     count: employees.length,
@@ -113,6 +158,14 @@ const filterEmployeeController = asyncHandler(async (req, res) => {
 const searchEmployeController = asyncHandler(async (req, res) => {
   const search = req.query;
   const searchData = await searchEmployeService(search);
+
+  await createAuditLog({
+    userId: req.user.id,
+    action: "GET",
+    module: "EMPLOYEE",
+    activity: "Employee search successfully",
+  });
+
   return res.status(STATUS_CODE.SUCCESS).json({
     data: searchData,
   });
@@ -122,7 +175,14 @@ const getEmployeController = asyncHandler(async (req, res) => {
   const { page = 1, limit = 10 } = req.query;
 
   const result = await getEmployeService(page, limit);
-  console.log("result", result);
+
+  await createAuditLog({
+    userId: req.user.id,
+    action: "GET",
+    module: "EMPLOYEE",
+    activity: "Employee fetched successfully",
+  });
+
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
     message: "Employees fetched successfully",
@@ -136,6 +196,13 @@ const generateEmpCodeController = asyncHandler(async (req, res) => {
 
   const fetchEmpCodeService = await generateEmpCode(employeeOnboardId);
 
+  await createAuditLog({
+    userId: req.user.id,
+    action: "GET",
+    module: "EMPLOYEE",
+    activity: "Employee fetched successfully",
+  });
+
   return res.status(STATUS_CODE.SUCCESS).json({
     data: fetchEmpCodeService,
   });
@@ -144,7 +211,14 @@ const generateEmpCodeController = asyncHandler(async (req, res) => {
 const getEmployeeNameDesignationController = asyncHandler(async (req, res) => {
   const employees = await getEmployeeNameDesignationService();
 
-  return res.status(200).json({
+  await createAuditLog({
+    userId: req.user.id,
+    action: "GET",
+    module: "EMPLOYEE",
+    activity: "Employee fetched successfully",
+  });
+  
+  return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
     data: employees,
   });

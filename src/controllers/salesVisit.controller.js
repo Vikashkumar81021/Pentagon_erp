@@ -1,114 +1,121 @@
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { STATUS_CODE } from "../constants/status.code.js";
-import { salesVisitValidator } from "../validators/salesVisit.validator.js";
-import path from "path";
 import {
-  getSalesVisitsService,
-  salesVisitService,
-  updateSalesVisit,
-  deleteSalesVisit,
-  mySalesVisitsService,
-  getConvertedLeads,
-  getSalesVisitsByType,
-  getFailedLeads,
+  createSalesVisit,
+  getSalesVisits,
+  fetchclientname,
+  updateSalesVisitStatus,
+  getApprovedStatus,
+  getRejectStatus,
 } from "../services/salesVisit.service.js";
+import { createAuditLog } from "../services/AuditLog.service.js";
 
-const createSalesVisitController = asyncHandler(async (req, res, next) => {
-    const data = {
-      ...req.body,
-      meeting_photo: req.file ? req.file.path : null,
-    };
+const createSalesVisitController = asyncHandler(async (req, res) => {
+  const data = {
+    ...req.body,
+    visit_date: new Date(req.body.visit_date),
+    meeting_photo: req.file ? req.file.path : null,
+    userId: Number(req.user.id),
+  };
+  const salesVisit = await createSalesVisit(data);
 
-  const validateData = salesVisitValidator.parse(req.body,data);
-
-  const salesVisit = await salesVisitService({
-    meeting_photo:req.file.path,
-    ...validateData,
+  await createAuditLog({
     userId: req.user.id,
+    action: "CREATE",
+    module: "SALES_VISIT",
+    activity: "Sales Visit created successfully",
   });
+
   return res.status(STATUS_CODE.CREATED).json({
     success: true,
     message: "Sales Visit created successfully",
     data: salesVisit,
   });
 });
-const getSalesVisitsController = asyncHandler(async (req, res, next) => {
-  const salesVisits = await getSalesVisitsService();
+
+const getSalesVisitsController = asyncHandler(async (req, res) => {
+  const salesVisits = await getSalesVisits();
+  await createAuditLog({
+    userId: req.user.id,
+    action: "GET",
+    module: "SALES_VISIT",
+    activity: "Sales Visit fetched successfully",
+  });
+
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
     message: "Sales Visits fetched successfully",
     data: salesVisits,
   });
 });
-const updateSalesVisitController = asyncHandler(async (req, res, next) => {
-  const { id } = req.params;
-  
-  const saleVisit = await updateSalesVisit(id, req.body);
-  
-  // const salesVisit = await updateSalesVisit(id, validateData);
-  return res.status(STATUS_CODE.SUCCESS).json({
-    success: true,
-    message: "Sales Visit updated successfully",
-    data: saleVisit,
+
+const fetchclientnameController = asyncHandler(async (req, res) => {
+  const salesVisits = await fetchclientname();
+
+  await createAuditLog({
+    userId: req.user.id,
+    action: "GET",
+    module: "SALES_VISIT",
+    activity: "Client name fetched successfully",
   });
-});
-const deleteSalesVisitController = asyncHandler(async (req, res, next) => {
-  const { id } = req.params;
-  await deleteSalesVisit(id);
+
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
-    message: "Sales Visit deleted successfully",
-  });
-});
-const mySalesVisitsController = asyncHandler(async (req, res) => {
-  const salesVisits = await mySalesVisitsService(req.user.id);
-  return res.status(STATUS_CODE.SUCCESS).json({
-    success: true,
-    message: "My sales visits fetched successfully",
+    message: "Client Name fetched successfully",
     data: salesVisits,
   });
 });
-const getConvertedSalesVisitController = asyncHandler(async (req, res, next) => {
-  const leads = await getConvertedLeads();
-  return res.status(STATUS_CODE.SUCCESS).json({
+
+const updateSalesVisitStatusController = asyncHandler(async (req, res) => {
+  const salesVisit = await updateSalesVisitStatus(req.body);
+
+  await createAuditLog({
+    userId: req.user.id,
+    action: "UPDATE",
+    module: "SALES_VISIT",
+    activity: "Sales Visit status updated successfully",
+  });
+
+  res.status(STATUS_CODE.SUCCESS).json({
     success: true,
-    message: "Converted leads fetched successfully",
-    data: leads,
+    message: "Sales Visit updated successfully",
+    data: salesVisit,
   });
 });
+const getApprovedStausController = asyncHandler(async (req, res) => {
+  const approvedStatus = await getApprovedStatus();
 
-const getFailedSalesVisistController = asyncHandler(async (req, res, next) => {
-  const leads = await getConvertedLeads();
+  await createAuditLog({
+    userId: req.user.id,
+    action: "GET",
+    module: "SALES_VISIT",
+    activity: "Client approved status fetched successfully",
+  });
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
-    message: "Failed leads fetched successfully",
-    data: leads,
+    message: "Client Approved Status fetched successfully",
+    data: approvedStatus,
   });
 });
-
-const getSalesVisitsByTypeController = async (req, res, next) => {
-  try {
-    const { type } = req.query;
-
-    const salesVisits = await getSalesVisitsByType(type);
-
-    return res.status(STATUS_CODE.SUCCESS).json({
-      success: true,
-      count: salesVisits.length,
-      data: salesVisits,
-    });
-  } catch (error) {
-    next(error);
-  }
-};
-
+const getRejectStatusController = asyncHandler(async (req, res) => {
+  const getReject = await getRejectStatus();
+  await createAuditLog({
+    userId: req.user.id,
+    action: "GET",
+    module: "SALES_VISIT",
+    activity: "Client Reject Status fetched successfully",
+  });
+  return res.status(STATUS_CODE.SUCCESS).json({
+    success: true,
+    message: "Client Reject Status fetched successfully",
+    data: getReject,
+  });
+});
 export {
   createSalesVisitController,
   getSalesVisitsController,
-  updateSalesVisitController,
-  deleteSalesVisitController,
-  mySalesVisitsController,
-  getConvertedSalesVisitController,
-  getFailedSalesVisistController,
-  getSalesVisitsByTypeController,
+  fetchclientnameController,
+  updateSalesVisitStatusController,
+  getApprovedStausController,
+  getRejectStatusController,
 };
