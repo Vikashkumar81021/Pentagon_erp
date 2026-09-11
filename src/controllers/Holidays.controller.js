@@ -6,10 +6,18 @@ import {
     getUpcomingHoliday,
     deleteHoliday,
 } from "../services/Holidays.service.js";
+import { createAuditLog } from "../services/AuditLog.service.js";
 
 const createHolidayController = async (req, res) => {
   try {
     const holiday = await createHoliday(req.body)
+
+    await createAuditLog({
+      userId: req.user.id,
+      action: "CREATE",
+      module: "HOLIDAYS",
+      activity: "Holiday created successfully",
+    });
 
     res.status(STATUS_CODE.CREATED).json({
       success: true,
@@ -28,6 +36,12 @@ const getAllHolidaysController = async (req, res) => {
   try {
     const holidays = await getAllHolidays()
 
+    await createAuditLog({
+      userId: req.user.id,
+      action: "GET",
+      module: "HOLIDAYS",
+      activity: "Holiday fetched successfully",
+    });
     res.status(STATUS_CODE.SUCCESS).json({
       success: true,
       count: holidays.length,
@@ -52,6 +66,13 @@ const getUpcomingHolidayController = async (req, res, next) => {
       });
     }
 
+    await createAuditLog({
+      userId: req.user.id,
+      action: "GET",
+      module: "HOLIDAYS",
+      activity: "Holiday fetched successfully",
+    });
+
     return res.status(STATUS_CODE.SUCCESS).json({
       success: true,
       message: "Upcoming holiday found",
@@ -67,6 +88,13 @@ const deleteHolidayController = async (req, res, next) => {
     const { id } = req.params;
 
     const holiday = await deleteHoliday(id);
+
+    await createAuditLog({
+      userId: req.user.id,
+      action: "DELETE",
+      module: "HOLIDAYS",
+      activity: "Holiday deleted successfully",
+    });
 
     return res.status(STATUS_CODE.SUCCESS).json({
       success: true,

@@ -1,95 +1,86 @@
 import prisma from "../config/db.js";
 
-const salesVisitService = async (salesVisitData) => {
-  //future mein isme db mein ek parmater add hoga isPermission ka true ya false jb mangment permisison approved hoga tb jb ui pe calltoaction show krega 
-  const salesVisit = await prisma.salesVisit.create({
-    data: salesVisitData,
+const createSalesVisit = async (data) => {
+  return await prisma.salesVisit.create({
+    data: {
+      executive_name: data.executive_name,
+      reporting_location: data.reporting_location,
+      visit_date: data.visit_date,
+      activity_type: data.activity_type,
+      visit_type: data.visit_type,
+      customer_name: data.customer_name,
+      contact_person: data.contact_person,
+      contact_number: data.contact_number,
+      city: data.city,
+      client_type: data.client_type,
+      lead_priority: data.lead_priority,
+      discussion_summary: data.discussion_summary,
+      current_status: data.current_status,
+      expected_business_value: data.expected_business_value,
+      proposal_sent: data.proposal_sent,
+      order_closed: data.order_closed,
+      order_lost_reason: data.order_lost_reason,
+      expected_closure_date: data.expected_closure_date,
+      next_followup_date: data.next_followup_date,
+      management_support_required: data.management_support_required,
+      additional_remarks: data.additional_remarks,
+      meeting_photo: data.meeting_photo,
+      userId: data.userId,
+    },
   });
-  return salesVisit;
 };
-const getSalesVisitsService = async () => {
-  const salesVisits = await prisma.salesVisit.findMany({
+
+const getSalesVisits = async () => {
+  return await prisma.salesVisit.findMany({
     orderBy: {
       createdAt: "desc",
     },
   });
-  return salesVisits;
 };
-const getConvertedLeads = async () => {
-  const convertedLeads = await prisma.salesVisit.findMany({
-    where: {
-      status: "Converted",
-    },
-    orderBy: {
-      updatedAt: "desc",
+
+const fetchclientname = async () => {
+  return await prisma.salesVisit.findMany({
+    select: {
+      customer_name: true,
     },
   });
-  return convertedLeads;
 };
-
-const getFailedLeads = async () => {
-  const convertedLeads = await prisma.salesVisit.findMany({
-    where: {
-      status: "Failed",
-    },
-    orderBy: {
-      updatedAt: "desc",
-    },
+const updateSalesVisitStatus = async (data) => {
+  const salesVisit = await prisma.salesVisit.findUnique({
+    where: { id: Number(data.id) },
   });
-  return convertedLeads;
-};
 
-const getSalesVisitsByType = async (type) => {
-  const where = {};
-
-  if (type) {
-    where.visit_type = {
-      equals: type,
-      mode: "insensitive",
-    };
+  if (!salesVisit) {
+    throw new BadRequestError("Sales Visit not found");
   }
 
-  return await prisma.salesVisit.findMany({
-    where,
-    orderBy: {
-      createdAt: "desc",
+  return prisma.salesVisit.update({
+    where: { id: Number(data.id) },
+    data: {
+      ...(data.status !== undefined && { status: data.status }),
+      ...(data.reason !== undefined && { reason: data.reason }),
     },
   });
 };
-
-const updateSalesVisit = async (id, data) => {
-  return await prisma.salesVisit.update({
+const getApprovedStatus = async () => {
+  return prisma.salesVisit.findMany({
     where: {
-      id: Number(id),
+      status: "APPROVED",
     },
-    data,
   });
 };
-const deleteSalesVisit = async (id) => {
-  return await prisma.salesVisit.delete({
+const getRejectStatus = async () => {
+  return prisma.salesVisit.findMany({
     where: {
-      id: Number(id),
+      status: "REJECTED",
     },
   });
 };
-const mySalesVisitsService = async (userId) => {
-  return await prisma.salesVisit.findMany({
-    where: {
-      userId: Number(userId),
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
-};
-
 export {
-  salesVisitService,
-  getSalesVisitsService,
-  updateSalesVisit,
-  deleteSalesVisit,
-  mySalesVisitsService,
-  getConvertedLeads,
-  getSalesVisitsByType,
-  getFailedLeads,
+  createSalesVisit,
+  getSalesVisits,
+  fetchclientname,
+  updateSalesVisitStatus,
+  getApprovedStatus,
+  getRejectStatus,
 };

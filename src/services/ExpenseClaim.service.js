@@ -4,18 +4,31 @@ import { NotFoundError } from "../utils/error.js";
 const createExpenseClaim = async (data) => {
   const claimId = `EXP-${Date.now()}`;
 
+  const employee = await prisma.employee.findUnique({
+    where: {
+      id: Number(data.employeeId),
+    },
+  });
+
+  if (!employee) {
+    throw new NotFoundError("Employee not found");
+  }
+
   return await prisma.expenseClaim.create({
     data: {
       claimId,
-      employee: data.employee,
+      employeeId: Number(data.employeeId),
       category: data.category,
       date: data.date,
       amount: Number(data.amount),
-      description: data.description,
       workflow: "Waiting Approval",
       status: "Pending",
+      description: data.description,
       decision: data.decision,
       remarks: data.remarks,
+    },
+    include: {
+      employee: true,
     },
   });
 };
