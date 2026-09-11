@@ -17,10 +17,10 @@ const createTaskChecklistController = asyncHandler(async (req, res) => {
   const task = await createTaskChecklist(payload);
 
   await createAuditLog({
-      userId: req.user.id,
-      action: "CREATE",
-      module: "TASK_CHECKLIST",
-      activity: "Tasklist created successfully",
+    userId: req.user.id,
+    action: "CREATE",
+    module: "TASK_CHECKLIST",
+    activity: "Tasklist created successfully",
   });
 
   return res.status(STATUS_CODE.SUCCESS).json({
@@ -33,12 +33,12 @@ const toggleTaskCheckListController = asyncHandler(async (req, res) => {
   const { taskId } = req.params;
   const updateTask = await toggleTaskStatus(taskId);
 
-  await createAuditLog({
-      userId: req.user.id,
-      action: "PATCH",
-      module: "TASK_CHECKLIST",
-      activity: "Tasklist updated successfully",
-  });
+  // await createAuditLog({
+  //     userId: req.user.id,
+  //     action: "PATCH",
+  //     module: "TASK_CHECKLIST",
+  //     activity: "Tasklist updated successfully",
+  // });
 
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
@@ -48,12 +48,12 @@ const toggleTaskCheckListController = asyncHandler(async (req, res) => {
 const getTaskChecklistController = asyncHandler(async (req, res) => {
   const tasks = await getTaskChecklist();
 
-  await createAuditLog({
-      userId: req.user.id,
-      action: "GET",
-      module: "TASK_CHECKLIST",
-      activity: "Tasklist fetched successfully",
-  });
+  // await createAuditLog({
+  //     userId: req.user.id,
+  //     action: "GET",
+  //     module: "TASK_CHECKLIST",
+  //     activity: "Tasklist fetched successfully",
+  // });
 
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
@@ -67,12 +67,12 @@ const getTaskChecklistByEmployeeController = async (req, res, next) => {
     console.log(req.params);
     const data = await getTaskChecklistByEmployee(id);
 
-    await createAuditLog({
-      userId: req.user.id,
-      action: "GET",
-      module: "TASK_CHECKLIST",
-      activity: "Tasklist fetched successfully",
-  });
+    //   await createAuditLog({
+    //     userId: req.user.id,
+    //     action: "GET",
+    //     module: "TASK_CHECKLIST",
+    //     activity: "Tasklist fetched successfully",
+    // });
 
     res.status(STATUS_CODE.SUCCESS).json({
       success: true,
@@ -87,12 +87,12 @@ const getTaskChecklistByEmployeeController = async (req, res, next) => {
 const getRecentPendingChecklistController = asyncHandler(async (req, res) => {
   const data = await getRecentPendingChecklist();
 
-  await createAuditLog({
-      userId: req.user.id,
-      action: "GET",
-      module: "TASK_CHECKLIST",
-      activity: "Tasklist fetched successfully",
-  });
+  // await createAuditLog({
+  //     userId: req.user.id,
+  //     action: "GET",
+  //     module: "TASK_CHECKLIST",
+  //     activity: "Tasklist fetched successfully",
+  // });
 
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
