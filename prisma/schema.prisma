@@ -482,6 +482,8 @@ model EmployeeOnboard {
   candidateName  String?
   jobTitle       String?
   department   String?
+   employeeId     Int?             @unique
+  employee       Employee?        @relation(fields: [employeeId], references: [id])
 }
 
 model Holidays {
@@ -523,6 +525,8 @@ model Employee {
   attendanceLogs AttendanceLog[]
   expenseClaims     ExpenseClaim[]
   payrolls       PayRoll[]
+  onboardProcess EmployeeOnboard?
+
 }
 
 enum PunchType {

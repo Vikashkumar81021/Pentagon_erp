@@ -46,9 +46,9 @@ const createEmployeeService = async (empdata) => {
 
 const getEmployeesService = async () => {
   return prisma.employee.findMany({
-    // include: {
-    //   onboardProcess: true,
-    // },
+    include: {
+      onboardProcess: true,
+    },
   });
 };
 
