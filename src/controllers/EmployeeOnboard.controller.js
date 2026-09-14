@@ -21,18 +21,17 @@ import {
 
 import { updateTaskChecklistValidator } from "../validators/TaskChecklist.validator.js";
 
-
 const createEmployeeOnboardController = asyncHandler(async (req, res) => {
   const validatedData = createEmployeeOnboardValidator.parse(req.body);
 
   const employee = await createEmployeeOnboard(validatedData);
 
-  await createAuditLog({
-    userId: req.user.id,
-    action: "CREATE",
-    module: "EMPLOYEE_ONBOARD",
-    activity: "Employee Onboard created successfully",
-  });
+  // await createAuditLog({
+  //   userId: req.user.id,
+  //   action: "CREATE",
+  //   module: "EMPLOYEE_ONBOARD",
+  //   activity: "Employee Onboard created successfully",
+  // });
 
   return res.status(STATUS_CODE.CREATED).json({
     success: true,
@@ -41,16 +40,15 @@ const createEmployeeOnboardController = asyncHandler(async (req, res) => {
   });
 });
 
-
 const getEmployeeOnboardController = asyncHandler(async (req, res) => {
   const employees = await fetchEmployeeOnboards();
 
-  await createAuditLog({
-    userId: req.user.id,
-    action: "GET",
-    module: "EMPLOYEE_ONBOARD",
-    activity: "Employee Onboard fetched successfully",
-  });
+  // await createAuditLog({
+  //   userId: req.user.id,
+  //   action: "GET",
+  //   module: "EMPLOYEE_ONBOARD",
+  //   activity: "Employee Onboard fetched successfully",
+  // });
 
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
@@ -59,7 +57,6 @@ const getEmployeeOnboardController = asyncHandler(async (req, res) => {
   });
 });
 
-
 const updateEmployeeOnboardController = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
@@ -67,12 +64,12 @@ const updateEmployeeOnboardController = asyncHandler(async (req, res) => {
 
   const employee = await updateEmployeeOnboard(id, validatedData);
 
-  await createAuditLog({
-    userId: req.user.id,
-    action: "PUT",
-    module: "EMPLOYEE_ONBOARD",
-    activity: "Employee Onboard updated successfully",
-  });
+  // await createAuditLog({
+  //   userId: req.user.id,
+  //   action: "PUT",
+  //   module: "EMPLOYEE_ONBOARD",
+  //   activity: "Employee Onboard updated successfully",
+  // });
 
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
@@ -81,18 +78,17 @@ const updateEmployeeOnboardController = asyncHandler(async (req, res) => {
   });
 });
 
-
 const deleteEmployeeOnboardController = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
   await deleteEmployeeOnboard(id);
 
-  await createAuditLog({
-    userId: req.user.id,
-    action: "DELETE",
-    module: "EMPLOYEE_ONBOARD",
-    activity: "Employee Onboard deleted successfully",
-  });
+  // await createAuditLog({
+  //   userId: req.user.id,
+  //   action: "DELETE",
+  //   module: "EMPLOYEE_ONBOARD",
+  //   activity: "Employee Onboard deleted successfully",
+  // });
 
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
@@ -100,16 +96,15 @@ const deleteEmployeeOnboardController = asyncHandler(async (req, res) => {
   });
 });
 
-
 const getTaskChecklistController = asyncHandler(async (req, res) => {
   const result = await getTaskChecklist();
 
-  await createAuditLog({
-    userId: req.user.id,
-    action: "GET",
-    module: "EMPLOYEE_ONBOARD",
-    activity: "Task Checklist fetched successfully",
-  });
+  // await createAuditLog({
+  //   userId: req.user.id,
+  //   action: "GET",
+  //   module: "EMPLOYEE_ONBOARD",
+  //   activity: "Task Checklist fetched successfully",
+  // });
 
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
@@ -118,7 +113,6 @@ const getTaskChecklistController = asyncHandler(async (req, res) => {
   });
 });
 
-
 const updateTaskChecklistController = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
@@ -126,12 +120,12 @@ const updateTaskChecklistController = asyncHandler(async (req, res) => {
 
   const result = await updateTaskChecklist(id, validatedData);
 
-  await createAuditLog({
-    userId: req.user.id,
-    action: "PUT",
-    module: "EMPLOYEE_ONBOARD",
-    activity: "Task Checklist updated successfully",
-  });
+  // await createAuditLog({
+  //   userId: req.user.id,
+  //   action: "PUT",
+  //   module: "EMPLOYEE_ONBOARD",
+  //   activity: "Task Checklist updated successfully",
+  // });
 
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
@@ -140,25 +134,23 @@ const updateTaskChecklistController = asyncHandler(async (req, res) => {
   });
 });
 
-
 const fetchEmployeeOnboardByIdController = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
   const onboard = await getEmployeeOnboardById(id);
 
-  await createAuditLog({
-    userId: req.user.id,
-    action: "GET",
-    module: "EMPLOYEE_ONBOARD",
-    activity: "Employee Onboard fetched by ID successfully",
-  });
+  // await createAuditLog({
+  //   userId: req.user.id,
+  //   action: "GET",
+  //   module: "EMPLOYEE_ONBOARD",
+  //   activity: "Employee Onboard fetched by ID successfully",
+  // });
 
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
     data: serializeBigInt(onboard),
   });
 });
-
 
 export {
   createEmployeeOnboardController,

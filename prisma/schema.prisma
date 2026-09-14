@@ -481,6 +481,7 @@ model EmployeeOnboard {
   taskCheckLists TaskChecklist[]
   candidateName  String?
   jobTitle       String?
+  department   String?
 }
 
 model Holidays {

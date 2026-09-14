@@ -16,12 +16,12 @@ const createTaskChecklistController = asyncHandler(async (req, res) => {
 
   const task = await createTaskChecklist(payload);
 
-  await createAuditLog({
-    userId: req.user.id,
-    action: "CREATE",
-    module: "TASK_CHECKLIST",
-    activity: "Tasklist created successfully",
-  });
+  // await createAuditLog({
+  //   userId: req.user.id,
+  //   action: "CREATE",
+  //   module: "TASK_CHECKLIST",
+  //   activity: "Tasklist created successfully",
+  // });
 
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,

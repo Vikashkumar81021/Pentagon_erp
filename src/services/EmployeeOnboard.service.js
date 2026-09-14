@@ -7,7 +7,7 @@ const createEmployeeOnboard = async (data) => {
       joiningDate: data.joiningDate,
       candidateName: data.candidateName,
       jobTitle: data.jobTitle,
-
+      department: data.department,
       taskCheckLists: {
         create: [
           {
