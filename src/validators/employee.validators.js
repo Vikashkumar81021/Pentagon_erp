@@ -23,13 +23,13 @@ const employeeSchema = z.object({
 
   org_name: z.string().optional(),
 
- dob: z
-  .string()
-  .regex(
-    /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/,
-    "DOB must be in YYYY-MM-DD format"
-  )
-  .optional(),
+  dob: z
+    .string()
+    .regex(
+      /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/,
+      "DOB must be in YYYY-MM-DD format",
+    )
+    .optional(),
   status: StatusDesignationEnum.optional(),
 
   bankName: z.string().min(1, "Bank Name is required"),
@@ -38,9 +38,7 @@ const employeeSchema = z.object({
     .string()
     .regex(/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/, "Invalid PAN Number"),
 
-  aadhaarNumber: z
-    .string()
-    .regex(/^[0-9]{12}$/, "Aadhaar must be 12 digits"),
+  aadhaarNumber: z.string().regex(/^[0-9]{12}$/, "Aadhaar must be 12 digits"),
 
   accountNumber: z.string().min(8, "Invalid Account Number"),
 });
