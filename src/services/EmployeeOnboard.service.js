@@ -45,18 +45,18 @@ const fetchEmployeeOnboards = async () => {
       taskCheckLists: true,
     },
   });
+  return employees;
+  // return {
+  //   pending: employees.filter((employee) =>
+  //     employee.taskCheckLists.some((task) => !task.completed)
+  //   ),
 
-  return {
-    pending: employees.filter((employee) =>
-      employee.taskCheckLists.some((task) => !task.completed)
-    ),
-
-    completed: employees.filter(
-      (employee) =>
-        employee.taskCheckLists.length === 4 &&
-        employee.taskCheckLists.every((task) => task.completed)
-    ),
-  };
+  //   completed: employees.filter(
+  //     (employee) =>
+  //       employee.taskCheckLists.length === 4 &&
+  //       employee.taskCheckLists.every((task) => task.completed)
+  //   ),
+  // };
 };
 
 const updateEmployeeOnboard = async (id, data) => {
