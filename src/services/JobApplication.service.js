@@ -194,6 +194,7 @@ const getJobApplicationsByHired = async () => {
   const applications = await prisma.jobApplication.findMany({
     where: {
       status: "HIRED",
+      employeeId: null,
     },
     include: {
       hiringRequirement: true,
