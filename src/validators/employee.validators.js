@@ -41,6 +41,11 @@ const employeeSchema = z.object({
   aadhaarNumber: z.string().regex(/^[0-9]{12}$/, "Aadhaar must be 12 digits"),
 
   accountNumber: z.string().min(8, "Invalid Account Number"),
+  jobApplicationId: z.coerce
+    .number()
+    .int()
+    .positive("Invalid Job Application ID")
+    .optional(),
 });
 
 export const createEmployeeValidator = employeeSchema;

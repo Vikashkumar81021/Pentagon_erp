@@ -526,6 +526,7 @@ model Employee {
   expenseClaims     ExpenseClaim[]
   payrolls       PayRoll[]
   onboardProcess EmployeeOnboard?
+  jobApplication  JobApplication?
 
 }
 
@@ -604,7 +605,8 @@ model JobApplication {
 
   hiringRequirementId Int
   hiringRequirement   HiringRequirement @relation(fields: [hiringRequirementId], references: [id], onDelete: Cascade)
-
+  employeeId          Int?      @unique
+  employee            Employee? @relation(fields: [employeeId], references: [id])
   candidateName String
   email         String
   mobile        String
