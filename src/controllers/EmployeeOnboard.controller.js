@@ -41,19 +41,18 @@ const createEmployeeOnboardController = asyncHandler(async (req, res) => {
 });
 
 const getEmployeeOnboardController = asyncHandler(async (req, res) => {
-  const employees = await fetchEmployeeOnboards();
+  const result = await fetchEmployeeOnboards();
 
   // await createAuditLog({
   //   userId: req.user.id,
   //   action: "GET",
   //   module: "EMPLOYEE_ONBOARD",
-  //   activity: "Employee Onboard fetched successfully",
+  //   activity: "Employee Onboard data fetched successfully",
   // });
 
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
-    count: employees.length,
-    data: serializeBigInt(employees),
+    data: serializeBigInt(result),
   });
 });
 

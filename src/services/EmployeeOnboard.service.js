@@ -40,11 +40,23 @@ const createEmployeeOnboard = async (data) => {
 };
 
 const fetchEmployeeOnboards = async () => {
-  return await prisma.employeeOnboard.findMany({
+  const employees = await prisma.employeeOnboard.findMany({
     include: {
       taskCheckLists: true,
     },
   });
+
+  return {
+    pending: employees.filter((employee) =>
+      employee.taskCheckLists.some((task) => !task.completed)
+    ),
+
+    completed: employees.filter(
+      (employee) =>
+        employee.taskCheckLists.length === 4 &&
+        employee.taskCheckLists.every((task) => task.completed)
+    ),
+  };
 };
 
 const updateEmployeeOnboard = async (id, data) => {
