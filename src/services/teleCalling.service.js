@@ -25,7 +25,6 @@ const getAllTelecalling = async () => {
   });
 };
 
-
 const updateTelecalling = async (id, data) => {
   const telecalling = await prisma.telecalling.findUnique({
     where: {
@@ -68,6 +67,9 @@ const updateTelecalling = async (id, data) => {
       }),
       ...(data.remarks && {
         remarks: data.remarks,
+      }),
+      ...(data.status && {
+        status: data.status,
       }),
     },
   });
