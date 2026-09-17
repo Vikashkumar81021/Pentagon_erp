@@ -136,6 +136,7 @@ model Telecalling {
   city           String
   lead_priority  String
   remarks        String
+   status       String?            @default("Pending")
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 }
