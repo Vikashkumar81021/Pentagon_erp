@@ -31,7 +31,7 @@ const createTelecallingController = asyncHandler(async (req, res) => {
 });
 
 const getAllTelecallingController = asyncHandler(async (req, res) => {
-  const telecalling = await telecallingService.getAllTelecalling();
+  const telecalling = await getAllTelecalling();
 
   // await createAuditLog({
   //     userId: req.user.id,
@@ -65,7 +65,7 @@ const getCallDiscussionAndTelecallingController = asyncHandler(
       success: true,
       data: serializeBigInt(result),
     });
-  }
+  },
 );
 
 const getRejectedTelecallingController = asyncHandler(async (req, res) => {
