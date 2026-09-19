@@ -1,8 +1,15 @@
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { STATUS_CODE } from "../constants/status.code.js";
 import { telecallingValidator } from "../validators/teleCalling.validator.js";
-import * as telecallingService from "../services/teleCalling.service.js";
-import { createAuditLog } from "../services/AuditLog.service.js";
+import {
+  createTelecalling,
+  getAllTelecalling,
+  getApprovedTelecalling,
+  getCallDiscussionAndTelecalling,
+  getRejectedTelecalling,
+  updateTelecalling,
+  deleteTelecalling,
+} from "../services/teleCalling.service.js";
 
 const createTelecallingController = asyncHandler(async (req, res) => {
   const telecalling = await createTelecalling(req.body);
