@@ -38,6 +38,26 @@ const getAllTelecallingController = asyncHandler(async (req, res) => {
   });
 });
 
+const getApprovedTelecallingController = asyncHandler(async (req, res) => {
+  const result = await getApprovedTelecalling();
+
+  return res.status(STATUS_CODE.SUCCESS).json({
+    success: true,
+    count: result.length,
+    data: serializeBigInt(result),
+  });
+});
+
+const getRejectedTelecallingController = asyncHandler(async (req, res) => {
+  const result = await getRejectedTelecalling();
+
+  return res.status(STATUS_CODE.SUCCESS).json({
+    success: true,
+    count: result.length,
+    data: serializeBigInt(result),
+  });
+});
+
 const updateTelecallingController = asyncHandler(async (req, res) => {
   const telecalling = await telecallingService.updateTelecalling(
     req.params.id,
@@ -77,6 +97,8 @@ const deleteTelecallingController = asyncHandler(async (req, res) => {
 export {
   createTelecallingController,
   getAllTelecallingController,
+  getApprovedTelecallingController,
+  getRejectedTelecallingController,
   updateTelecallingController,
   deleteTelecallingController,
 };

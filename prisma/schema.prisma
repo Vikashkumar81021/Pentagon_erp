@@ -799,3 +799,15 @@ model Shipment {
 
   createdAt DateTime @default(now())
 }
+
+model OrderTracking {
+  id        Int      @id @default(autoincrement())
+  orderId   Int?
+  customer  String?
+  orderDate DateTime?
+  userId    Int?
+  amount    Decimal?   @db.Decimal(12, 2)
+  status    String?
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+}
