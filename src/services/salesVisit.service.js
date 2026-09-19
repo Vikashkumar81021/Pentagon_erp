@@ -45,6 +45,21 @@ const fetchclientname = async () => {
     },
   });
 };
+
+const getApprovedSalesVisits = async () => {
+  return await prisma.salesVisit.findMany({
+    where: {
+      status: "Approved",
+    },
+    include: {
+      callDiscussions: true,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+};
+
 const updateSalesVisitStatus = async (data) => {
   const salesVisit = await prisma.salesVisit.findUnique({
     where: { id: Number(data.id) },
@@ -80,6 +95,7 @@ export {
   createSalesVisit,
   getSalesVisits,
   fetchclientname,
+  getApprovedSalesVisits,
   updateSalesVisitStatus,
   getApprovedStatus,
   getRejectStatus,

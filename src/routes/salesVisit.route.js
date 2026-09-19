@@ -3,6 +3,7 @@ import {
   createSalesVisitController,
   getSalesVisitsController,
   fetchclientnameController,
+  getApprovedSalesVisitsController,
   updateSalesVisitStatusController,
   getApprovedStausController,
   getRejectStatusController,
@@ -20,11 +21,8 @@ router.post(
 );
 router.get("/fetchSalesVisits", authMiddleware, getSalesVisitsController);
 router.get("/fetchclientname", authMiddleware, fetchclientnameController);
-router.patch(
-  "/updateApprovedStatus",
-  authMiddleware,
-  updateSalesVisitStatusController,
-);
+router.patch("/updateApprovedStatus", authMiddleware, updateSalesVisitStatusController,);
 router.get("/fetch/approved", authMiddleware, getApprovedStausController);
 router.get("/fetch/reject", authMiddleware, getRejectStatusController);
+router.get("/getApprovedSalesVisits", authMiddleware, getApprovedSalesVisitsController);
 export default router;

@@ -1,9 +1,11 @@
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { STATUS_CODE } from "../constants/status.code.js";
+import { serializeBigInt } from "../utils/bigIntSerializer.js";
 import {
   createSalesVisit,
   getSalesVisits,
   fetchclientname,
+  getApprovedSalesVisits,
   updateSalesVisitStatus,
   getApprovedStatus,
   getRejectStatus,
@@ -66,6 +68,16 @@ const fetchclientnameController = asyncHandler(async (req, res) => {
   });
 });
 
+const getApprovedSalesVisitsController = asyncHandler(async (req, res) => {
+  const result = await getApprovedSalesVisits();
+
+  return res.status(STATUS_CODE.SUCCESS).json({
+    success: true,
+    count: result.length,
+    data: serializeBigInt(result),
+  });
+});
+
 const updateSalesVisitStatusController = asyncHandler(async (req, res) => {
   const salesVisit = await updateSalesVisitStatus(req.body);
 
@@ -115,6 +127,7 @@ export {
   createSalesVisitController,
   getSalesVisitsController,
   fetchclientnameController,
+  getApprovedSalesVisitsController,
   updateSalesVisitStatusController,
   getApprovedStausController,
   getRejectStatusController,
