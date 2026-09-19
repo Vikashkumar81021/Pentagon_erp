@@ -25,6 +25,28 @@ const getAllTelecalling = async () => {
   });
 };
 
+const getApprovedTelecalling = async () => {
+  return await prisma.telecalling.findMany({
+    where: {
+      status: "Approved",
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+};
+
+const getRejectedTelecalling = async () => {
+  return await prisma.telecalling.findMany({
+    where: {
+      status: "Rejected",
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+};
+
 const updateTelecalling = async (id, data) => {
   const telecalling = await prisma.telecalling.findUnique({
     where: {
@@ -98,6 +120,8 @@ const deleteTelecalling = async (id) => {
 export {
   createTelecalling,
   getAllTelecalling,
+  getApprovedTelecalling,
+  getRejectedTelecalling,
   updateTelecalling,
   deleteTelecalling,
 };

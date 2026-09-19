@@ -9,6 +9,14 @@ const createHiringRequirement = async (data) => {
 
 const getHiringRequirement = async () => {
   const today = new Date().toISOString().split("T")[0];
+  
+  await prisma.hiringRequirement.deleteMany({
+    where: {
+      applicationDeadline: {
+        lt: today,
+      },
+    },
+  });
 
   const fetchjob = await prisma.hiringRequirement.findMany({
     where: {

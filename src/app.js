@@ -35,6 +35,7 @@ import AssestsRoute from "./routes/Assets.routes.js";
 import teleCallingRoute from "./routes/teleCalling.route.js";
 import CallDiscussionRoute from "./routes/CallDiscussion.route.js";
 import AuditLogRoute from "./routes/AuditLog.routes.js";
+import OrderTracking from "./routes/OrderTracking.route.js"
 import { reqLogger } from "./middleware/req.middleware.js";
 import cors from "cors";
 const app = express();
@@ -98,4 +99,5 @@ app.use("/api/v1", AssestsRoute);
 app.use("/api/v1", teleCallingRoute);
 app.use("/api/v1", CallDiscussionRoute);
 app.use("/api/v1", AuditLogRoute);
+app.use("/api/v1", OrderTracking);
 export default app;
