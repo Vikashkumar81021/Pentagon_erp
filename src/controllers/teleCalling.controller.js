@@ -10,7 +10,7 @@ import {
   updateTelecalling,
   deleteTelecalling,
 } from "../services/teleCalling.service.js";
-
+import { serializeBigInt } from "../utils/bigIntSerializer.js";
 const createTelecallingController = asyncHandler(async (req, res) => {
   const telecalling = await createTelecalling(req.body);
 
