@@ -36,6 +36,27 @@ const getApprovedTelecalling = async () => {
   });
 };
 
+const getCallDiscussionAndTelecalling = async () => {
+  const [callDiscussions, telecallings] = await Promise.all([
+    prisma.callDiscussion.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
+    }),
+
+    prisma.telecalling.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
+    }),
+  ]);
+
+  return {
+    callDiscussions,
+    telecallings,
+  };
+};
+
 const getRejectedTelecalling = async () => {
   return await prisma.telecalling.findMany({
     where: {
@@ -121,6 +142,7 @@ export {
   createTelecalling,
   getAllTelecalling,
   getApprovedTelecalling,
+  getCallDiscussionAndTelecalling,
   getRejectedTelecalling,
   updateTelecalling,
   deleteTelecalling,

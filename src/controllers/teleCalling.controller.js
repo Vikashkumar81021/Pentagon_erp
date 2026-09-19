@@ -1,7 +1,16 @@
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { STATUS_CODE } from "../constants/status.code.js";
+import { serializeBigInt } from "../utils/bigIntSerializer.js";
 import { telecallingValidator } from "../validators/teleCalling.validator.js";
-import * as telecallingService from "../services/teleCalling.service.js";
+import {
+  createTelecalling,
+  getAllTelecalling,
+  getApprovedTelecalling,
+  getCallDiscussionAndTelecalling,
+  getRejectedTelecalling,
+  updateTelecalling,
+  deleteTelecalling,
+} from "../services/teleCalling.service.js";
 import { createAuditLog } from "../services/AuditLog.service.js";
 
 const createTelecallingController = asyncHandler(async (req, res) => {
@@ -47,6 +56,17 @@ const getApprovedTelecallingController = asyncHandler(async (req, res) => {
     data: serializeBigInt(result),
   });
 });
+
+const getCallDiscussionAndTelecallingController = asyncHandler(
+  async (req, res) => {
+    const result = await getCallDiscussionAndTelecalling();
+
+    return res.status(STATUS_CODE.SUCCESS).json({
+      success: true,
+      data: serializeBigInt(result),
+    });
+  }
+);
 
 const getRejectedTelecallingController = asyncHandler(async (req, res) => {
   const result = await getRejectedTelecalling();
@@ -98,6 +118,7 @@ export {
   createTelecallingController,
   getAllTelecallingController,
   getApprovedTelecallingController,
+  getCallDiscussionAndTelecallingController,
   getRejectedTelecallingController,
   updateTelecallingController,
   deleteTelecallingController,
