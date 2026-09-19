@@ -1,20 +1,74 @@
 import { z } from "zod";
 
-export const orderSchema = z.object({
-  order_no: z.string().optional(),
+export const orderItemValidator = z.object({
+  description: z
+    .string()
+    .min(1, "Description is required"),
 
-  purchaseMode: z.enum(["GEM", "DIRECT_PURCHASE", "TENDER"]),
-
-  clientAccountId: z
+  quantity: z
+    .coerce
     .number()
     .int()
-    .positive("Client Account ID must be positive"),
+    .positive("Quantity must be greater than 0"),
 
-  proposal: z.string().optional(),
+  unitPrice: z
+    .coerce
+    .number()
+    .nonnegative("Unit price cannot be negative"),
+});
 
-  poNumber: z.string().optional(),
+export const createOrderValidator = z.object({
+  customerName: z
+    .string()
+    .min(1, "Customer name is required"),
 
-  totalAmount: z.number().positive("Total amount must be greater than 0"),
+  phone: z
+    .string()
+    .min(10, "Invalid phone number"),
 
-  shippingAddress: z.string().optional(),
+  email: z
+    .string()
+    .email("Invalid email"),
+
+  purchaseOrderNumber: z
+    .string()
+    .min(1, "Purchase order number is required"),
+
+  orderDate: z
+    .string()
+    .min(1, "Order date is required"),
+
+  deliveryTargetDate: z
+    .string()
+    .min(1, "Delivery target date is required"),
+
+  items: z
+    .array(orderItemValidator)
+    .min(1, "At least one order item is required"),
+
+  upfrontAdvancePayment: z
+    .coerce
+    .boolean(),
+
+  advanceAmount: z
+    .coerce
+    .number()
+    .nonnegative()
+    .optional(),
+
+  depositAccount: z
+    .string()
+    .optional(),
+
+  paymentMode: z
+    .string()
+    .optional(),
+
+  paymentReference: z
+    .string()
+    .optional(),
+
+  termsAndNotes: z
+    .string()
+    .min(1, "Terms and notes are required"),
 });

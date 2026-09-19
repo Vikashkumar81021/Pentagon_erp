@@ -7,9 +7,17 @@ import {
   updateExpenseClaim,
   deleteExpenseClaim,
 } from "../services/ExpenseClaim.service.js";
+import { createAuditLog } from "../services/AuditLog.service.js";
 
 const createExpenseClaimController = asyncHandler(async (req, res) => {
   const claim = await createExpenseClaim(req.body);
+
+  await createAuditLog({
+    userId: req.user.id,
+    action: "CREATE",
+    module: "EXPENSE_CLAIM",
+    activity: "Expense Claim created successfully",
+  });
 
   return res.status(STATUS_CODE.CREATED).json({
     success: true,
@@ -21,6 +29,13 @@ const createExpenseClaimController = asyncHandler(async (req, res) => {
 const getAllExpenseClaimsController = asyncHandler(async (req, res) => {
   const claims = await getAllExpenseClaims();
 
+  await createAuditLog({
+    userId: req.user.id,
+    action: "GET",
+    module: "EXPENSE_CLAIM",
+    activity: "Expense Claim fetched successfully",
+  });
+
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
     count: claims.length,
@@ -31,6 +46,13 @@ const getAllExpenseClaimsController = asyncHandler(async (req, res) => {
 const getExpenseClaimByIdController = asyncHandler(async (req, res) => {
   const claim = await getExpenseClaimById(req.params.id);
 
+  await createAuditLog({
+    userId: req.user.id,
+    action: "GET",
+    module: "EXPENSE_CLAIM",
+    activity: "Expense Claim fetched successfully",
+  });
+
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
     data: claim,
@@ -39,6 +61,13 @@ const getExpenseClaimByIdController = asyncHandler(async (req, res) => {
 
 const updateExpenseClaimController = asyncHandler(async (req, res) => {
   const claim = await updateExpenseClaim(req.params.id, req.body);
+
+  await createAuditLog({
+    userId: req.user.id,
+    action: "PATCH",
+    module: "EXPENSE_CLAIM",
+    activity: "Expense Claim UPDATED successfully",
+  });
 
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
@@ -49,6 +78,13 @@ const updateExpenseClaimController = asyncHandler(async (req, res) => {
 
 const deleteExpenseClaimController = asyncHandler(async (req, res) => {
   await deleteExpenseClaim(req.params.id);
+
+  await createAuditLog({
+    userId: req.user.id,
+    action: "DELETE",
+    module: "EXPENSE_CLAIM",
+    activity: "Expense Claim deleted successfully",
+  });
 
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,

@@ -16,7 +16,7 @@ import {
 const router = express.Router();
 
 router.post("/employee/create", createEmployeeController);
-router.get("/fetchEmp", authMiddleware, getEmployeesController);
+router.get("/fetchEmp", getEmployeesController);
 router.get("/fetchEmp/:id", authMiddleware, getEmployeeByIdController);
 router.put("/updateEmp/:id", authMiddleware, updateEmployeeController);
 router.delete("/deleteEmp/:id", authMiddleware, deleteEmployeeController);
@@ -24,5 +24,9 @@ router.get("/filter", filterEmployeeController);
 router.get("/search", searchEmployeController);
 router.get("/getEmp", getEmployeController);
 router.post("/generateEmpCode", generateEmpCodeController);
-router.get("/employee-name-designation", authMiddleware, getEmployeeNameDesignationController);
+router.get(
+  "/employee-name-designation",
+  authMiddleware,
+  getEmployeeNameDesignationController,
+);
 export default router;

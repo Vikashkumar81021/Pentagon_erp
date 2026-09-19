@@ -8,12 +8,21 @@ import {
   fetchLeads,
   getConvertedLeads,
 } from "../services/lead.service.js";
+import { createAuditLog } from "../services/AuditLog.service.js";
 import { BadRequestError } from "../utils/error.js";
 
 const createLeadController = asyncHandler(async (req, res, next) => {
   const validateData = createLeadSchema.parse(req.body);
 
   const lead = await createLead(validateData);
+
+  await createAuditLog({
+      userId: req.user.id,
+      action: "CREATE",
+      module: "LEADS",
+      activity: "Lead created successfully",
+  });
+
   return res.status(STATUS_CODE.CREATED).json({
     success: true,
     message: "Lead created successfully",
@@ -23,6 +32,14 @@ const createLeadController = asyncHandler(async (req, res, next) => {
 
 const fetchLeadsController = asyncHandler(async (req, res, next) => {
   const leads = await fetchLeads();
+
+  await createAuditLog({
+      userId: req.user.id,
+      action: "GET",
+      module: "LEADS",
+      activity: "Lead fetched successfully",
+  });
+
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
     message: "Leads fetched successfully",
@@ -31,6 +48,14 @@ const fetchLeadsController = asyncHandler(async (req, res, next) => {
 });
 const getConvertedLeadsController = asyncHandler(async (req, res, next) => {
   const leads = await getConvertedLeads();
+
+  await createAuditLog({
+      userId: req.user.id,
+      action: "GET",
+      module: "LEADS",
+      activity: "Converted leads fetched successfully",
+  });
+
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
     message: "Converted leads fetched successfully",
@@ -49,6 +74,14 @@ const leadDiscussionController = asyncHandler(async (req, res, next) => {
     throw new BadRequestError(400, "Missing fileds are required");
   }
   const discussion = await discusionLead(leadId, durationSec, outcome, remarks);
+
+  await createAuditLog({
+      userId: req.user.id,
+      action: "PATCH",
+      module: "LEADS",
+      activity: "Lead discussion added successfully",
+  });
+
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
     message: "Lead discussion added successfully",
@@ -68,6 +101,13 @@ const actionConvertedController = asyncHandler(async (req, res) => {
   }
 
   const actionData = await actionConverted(leadId, outcome);
+
+  await createAuditLog({
+      userId: req.user.id,
+      action: "PATCH",
+      module: "LEADS",
+      activity: "Lead status updated successfully",
+  });
 
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,

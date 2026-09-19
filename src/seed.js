@@ -9,12 +9,6 @@ const users = [
     name: "Super Admin",
   },
   {
-    employeeCode: "DIR001",
-    password: "123456",
-    role: "DIRECTOR",
-    name: "Amit Sharma",
-  },
-  {
     employeeCode: "MAN001",
     password: "123456",
     role: "MANAGER",
@@ -30,13 +24,13 @@ const users = [
     employeeCode: "HR001",
     password: "123456",
     role: "HR_MANAGER",
-    name: "Neha Gupta",
+    name: "Rhicha Rawat",
   },
   {
     employeeCode: "HR002",
     password: "123456",
     role: "HR_EXECUTIVE",
-    name: "Ankit Singh",
+    name: "Rhicha Rawat",
   },
   {
     employeeCode: "FIN001",
@@ -98,6 +92,41 @@ const users = [
     role: "OPERATIONS_EXECUTIVE",
     name: "Pooja Arora",
   },
+  // =====================================================
+  // DIRECTORS
+  // =====================================================
+
+  // Sales Director
+  {
+    employeeCode: "DIR001",
+    password: "123456",
+    role: "SALES_DIRECTOR",
+    name: "Amit Sharma",
+  },
+
+  // Supply Chain Director
+  {
+    employeeCode: "DIR002",
+    password: "123456",
+    role: "SCM_DIRECTOR",
+    name: "Rajesh Verma",
+  },
+
+  // Finance Director
+  {
+    employeeCode: "DIR003",
+    password: "123456",
+    role: "FINANCE_DIRECTOR",
+    name: "Sanjay Agarwal",
+  },
+
+  // GEM Director
+  {
+    employeeCode: "DIR004",
+    password: "123456",
+    role: "GEM_DIRECTOR",
+    name: "Vivek Mehta",
+  },
 ];
 
 async function seedUsers() {
@@ -152,5 +181,4 @@ async function seedUsers() {
     await prisma.$disconnect();
   }
 }
-
 seedUsers();

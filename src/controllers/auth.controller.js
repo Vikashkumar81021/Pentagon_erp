@@ -6,6 +6,7 @@ import {
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { BadRequestError } from "../utils/error.js";
 import { STATUS_CODE } from "../constants/status.code.js";
+import { createAuditLog } from "../services/AuditLog.service.js";
 
 const login = asyncHandler(async (req, res) => {
   const { empcode, password } = req.body;
@@ -39,6 +40,13 @@ const login = asyncHandler(async (req, res) => {
 const getCurrentUser = asyncHandler(async (req, res) => {
   const user = await getCurrentUserService(req.user.id);
 
+  await createAuditLog({
+    userId: req.user.id,
+    action: "GET",
+    module: "AUTH",
+    activity: "Current user details fetched",
+  });
+
   res.status(STATUS_CODE.SUCCESS).json({
     success: true,
     data: user,
@@ -46,10 +54,20 @@ const getCurrentUser = asyncHandler(async (req, res) => {
 });
 
 const logout = asyncHandler(async (req, res) => {
+  await createAuditLog({
+    userId: req.user.id,
+    action: "LOGOUT",
+    module: "AUTH",
+    activity: "User logged out successfully",
+  });
   res.clearCookie("access_token").status(STATUS_CODE.SUCCESS).json({
     success: true,
     message: "Logout Successfully",
   });
 });
 
-export { login, getCurrentUser, logout };
+export{ 
+  login, 
+  getCurrentUser, 
+  logout 
+};

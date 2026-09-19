@@ -1,17 +1,117 @@
 import prisma from "../config/db.js";
 import { BadRequestError } from "../utils/error.js";
 
+// const createEmployeeService = async (empdata) => {
+//   const existEmpEmail = await prisma.employee.findFirst({
+//     where: {
+//       workEmail: empdata.workEmail,
+//     },
+//   });
+
+//   if (existEmpEmail) {
+//     throw new BadRequestError("Employee Already Exists.");
+//   }
+
+//   const dateObj = new Date(empdata.dob);
+
+//   const dd = String(dateObj.getDate()).padStart(2, "0");
+//   const mm = String(dateObj.getMonth() + 1).padStart(2, "0");
+//   const yy = String(dateObj.getFullYear()).slice(-2);
+
+//   const dobPart = `${dd}${mm}${yy}`;
+
+//   const finalEmpCode = `${empdata.org_name}${dobPart}`;
+
+//   const employeedata = await prisma.employee.create({
+//     data: {
+//       fullName: empdata.fullName,
+//       employeeCode: finalEmpCode,
+//       workEmail: empdata.workEmail,
+//       mobileNumber: empdata.mobileNumber,
+//       designation: empdata.designation,
+//       department: empdata.department,
+//       salary: empdata.salary,
+//       org_name: empdata.org_name,
+//       dob: empdata.dob,
+//       status: empdata.status,
+//       bankName: empdata.bankName,
+//       panNumber: empdata.panNumber,
+//       aadhaarNumber: empdata.aadhaarNumber,
+//       accountNumber: empdata.accountNumber,
+//     },
+//   });
+
+//   return employeedata;
+// };
+
 const createEmployeeService = async (empdata) => {
   const existEmpEmail = await prisma.employee.findFirst({
     where: {
       workEmail: empdata.workEmail,
     },
   });
+
   if (existEmpEmail) {
     throw new BadRequestError("Employee Already Exists.");
   }
-  const employeedata = await prisma.employee.create({
-    data: empdata,
+
+  if (empdata.jobApplicationId) {
+    const jobApplication = await prisma.jobApplication.findFirst({
+      where: {
+        id: Number(empdata.jobApplicationId),
+        status: "HIRED",
+        employeeId: null,
+      },
+    });
+
+    if (!jobApplication) {
+      throw new BadRequestError(
+        "Invalid Job Application or Employee already created.",
+      );
+    }
+  }
+
+  const dateObj = new Date(empdata.dob);
+
+  const dd = String(dateObj.getDate()).padStart(2, "0");
+  const mm = String(dateObj.getMonth() + 1).padStart(2, "0");
+  const yy = String(dateObj.getFullYear()).slice(-2);
+
+  const dobPart = `${dd}${mm}${yy}`;
+  const finalEmpCode = `${empdata.org_name}${dobPart}`;
+
+  const employeedata = await prisma.$transaction(async (tx) => {
+    const employee = await tx.employee.create({
+      data: {
+        fullName: empdata.fullName,
+        employeeCode: finalEmpCode,
+        workEmail: empdata.workEmail,
+        mobileNumber: empdata.mobileNumber,
+        designation: empdata.designation,
+        department: empdata.department,
+        salary: empdata.salary,
+        org_name: empdata.org_name,
+        dob: empdata.dob,
+        status: empdata.status,
+        bankName: empdata.bankName,
+        panNumber: empdata.panNumber,
+        aadhaarNumber: empdata.aadhaarNumber,
+        accountNumber: empdata.accountNumber,
+      },
+    });
+
+    if (empdata.jobApplicationId) {
+      await tx.jobApplication.update({
+        where: {
+          id: Number(empdata.jobApplicationId),
+        },
+        data: {
+          employeeId: employee.id,
+        },
+      });
+    }
+
+    return employee;
   });
 
   return employeedata;

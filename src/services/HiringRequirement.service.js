@@ -8,15 +8,44 @@ const createHiringRequirement = async (data) => {
 };
 
 const getHiringRequirement = async () => {
-  return await prisma.hiringRequirement.findMany({
-    include: {
-      _count: {
-        select: {
-          applications: true,
-        },
+  const today = new Date().toISOString().split("T")[0];
+  
+  await prisma.hiringRequirement.deleteMany({
+    where: {
+      applicationDeadline: {
+        lt: today,
       },
     },
   });
+
+  const fetchjob = await prisma.hiringRequirement.findMany({
+    where: {
+      applicationDeadline: {
+        gte: today,
+      },
+      jobStatus: "OPEN",
+    },
+
+    include: {
+      _count: {
+        select: {
+          applications: {
+            where: {
+              status: {
+                not: "HIRED",
+              },
+            },
+          },
+        },
+      },
+    },
+
+    orderBy: {
+      applicationDeadline: "asc",
+    },
+  });
+
+  return fetchjob;
 };
 
 const getHiringRequirementById = async (id) => {
@@ -66,11 +95,33 @@ const searchHiringRequirement = async (search) => {
   });
 };
 
-export{
-    createHiringRequirement,
-    getHiringRequirement,
-    getHiringRequirementById,
-    updateHiringRequirement,
-    deleteHiringRequirement,
-    searchHiringRequirement,
+const getOpenHiringRequirements = async () => {
+  return await prisma.hiringRequirement.findMany({
+    where: {
+      jobStatus: {
+        equals: "OPEN",
+        mode: "insensitive",
+      },
+    },
+    include: {
+      _count: {
+        select: {
+          applications: true,
+        },
+      },
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+};
+
+export {
+  createHiringRequirement,
+  getHiringRequirement,
+  getHiringRequirementById,
+  updateHiringRequirement,
+  deleteHiringRequirement,
+  searchHiringRequirement,
+  getOpenHiringRequirements,
 };

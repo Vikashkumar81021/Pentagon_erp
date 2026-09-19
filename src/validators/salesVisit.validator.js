@@ -1,31 +1,19 @@
 import { z } from "zod";
 
 export const salesVisitValidator = z.object({
-  executive_name: z
-    .string()
-    .min(1, "Executive name is required"),
+  executive_name: z.string().min(1, "Executive name is required"),
 
   visit_date: z.coerce.date(),
 
-  visit_type: z
-    .string()
-    .min(1, "Visit type is required"),
+  visit_type: z.string().optional(),
 
-  customer_name: z
-    .string()
-    .min(1, "Customer name is required"),
+  customer_name: z.string().min(1, "Customer name is required"),
 
-  customer_address: z
-    .string()
-    .optional(),
+  customer_address: z.string().optional(),
 
-  contact_person: z
-    .string()
-    .min(1, "Contact person is required"),
+  contact_person: z.string().min(1, "Contact person is required"),
 
-  contact_number: z
-    .string()
-    .min(10, "Invalid contact number"),
+  contact_number: z.string().min(10, "Invalid contact number"),
 
   customer_email: z
     .string()
@@ -33,92 +21,65 @@ export const salesVisitValidator = z.object({
     .optional()
     .or(z.literal("")),
 
-  product_description: z
-    .string()
-    .optional(),
+  // NEW
+  city: z.string().min(1, "City is required"),
 
-  quantity: z
-    .coerce
-    .number()
-    .int()
-    .positive()
-    .optional(),
+  product_description: z.string().optional(),
 
-  remarks: z
-    .string()
-    .optional(),
+  quantity: z.coerce.number().int().positive().optional(),
 
-  reporting_location: z
-    .string()
-    .optional(),
+  remarks: z.string().optional(),
 
-  activity_type: z
-    .string()
-    .optional(),
+  reporting_location: z.string().optional(),
 
-  client_type: z
-    .enum(["NEW", "EXISTING"])
-    .optional(),
+  activity_type: z.string().optional(),
 
-  lead_priority: z.string(),
+  client_type: z.enum(["NEW", "EXISTING"]).optional(),
 
-  discussion_summary: z
-    .string()
-    .optional(),
+  lead_priority: z.string().min(1, "Lead priority is required"),
 
-  current_status: z
-    .string()
-    .optional(),
+  discussion_summary: z.string().optional(),
 
-  expected_business_value: z
-    .coerce
-    .number()
-    .nonnegative()
-    .optional(),
+  current_status: z.string().optional(),
 
-  proposal_sent: z
-    .enum(["YES", "NO"])
-    .optional(),
+  expected_business_value: z.coerce.number().nonnegative().optional(),
 
-  order_closed: z
-    .enum(["YES", "NO"])
-    .optional(),
+  proposal_sent: z.enum(["YES", "NO"]).optional(),
 
-  expected_closure_date: z
-    .string()
-    .optional(),
+  order_closed: z.enum(["YES", "NO"]).optional(),
 
-  next_followup_date: z
-    .string()
-    .optional(),
+  // NEW
+  order_lost_reason: z.string().optional(),
 
-  management_support_required: z
-    .enum(["YES", "NO", "OTHER"])
-    .optional(),
+  // NEW
+  total_calls_made: z.coerce.number().int().nonnegative().optional(),
 
-  additional_remarks: z
-    .string()
-    .optional(),
+  // NEW
+  connected_calls: z.coerce.number().int().nonnegative().optional(),
 
-  meeting_photo: z
-    .string()
-    .optional(),
+  // NEW
+  meetings_scheduled: z.coerce.number().int().nonnegative().optional(),
 
-  closure_date: z
-    .string()
-    .optional(),
+  // NEW
+  new_leads_generated: z.coerce.number().int().nonnegative().optional(),
 
-  basic_amount: z
-    .coerce
-    .number()
-    .nonnegative()
-    .optional(),
+  expected_closure_date: z.string().optional(),
 
-  status: z
-    .string()
-    .optional(),
+  next_followup_date: z.string().optional(),
 
-  type: z
-    .string()
-    .optional(),
+  management_support_required: z.enum(["YES", "NO", "OTHER"]).optional(),
+
+  additional_remarks: z.string().optional(),
+
+  meeting_photo: z.string().optional(),
+
+  closure_date: z.string().optional(),
+
+  basic_amount: z.coerce.number().nonnegative().optional(),
+
+  status: z.string().optional(),
+  reason: z.string().optional(),
+  type: z.string().optional(),
+
+  userId: z.coerce.number().int().positive(),
 });

@@ -12,10 +12,18 @@ import {
   updateChartAccount,
   deleteChartAccount,
 } from "../services/ChartAccount.service.js";
+import { createAuditLog } from "../services/AuditLog.service.js";
 
 const createChartAccountController = async (req, res, next) => {
   try {
     const account = await createChartAccount(req.body);
+
+    await createAuditLog({
+    userId: req.user.id,
+    action: "CREATE",
+    module: "CHART_ACCOUNT",
+    activity: "Chart Account created successfully",
+  });
 
     return res.status(STATUS_CODE.CREATED).json({
       success: true,
@@ -30,6 +38,13 @@ const createChartAccountController = async (req, res, next) => {
 const createAmountInBankController = asyncHandler(async (req, res) => {
   const bank = await createAmountInBank(req.body);
 
+  await createAuditLog({
+    userId: req.user.id,
+    action: "CREATE",
+    module: "CHART_ACCOUNT",
+    activity: "Amount created successfully",
+  });
+
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
     message: "Amount added successfully",
@@ -40,6 +55,13 @@ const createAmountInBankController = asyncHandler(async (req, res) => {
 const getAllChartAccountsController = async (req, res, next) => {
   try {
     const accounts = await getAllChartAccounts();
+
+    await createAuditLog({
+    userId: req.user.id,
+    action: "GET",
+    module: "CHART_ACCOUNT",
+    activity: "Chart Accounts fetched successfully",
+  });
 
     return res.status(STATUS_CODE.SUCCESS).json({
       success: true,
@@ -56,6 +78,13 @@ const getChartAccountByIdController = async (req, res, next) => {
   try {
     const account = await getChartAccountById(req.params.id);
 
+    await createAuditLog({
+    userId: req.user.id,
+    action: "GET",
+    module: "CHART_ACCOUNT",
+    activity: "Chart Account fetched successfully",
+  });
+
     return res.status(STATUS_CODE.SUCCESS).json({
       success: true,
       message: "Chart Account fetched successfully",
@@ -70,6 +99,13 @@ const getChartByAccountController = async (req, res, next) => {
   try {
     const account = await getChartByAccount(req.query.balanceType);
 
+    await createAuditLog({
+    userId: req.user.id,
+    action: "GET",
+    module: "CHART_ACCOUNT",
+    activity: "Chart Account By Account successfully",
+  });
+
     return res.status(STATUS_CODE.SUCCESS).json({
       success: true,
       count: account.length,
@@ -83,6 +119,13 @@ const getChartByAccountController = async (req, res, next) => {
 const fetchBankAccountController = asyncHandler(async (req, res) => {
   const banks = await fetchBankAccount();
 
+  await createAuditLog({
+    userId: req.user.id,
+    action: "GET",
+    module: "CHART_ACCOUNT",
+    activity: "Chart Account fetched successfully",
+  });
+
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
     count: banks.length,
@@ -93,6 +136,13 @@ const fetchBankAccountController = asyncHandler(async (req, res) => {
 const getBankAccountsController = asyncHandler(async (req, res) => {
   const banks = await getBankAccounts();
 
+  await createAuditLog({
+    userId: req.user.id,
+    action: "GET",
+    module: "CHART_ACCOUNT",
+    activity: "Chart Account By BankAccount fetched successfully",
+  });
+
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
     count: banks.length,
@@ -101,9 +151,14 @@ const getBankAccountsController = asyncHandler(async (req, res) => {
 });
 
 const filterChartAccountController = asyncHandler(async (req, res) => {
-  console.log("node",req.query)
   const accounts = await filterChartAccounts(req.query);
 
+  await createAuditLog({
+    userId: req.user.id,
+    action: "GET",
+    module: "CHART_ACCOUNT",
+    activity: "Chart Account fetched successfully",
+  });
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
     count: accounts.length,
@@ -114,6 +169,13 @@ const filterChartAccountController = asyncHandler(async (req, res) => {
 const updateChartAccountController = async (req, res, next) => {
   try {
     const account = await updateChartAccount(req.params.id, req.body);
+
+    await createAuditLog({
+    userId: req.user.id,
+    action: "PATCH",
+    module: "CHART_ACCOUNT",
+    activity: "Chart Account updated successfully",
+  });
 
     return res.status(STATUS_CODE.SUCCESS).json({
       success: true,
@@ -128,6 +190,13 @@ const updateChartAccountController = async (req, res, next) => {
 const deleteChartAccountController = async (req, res, next) => {
   try {
     const account = await deleteChartAccount(req.params.id);
+
+    await createAuditLog({
+    userId: req.user.id,
+    action: "DELETE",
+    module: "CHART_ACCOUNT",
+    activity: "Chart Account deleted successfully",
+  });
 
     return res.status(STATUS_CODE.SUCCESS).json({
       success: true,
