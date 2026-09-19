@@ -49,7 +49,7 @@ const fetchclientname = async () => {
 const getApprovedSalesVisits = async () => {
   return await prisma.salesVisit.findMany({
     where: {
-      status: "Approved",
+      status: "APPROVED",
     },
     include: {
       callDiscussions: true,

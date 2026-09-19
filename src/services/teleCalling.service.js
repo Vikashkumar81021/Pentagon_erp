@@ -28,7 +28,7 @@ const getAllTelecalling = async () => {
 const getApprovedTelecalling = async () => {
   return await prisma.telecalling.findMany({
     where: {
-      status: "Approved",
+      status: "APPROVED",
     },
     orderBy: {
       createdAt: "desc",
@@ -60,7 +60,7 @@ const getCallDiscussionAndTelecalling = async () => {
 const getRejectedTelecalling = async () => {
   return await prisma.telecalling.findMany({
     where: {
-      status: "Rejected",
+      status: "REJECTED",
     },
     orderBy: {
       createdAt: "desc",
