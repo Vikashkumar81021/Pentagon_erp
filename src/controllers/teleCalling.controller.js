@@ -11,7 +11,6 @@ import {
   updateTelecalling,
   deleteTelecalling,
 } from "../services/teleCalling.service.js";
-import { createAuditLog } from "../services/AuditLog.service.js";
 
 const createTelecallingController = asyncHandler(async (req, res) => {
   const telecalling = await createTelecalling(req.body);
