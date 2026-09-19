@@ -14,7 +14,7 @@ import {
 import { createAuditLog } from "../services/AuditLog.service.js";
 
 const createTelecallingController = asyncHandler(async (req, res) => {
-  const telecalling = await telecallingService.createTelecalling(req.body);
+  const telecalling = await createTelecalling(req.body);
 
   // await createAuditLog({
   //     userId: req.user.id,
@@ -79,10 +79,7 @@ const getRejectedTelecallingController = asyncHandler(async (req, res) => {
 });
 
 const updateTelecallingController = asyncHandler(async (req, res) => {
-  const telecalling = await telecallingService.updateTelecalling(
-    req.params.id,
-    req.body,
-  );
+  const telecalling = await updateTelecalling(req.params.id, req.body);
 
   // await createAuditLog({
   //     userId: req.user.id,
@@ -99,7 +96,7 @@ const updateTelecallingController = asyncHandler(async (req, res) => {
 });
 
 const deleteTelecallingController = asyncHandler(async (req, res) => {
-  await telecallingService.deleteTelecalling(req.params.id);
+  await deleteTelecalling(req.params.id);
 
   // await createAuditLog({
   //   userId: req.user.id,
