@@ -36,6 +36,14 @@ const createCallDiscussion = async (data) => {
 
 const getAllCallDiscussions = async () => {
   return await prisma.callDiscussion.findMany({
+    where: {
+      salesVisit: {
+        status: "APPROVED",
+        visit_type: {
+          in: ["PHYSICALMEETING", "TELECALLING"],
+        },
+      },
+    },
     include: {
       salesVisit: true,
     },
