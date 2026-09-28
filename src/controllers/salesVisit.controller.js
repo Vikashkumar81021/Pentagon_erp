@@ -11,6 +11,7 @@ import {
   getRejectStatus,
 } from "../services/salesVisit.service.js";
 import { createAuditLog } from "../services/AuditLog.service.js";
+import { count } from "node:console";
 
 const createSalesVisitController = asyncHandler(async (req, res) => {
   const data = {
@@ -31,7 +32,8 @@ const createSalesVisitController = asyncHandler(async (req, res) => {
   return res.status(STATUS_CODE.CREATED).json({
     success: true,
     message: "Sales Visit created successfully",
-    data: salesVisit,
+    count: salesVisit.length,
+    data: serializeBigInt(salesVisit),
   });
 });
 
@@ -47,7 +49,8 @@ const getSalesVisitsController = asyncHandler(async (req, res) => {
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
     message: "Sales Visits fetched successfully",
-    data: salesVisits,
+    count: salesVisits.length,
+    data: serializeBigInt(salesVisits),
   });
 });
 
@@ -64,7 +67,8 @@ const fetchclientnameController = asyncHandler(async (req, res) => {
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
     message: "Client Name fetched successfully",
-    data: salesVisits,
+    count: salesVisits.length,
+    data: serializeBigInt(salesVisits),
   });
 });
 
@@ -91,7 +95,7 @@ const updateSalesVisitStatusController = asyncHandler(async (req, res) => {
   res.status(STATUS_CODE.SUCCESS).json({
     success: true,
     message: "Sales Visit updated successfully",
-    data: salesVisit,
+    data: serializeBigInt(salesVisit),
   });
 });
 const getApprovedStausController = asyncHandler(async (req, res) => {
@@ -106,7 +110,7 @@ const getApprovedStausController = asyncHandler(async (req, res) => {
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
     message: "Client Approved Status fetched successfully",
-    data: approvedStatus,
+    data: serializeBigInt(approvedStatus),
   });
 });
 const getRejectStatusController = asyncHandler(async (req, res) => {
@@ -120,7 +124,7 @@ const getRejectStatusController = asyncHandler(async (req, res) => {
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
     message: "Client Reject Status fetched successfully",
-    data: getReject,
+    data: serializeBigInt(getReject),
   });
 });
 export {

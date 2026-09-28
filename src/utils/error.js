@@ -8,7 +8,7 @@ class ApiError extends Error {
   }
 }
 class BadRequestError extends ApiError {
-  constructor(message, code = "BAD REQUEST") {
+  constructor(message, code = "BAD_REQUEST") {
     super(message, STATUS_CODE.BAD_REQUESTS, code);
   }
 }
@@ -24,7 +24,7 @@ class ForBiddenError extends ApiError {
   }
 }
 class NotFoundError extends ApiError {
-  constructor(message, code = "NOT FOUND") {
+  constructor(message, code = "NOT_FOUND") {
     super(message, STATUS_CODE.NOTFOUND, code);
   }
 }

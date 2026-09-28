@@ -25,7 +25,8 @@ const createTaskChecklistController = asyncHandler(async (req, res) => {
 
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
-    data: task,
+    message: "Tasklist created successfully",
+    data: serializeBigInt(task),
   });
 });
 
@@ -42,9 +43,11 @@ const toggleTaskCheckListController = asyncHandler(async (req, res) => {
 
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
-    data: updateTask,
+    message: "Tasklist updated successfully",
+    data: serializeBigInt(updateTask),
   });
 });
+
 const getTaskChecklistController = asyncHandler(async (req, res) => {
   const tasks = await getTaskChecklist();
 
@@ -57,7 +60,8 @@ const getTaskChecklistController = asyncHandler(async (req, res) => {
 
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
-    data: tasks,
+    message: "Tasklist fetched successfully",
+    data: serializeBigInt(tasks),
   });
 });
 
@@ -96,6 +100,7 @@ const getRecentPendingChecklistController = asyncHandler(async (req, res) => {
 
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
+    message: "Tasklist fetched successfully",
     data: serializeBigInt(data),
   });
 });

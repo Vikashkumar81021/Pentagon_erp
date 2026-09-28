@@ -28,24 +28,21 @@ const createCallDiscussionController = asyncHandler(
   }
 );
 
-const getAllCallDiscussionsController = asyncHandler(
-  async (req, res) => {
-    const callDiscussions = await getAllCallDiscussions();
+const getAllCallDiscussionsController = async (req, res, next) => {
+  try {
+    const { type } = req.query;
 
-    await createAuditLog({
-    userId: req.user.id,
-    action: "GET",
-    module: "CALL_DISCUSSION",
-    activity: "Call Disussion fetched successfully",
-  });
+    const data = await getAllCallDiscussions(type);
 
     return res.status(STATUS_CODE.SUCCESS).json({
       success: true,
-      message: "Call Discussions fetched successfully",
-      data: callDiscussions,
+      message: "Call discussions fetched successfully",
+      data,
     });
+  } catch (error) {
+    next(error);
   }
-);
+};
 
 const updateCallDiscussionController = asyncHandler(
   async (req, res) => {

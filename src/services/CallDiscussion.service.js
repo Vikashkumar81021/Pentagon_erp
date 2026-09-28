@@ -34,14 +34,12 @@ const createCallDiscussion = async (data) => {
   });
 };
 
-const getAllCallDiscussions = async () => {
+const getAllCallDiscussions = async (type) => {
   return await prisma.callDiscussion.findMany({
     where: {
       salesVisit: {
         status: "APPROVED",
-        visit_type: {
-          in: ["PHYSICALMEETING", "TELECALLING"],
-        },
+        type: type,
       },
     },
     include: {

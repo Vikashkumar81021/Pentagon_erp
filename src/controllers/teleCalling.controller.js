@@ -1,6 +1,7 @@
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { STATUS_CODE } from "../constants/status.code.js";
-import { telecallingValidator } from "../validators/teleCalling.validator.js";
+import { serializeBigInt } from "../utils/bigIntSerializer.js";
+
 import {
   createTelecalling,
   getAllTelecalling,
@@ -14,34 +15,21 @@ import {
 const createTelecallingController = asyncHandler(async (req, res) => {
   const telecalling = await createTelecalling(req.body);
 
-  // await createAuditLog({
-  //     userId: req.user.id,
-  //     action: "CREATE",
-  //     module: "TELE_CALLING",
-  //     activity: "Telecalling fetched successfully",
-  // });
-
   return res.status(STATUS_CODE.CREATED).json({
     success: true,
     message: "Telecalling created successfully",
-    data: telecalling,
+    data: serializeBigInt(telecalling),
   });
 });
 
 const getAllTelecallingController = asyncHandler(async (req, res) => {
   const telecalling = await getAllTelecalling();
 
-  // await createAuditLog({
-  //     userId: req.user.id,
-  //     action: "GET",
-  //     module: "TELE_CALLING",
-  //     activity: "Telecalling fetched successfully",
-  // });
-
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
     message: "Telecalling fetched successfully",
-    data: telecalling,
+    count: telecalling.length,
+    data: serializeBigInt(telecalling),
   });
 });
 
@@ -50,6 +38,18 @@ const getApprovedTelecallingController = asyncHandler(async (req, res) => {
 
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
+    message: "Approved Telecalling fetched successfully",
+    count: result.length,
+    data: serializeBigInt(result),
+  });
+});
+
+const getRejectedTelecallingController = asyncHandler(async (req, res) => {
+  const result = await getRejectedTelecalling();
+
+  return res.status(STATUS_CODE.SUCCESS).json({
+    success: true,
+    message: "Rejected Telecalling fetched successfully",
     count: result.length,
     data: serializeBigInt(result),
   });
@@ -61,46 +61,27 @@ const getCallDiscussionAndTelecallingController = asyncHandler(
 
     return res.status(STATUS_CODE.SUCCESS).json({
       success: true,
+      message: "Call Discussion and Telecalling fetched successfully",
       data: serializeBigInt(result),
     });
-  },
+  }
 );
-const getRejectedTelecallingController = asyncHandler(async (req, res) => {
-  const result = await getRejectedTelecalling();
-
-  return res.status(STATUS_CODE.SUCCESS).json({
-    success: true,
-    count: result.length,
-    data: serializeBigInt(result),
-  });
-});
 
 const updateTelecallingController = asyncHandler(async (req, res) => {
-  const telecalling = await updateTelecalling(req.params.id, req.body);
-
-  // await createAuditLog({
-  //     userId: req.user.id,
-  //     action: "PATCH",
-  //     module: "TELE_CALLING",
-  //     activity: "Telecalling updated successfully",
-  // });
+  const telecalling = await updateTelecalling(
+    req.params.id,
+    req.body
+  );
 
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
     message: "Telecalling updated successfully",
-    data: telecalling,
+    data: serializeBigInt(telecalling),
   });
 });
 
 const deleteTelecallingController = asyncHandler(async (req, res) => {
   await deleteTelecalling(req.params.id);
-
-  // await createAuditLog({
-  //   userId: req.user.id,
-  //   action: "DELETE",
-  //   module: "TELE_CALLING",
-  //   activity: "Telecalling deleted successfully",
-  // });
 
   return res.status(STATUS_CODE.SUCCESS).json({
     success: true,
@@ -113,7 +94,7 @@ export {
   getAllTelecallingController,
   getApprovedTelecallingController,
   getRejectedTelecallingController,
+  getCallDiscussionAndTelecallingController,
   updateTelecallingController,
   deleteTelecallingController,
-  getCallDiscussionAndTelecallingController,
 };
